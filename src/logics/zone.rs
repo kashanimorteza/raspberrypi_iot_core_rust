@@ -9,12 +9,15 @@ use sea_orm::{ActiveModelTrait, ColumnTrait, DbConn, DbErr, EntityTrait, QueryFi
 use crate::models::zone::{ActiveModel as ZoneActiveModel, Column as ZoneColumn, Entity as ZoneEntity, Model as ZoneModel};
 
 //--------------------------------------------------------------------------------- Methods
-impl ZoneModel {
-    pub async fn select_all(db: &DbConn) -> Result<Vec<ZoneModel>, DbErr> {
+impl ZoneModel 
+{
+    pub async fn select_all(db: &DbConn) -> Result<Vec<ZoneModel>, DbErr> 
+    {
         ZoneEntity::find().all(db).await
     }
 
-    pub async fn select_by_id(db: &DbConn, id: i32) -> Result<Option<ZoneModel>, DbErr> {
+    pub async fn select_by_id(db: &DbConn, id: i32) -> Result<Option<ZoneModel>, DbErr> 
+    {
         ZoneEntity::find_by_id(id).one(db).await
     }
 

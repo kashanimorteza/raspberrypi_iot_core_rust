@@ -1,0 +1,6 @@
+my programming language is rust
+i use sea-orm for orm on rust
+all models exist on : /src/models
+all logics exist on : /src/logics
+
+ii need logic for all models
