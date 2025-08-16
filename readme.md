@@ -58,7 +58,19 @@ PGPASSWORD='123456' psql -h 192.168.64.9 -U postgres -d postgres -c "CREATE DATA
 PGPASSWORD='123456' psql -h 192.168.64.9 -U postgres -d postgres -c "DROP DATABASE raspberrypi;"
 ```
 <!------------------------- Table -->
-Database
+Table
 ```bash
 PGPASSWORD='123456' psql -U postgres -h 192.168.64.9 -d raspberrypi -f db_postgres.sql
+```
+
+
+
+<!--------------------------------------------------------------------------------- ORM -->
+<br><br>
+
+## ORM
+<!------------------------- Entity -->
+Entity
+```bash
+sea-orm-cli generate entity -u postgres://postgres:123456@192.168.64.9:5432/raspberrypi -o src/entity
 ```
