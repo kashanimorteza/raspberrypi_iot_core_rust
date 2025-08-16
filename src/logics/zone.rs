@@ -31,7 +31,8 @@ impl ZoneModel
 		active.update(db).await
 	}
 
-	pub async fn delete(db: &DbConn, id: i32) -> Result<u64, DbErr> {
+	pub async fn delete(db: &DbConn, id: i32) -> Result<u64, DbErr> 
+	{
 		let res = ZoneEntity::delete_by_id(id).exec(db).await?;
 		Ok(res.rows_affected)
 	}
