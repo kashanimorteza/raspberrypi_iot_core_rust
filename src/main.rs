@@ -44,9 +44,9 @@ async fn main() -> Result<(), DbErr>
         println!("{:?}", z);
     }
 
-    // Delete
-    let rows_affected = ZoneModel::delete(&db, updated.id).await?;
-    println!("Deleted rows: {}", rows_affected);
+    // // Delete
+    // let rows_affected = ZoneModel::delete(&db, updated.id).await?;
+    // println!("Deleted rows: {}", rows_affected);
 
     Ok(())
 }
