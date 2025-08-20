@@ -40,11 +40,7 @@ pub async fn handle_arguments(db: &DatabaseConnection) -> Result<bool, Box<dyn s
                 if let Err(e) = admin.add_samples(db).await {
                     eprintln!("❌ Error adding samples: {}", e);
                 }
-                
-                println!("\n📋 Listing all users:");
-                if let Err(e) = logics::user::list_all_users(db).await {
-                    eprintln!("❌ Error listing users: {}", e);
-                }
+
                 
                 return Ok(true); // Return true to indicate we should exit
             }

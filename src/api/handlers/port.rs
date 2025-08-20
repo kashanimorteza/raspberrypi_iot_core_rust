@@ -1,0 +1,117 @@
+//--------------------------------------------------------------------------------- Location
+// src/api/handlers/port.rs
+
+//--------------------------------------------------------------------------------- Description
+// Axum handlers for Port CRUD operations
+
+//--------------------------------------------------------------------------------- Import
+use axum::{
+    extract::{Path, Query, State},
+    http::StatusCode,
+    Json,
+};
+use serde::Deserialize;
+use std::collections::HashMap;
+use crate::{orm::models::port::Model as PortModel, logics::general::ModelOutput, AppState};
+use crate::api::services::port::PortService;
+
+//--------------------------------------------------------------------------------- Request DTOs
+#[derive(Deserialize)]
+pub struct CreatePortRequest {
+    pub user_id: i32,
+    pub name: String,
+    pub pin: Option<i32>,
+    pub port: Option<i32>,
+    pub value: Option<i32>,
+    pub description: String,
+    pub enable: bool,
+    pub protocol: String,
+    pub r#type: String,
+}
+
+#[derive(Deserialize)]
+pub struct UpdatePortRequest {
+    pub user_id: Option<i32>,
+    pub name: Option<String>,
+    pub pin: Option<i32>,
+    pub port: Option<i32>,
+    pub value: Option<i32>,
+    pub description: Option<String>,
+    pub enable: Option<bool>,
+    pub protocol: Option<String>,
+    pub r#type: Option<String>,
+}
+
+//--------------------------------------------------------------------------------- Handlers
+pub async fn list_ports(
+    State(state): State<AppState>,
+    Query(params): Query<HashMap<String, String>>,
+) -> Result<Json<ModelOutput<Vec<PortModel>>>, StatusCode> {
+    let service = PortService::new();
+    let result = service.items(&state.db, params).await;
+    Ok(Json(result))
+}
+
+pub async fn get_port(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<PortModel>>, StatusCode> {
+    let service = PortService::new();
+    let result = service.item(&state.db, id).await;
+    Ok(Json(result))
+}
+
+pub async fn create_port(
+    State(state): State<AppState>,
+    Json(payload): Json<CreatePortRequest>,
+) -> Result<Json<ModelOutput<PortModel>>, StatusCode> {
+    let service = PortService::new();
+    let port_model = PortModel {
+        id: 0, // Will be auto-generated
+        user_id: payload.user_id,
+        name: payload.name,
+        pin: payload.pin,
+        port: payload.port,
+        value: payload.value,
+        description: payload.description,
+        enable: payload.enable,
+        protocol: payload.protocol,
+        r#type: payload.r#type,
+    };
+    
+    let result = service.add(&state.db, port_model).await;
+    Ok(Json(result))
+}
+
+pub async fn update_port(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+    Json(payload): Json<UpdatePortRequest>,
+) -> Result<Json<ModelOutput<PortModel>>, StatusCode> {
+    let service = PortService::new();
+    
+    let port_model = PortModel {
+        id,
+        user_id: payload.user_id.unwrap_or_default(),
+        name: payload.name.unwrap_or_default(),
+        pin: payload.pin,
+        port: payload.port,
+        value: payload.value,
+        description: payload.description.unwrap_or_default(),
+        enable: payload.enable.unwrap_or(true),
+        protocol: payload.protocol.unwrap_or_default(),
+        r#type: payload.r#type.unwrap_or_default(),
+    };
+    
+    let result = service.update(&state.db, port_model).await;
+    Ok(Json(result))
+}
+
+pub async fn delete_port(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<String>>, StatusCode> {
+    let service = PortService::new();
+    let result = service.delete(&state.db, id).await;
+    Ok(Json(result))
+}

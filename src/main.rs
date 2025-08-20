@@ -59,6 +59,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>
     // Routes configuration
     let app = Router::new()
         .nest("/users", api::routes::user::router())
+        .nest("/devices", api::routes::device::router())
+        .nest("/zones", api::routes::zone::router())
+        .nest("/configs", api::routes::config::router())
+        .nest("/device_commands", api::routes::device_command::router())
+        .nest("/logs", api::routes::log::router())
+        .nest("/ports", api::routes::port::router())
+        .nest("/timers", api::routes::timer::router())
+        .nest("/timer_devices", api::routes::timer_device::router())
+        .nest("/timer_items", api::routes::timer_item::router())
+        .nest("/timer_limits", api::routes::timer_limit::router())
+        .nest("/zone_commands", api::routes::zone_command::router())
+        .nest("/zone_command-actions", api::routes::zone_command_action::router())
+        .nest("/zone_command-ifs", api::routes::zone_command_if::router())
         .layer(middleware_stack)
         .with_state(state);
 

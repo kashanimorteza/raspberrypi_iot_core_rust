@@ -1,0 +1,174 @@
+//--------------------------------------------------------------------------------- Location
+// src/orm/logics/zone_command_if.rs
+
+//--------------------------------------------------------------------------------- Description
+// ORM logic for zone_command_if
+
+//--------------------------------------------------------------------------------- Import
+use std::collections::HashMap;
+use tracing::{info, error, debug};
+use sea_orm::{ActiveModelTrait, DbConn, EntityTrait};
+use crate::orm::models::zone_command_if::{ActiveModel as ZoneCommandIfActiveModel, Entity as ZoneCommandIfEntity, Model as ZoneCommandIfModel};
+use crate::logics::general::ModelOutput;
+
+//--------------------------------------------------------------------------------- Class
+pub struct ZoneCommandIfORM 
+{
+    pub verbose: bool,
+    pub log: bool,
+    pub this_class: String,
+    pub module: String,
+}
+
+impl ZoneCommandIfORM
+{
+    pub fn new(verbose: bool, log: bool) -> Self 
+    {
+        Self 
+        {
+            verbose,
+            log,
+            this_class: "ZoneCommandIfORM".to_string(),
+            module: "zone_command_if".to_string(),
+        }
+    }
+
+    pub async fn add(&self, db: &DbConn, item: ZoneCommandIfActiveModel) -> ModelOutput<ZoneCommandIfModel> 
+    {
+        let this_method = "add";
+        if self.verbose { debug!("{}::{} - Starting add operation", self.this_class, this_method); }
+
+        match item.insert(db).await 
+        {
+            Ok(model) => {
+                let output = ModelOutput::success(model, "zonecommandif added successfully".to_string());
+                if self.verbose { info!("{}::{} - Success: zonecommandif added", self.this_class, this_method); }
+                if self.log { info!("LOG: {}::{} - zonecommandif added", self.this_class, this_method); }
+                output
+            }
+            Err(e) => 
+            {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                let output = ModelOutput::error(error_msg.clone());
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                if self.log { error!("LOG: {}::{} - Error: {}", self.this_class, this_method, error_msg); }
+                output
+            }
+        }
+    }
+
+    pub async fn items(&self, db: &DbConn, _filters: HashMap<String, String>) -> ModelOutput<Vec<ZoneCommandIfModel>> 
+    {
+        let this_method = "items";
+        if self.verbose { debug!("{}::{} - Starting items operation", self.this_class, this_method); }
+
+        match ZoneCommandIfEntity::find().all(db).await 
+        {
+            Ok(items) => 
+            {
+                let output = ModelOutput::success(items, "zonecommandifs retrieved successfully".to_string());
+                if self.verbose { info!("{}::{} - Success: zonecommandifs retrieved", self.this_class, this_method); }
+                if self.log { info!("LOG: {}::{} - zonecommandifs retrieved", self.this_class, this_method); }
+                output
+            }
+            Err(e) => 
+            {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                let output = ModelOutput::error(error_msg.clone());
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                if self.log { error!("LOG: {}::{} - Error: {}", self.this_class, this_method, error_msg); }
+                output
+            }
+        }
+    }
+
+    pub async fn item(&self, db: &DbConn, id: i32) -> ModelOutput<ZoneCommandIfModel> 
+    {
+        let this_method = "item";
+        if self.verbose { debug!("{}::{} - Starting item operation for id: {}", self.this_class, this_method, id); }
+
+        match ZoneCommandIfEntity::find_by_id(id).one(db).await 
+        {
+            Ok(Some(model)) => 
+            {
+                let output = ModelOutput::success(model, "zonecommandif retrieved successfully".to_string());
+                if self.verbose { info!("{}::{} - Success: zonecommandif {} found", self.this_class, this_method, id); }
+                if self.log { info!("LOG: {}::{} - zonecommandif {} retrieved", self.this_class, this_method, id); }
+                output
+            }
+            Ok(None) => 
+            {
+                let output = ModelOutput::error("zonecommandif not found".to_string());
+                if self.verbose { info!("{}::{} - zonecommandif {} not found", self.this_class, this_method, id); }
+                output
+            }
+            Err(e) => 
+            {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                let output = ModelOutput::error(error_msg.clone());
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                if self.log { error!("LOG: {}::{} - Error: {}", self.this_class, this_method, error_msg); }
+                output
+            }
+        }
+    }
+
+    pub async fn update(&self, db: &DbConn, item: ZoneCommandIfActiveModel) -> ModelOutput<ZoneCommandIfModel> 
+    {
+        let this_method = "update";
+        if self.verbose { debug!("{}::{} - Starting update operation", self.this_class, this_method); }
+
+        match item.update(db).await 
+        {
+            Ok(model) => 
+            {
+                let output = ModelOutput::success(model, "zonecommandif updated successfully".to_string());
+                if self.verbose { info!("{}::{} - Success: zonecommandif updated", self.this_class, this_method); }
+                if self.log { info!("LOG: {}::{} - zonecommandif updated", self.this_class, this_method); }
+                output
+            }
+            Err(e) => 
+            {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                let output = ModelOutput::error(error_msg.clone());
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                if self.log { error!("LOG: {}::{} - Error: {}", self.this_class, this_method, error_msg); }
+                output
+            }
+        }
+    }
+
+    pub async fn delete(&self, db: &DbConn, id: i32) -> ModelOutput<String> 
+    {
+        let this_method = "delete";
+        if self.verbose { debug!("{}::{} - Starting delete operation for id: {}", self.this_class, this_method, id); }
+
+        match ZoneCommandIfEntity::delete_by_id(id).exec(db).await 
+        {
+            Ok(result) => 
+            {
+                if result.rows_affected > 0 
+                {
+                    let output = ModelOutput::success("deleted".to_string(), "zonecommandif deleted successfully".to_string());
+                    if self.verbose { info!("{}::{} - Success: zonecommandif {} deleted", self.this_class, this_method, id); }
+                    if self.log { info!("LOG: {}::{} - zonecommandif {} deleted", self.this_class, this_method, id); }
+                    output
+                } 
+                else 
+                {
+                    let output = ModelOutput::error("zonecommandif not found".to_string());
+                    if self.verbose { info!("{}::{} - zonecommandif {} not found", self.this_class, this_method, id); }
+                    output
+                }
+            }
+            Err(e) => 
+            {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                let output = ModelOutput::error(error_msg.clone());
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                if self.log { error!("LOG: {}::{} - Error: {}", self.this_class, this_method, error_msg); }
+                output
+            }
+        }
+    }
+}
