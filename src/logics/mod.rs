@@ -1,20 +1,10 @@
 //--------------------------------------------------------------------------------- Location
 // src/logics/mod.rs
 
-//--------------------------------------------------------------------------------- Exports
-pub mod config;
-pub mod device;
-pub mod device_command;
-pub mod log;
-pub mod port;
-pub mod timer;
-pub mod timer_device;
-pub mod timer_item;
-pub mod timer_limit;
+//--------------------------------------------------------------------------------- Description
+// Module declaration for logics
+
+//--------------------------------------------------------------------------------- Modules
 pub mod user;
-pub mod zone;
-pub mod zone_command;
-pub mod zone_command_action;
-pub mod zone_command_if;
-
-
+pub mod admin;
+pub mod general;

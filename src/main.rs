@@ -2,57 +2,75 @@
 // src/main.rs
 
 //--------------------------------------------------------------------------------- Description
-// This is main
+// Main Axum server with proper structure: Routes | Handlers | Extractors | Middlewares | State Management
 
 //--------------------------------------------------------------------------------- Import
-pub use sea_orm::entity::prelude::*;
-pub use sea_orm::Database;
-pub mod models;
+pub use axum::{middleware::from_fn, Router};
+pub use dotenvy::dotenv;
+pub use sea_orm::{Database, DatabaseConnection};
+pub use std::net::SocketAddr;
+pub use tower::ServiceBuilder;
+pub use tower_http::{cors::CorsLayer, trace::TraceLayer};
+pub use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+pub mod api;
+pub mod orm;
 pub mod logics;
-pub use sea_orm::{EntityTrait, DbConn, DbErr};
-pub use models::zone::{Entity as ZoneEntity, Model as ZoneModel, ActiveModel as ZoneActiveModel};
-use sea_orm::ActiveValue::Set;
+pub mod args;
 
-//--------------------------------------------------------------------------------- Class
-#[tokio::main]
-async fn main() -> Result<(), DbErr> 
+//--------------------------------------------------------------------------------- State Management
+#[derive(Clone)]
+pub struct AppState 
 {
-    let db = Database::connect("postgres://postgres:123456@192.168.64.9:5432/raspberrypi").await?;
+    pub db: DatabaseConnection,
+}
 
-    // Insert
-    let created = ZoneModel::insert(
-        &db,
-        ZoneActiveModel {
-            user_id: Set(1),
-            name: Set("Zone A".to_owned()),
-            description: Set("Initial description".to_owned()),
-            enable: Set(true),
-            ..Default::default()
-        },
-    ).await?;
-    println!("Inserted: {:?}", created);
+//--------------------------------------------------------------------------------- Main
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>>
+{
+    // Load environment variables
+    dotenv().ok();
 
-    // Update
-    let mut to_update: ZoneActiveModel = created.clone().into();
-    to_update.name = Set("Zone A+".to_owned());
-    to_update.description = Set("Updated description".to_owned());
-    let updated = ZoneModel::update(&db, to_update).await?;
-    println!("Updated: {:?}", updated);
+    // Initialize tracing
+    tracing_subscriber::registry()
+        .with(tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| "api_1=debug,tower_http=debug".into()),)
+        .with(tracing_subscriber::fmt::layer())
+        .init();
 
-    // Select by id
-    let fetched = ZoneModel::select_by_id(&db, updated.id).await?;
-    println!("Selected by id: {:?}", fetched);
+    // Database connection
+    let database_url = std::env::var("DATABASE_URL").unwrap_or_else(|_| "sqlite::memory:".to_string());
+    let db: DatabaseConnection = Database::connect(&database_url).await.expect("Failed to connect to database");
 
-    // Select all
-    let zones = ZoneModel::select_all(&db).await?;
-    println!("Select all ({} rows)", zones.len());
-    for z in zones {
-        println!("{:?}", z);
+    // Handle command-line arguments
+    if args::handle_arguments(&db).await? 
+    {
+        return Ok(()); // Exit if arguments were handled (like --add-users)
     }
 
-    // Delete
-    // let rows_affected = ZoneModel::delete(&db, updated.id).await?;
-    // println!("Deleted rows: {}", rows_affected);
+    // State management
+    let state = AppState { db };
 
+    // Middleware stack
+    let middleware_stack = ServiceBuilder::new()
+        .layer(TraceLayer::new_for_http())
+        .layer(CorsLayer::permissive())
+        .layer(from_fn(api::middleware::logging_middleware));
+
+    // Routes configuration
+    let app = Router::new()
+        .nest("/users", api::routes::user::router())
+        .layer(middleware_stack)
+        .with_state(state);
+
+    // Server configuration
+    let api_host = std::env::var("API_HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
+    let api_port = std::env::var("API_PORT").unwrap_or_else(|_| "3000".to_string());
+    let addr: SocketAddr = format!("{}:{}", api_host, api_port).parse().expect("invalid host:port");
+    tracing::info!("🚀 Server listening on {}", addr);
+    
+    // Server Start
+    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
+    axum::serve(listener, app).await.unwrap();
     Ok(())
 }
+
