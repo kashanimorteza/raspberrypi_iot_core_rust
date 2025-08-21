@@ -77,7 +77,7 @@ curl -X GET http://localhost:3000/user/items
 ```
 Get User by ID
 ```bash
-curl -X GET http://localhost:3000/users/1
+curl -X GET http://localhost:3000/config/item/1
 ```
 Add New User 
 ```bash

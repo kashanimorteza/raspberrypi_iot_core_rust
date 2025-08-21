@@ -100,8 +100,8 @@ pub struct UpdateConfigRequest {
 //--------------------------------------------------------------------------------- Handlers
 #[utoipa::path(
     get,
-    path = "/configs/items",
-    tag = "⚙️ Configs",
+    path = "/config/items",
+    tag = "⚙️ Config",
     summary = "List all configurations",
     description = "Retrieve a list of all system configurations with optional query parameters for filtering",
     params(
@@ -124,8 +124,8 @@ pub async fn list_configs(
 
 #[utoipa::path(
     get,
-    path = "/configs/{id}",
-    tag = "⚙️ Configs",
+    path = "/config/item/{id}",
+    tag = "⚙️ Config",
     summary = "Get configuration by ID",
     description = "Retrieve a specific configuration by its unique identifier",
     params(
@@ -148,8 +148,8 @@ pub async fn get_config(
 
 #[utoipa::path(
     post,
-    path = "/configs/add",
-    tag = "⚙️ Configs",
+    path = "/config/add",
+    tag = "⚙️ Config",
     summary = "Create new configuration",
     description = "Create a new system configuration with the provided details",
     request_body = CreateConfigRequest,
@@ -206,8 +206,8 @@ pub async fn create_config(
 
 #[utoipa::path(
     put,
-    path = "/configs/update/{id}",
-    tag = "⚙️ Configs",
+    path = "/config/update/{id}",
+    tag = "⚙️ Config",
     summary = "Update configuration",
     description = "Update an existing configuration with the provided details",
     params(
@@ -270,8 +270,8 @@ pub async fn update_config(
 
 #[utoipa::path(
     delete,
-    path = "/configs/delete/{id}",
-    tag = "⚙️ Configs",
+    path = "/config/delete/{id}",
+    tag = "⚙️ Config",
     summary = "Delete configuration",
     description = "Delete a configuration by its unique identifier",
     params(
