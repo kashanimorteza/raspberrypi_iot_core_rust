@@ -67,14 +67,19 @@ Add samples
 ```bash
 cargo run -- --add-samples
 ```
-
-**Running the Server:** `cargo run`
-
-**Get All Users:** `curl -X GET http://localhost:3000/users/items`
-
-**Get User by ID:** `curl -X GET http://localhost:3000/users/1`
-
-**Add New User:** 
+Running the Server
+```bash
+cargo run
+```
+Get All Users
+```bash
+curl -X GET http://localhost:3000/users/items
+```
+Get User by ID
+```bash
+curl -X GET http://localhost:3000/users/1
+```
+Add New User 
 ```bash
 curl -X POST http://localhost:3000/users/add \
   -H "Content-Type: application/json" \
@@ -89,7 +94,7 @@ curl -X POST http://localhost:3000/users/add \
     "enable": true
   }'
 ```
-**Update User:** 
+Update User 
 ```bash
 curl -X PUT http://localhost:3000/users/update \
   -H "Content-Type: application/json" \
@@ -105,8 +110,15 @@ curl -X PUT http://localhost:3000/users/update \
     "enable": true
   }'
 ```
-**Delete User:** `curl -X DELETE http://localhost:3000/users/delete/1`
-
-**Disable User:** `curl -X GET http://localhost:3000/users/disable/1`
-
-**Enable User:** `curl -X GET http://localhost:3000/users/enable/1`
+Disable User
+```bash
+curl -X GET http://localhost:3000/users/disable/1
+```
+Enable User
+```bash
+curl -X GET http://localhost:3000/users/enable/1
+```
+Delete User
+```bash
+curl -X DELETE http://localhost:3000/users/delete/1
+```
