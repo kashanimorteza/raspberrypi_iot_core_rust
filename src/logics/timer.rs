@@ -19,16 +19,16 @@ pub async fn add_sample_timers(db: &DatabaseConnection) -> Result<(), Box<dyn st
         {
             id: sea_orm::ActiveValue::NotSet,
             user_id: Set(1),
-            name: Set("Morning Routine".to_string()),
-            description: Set("Automated morning lighting and climate control".to_string()),
+            name: Set("Timer-On".to_string()),
+            description: Set("Timer for turning devices on during active periods".to_string()),
             enable: Set(true),
         },
         TimerActiveModel 
         {
             id: sea_orm::ActiveValue::NotSet,
             user_id: Set(1),
-            name: Set("Evening Schedule".to_string()),
-            description: Set("Evening device automation and security".to_string()),
+            name: Set("Timer-Off".to_string()),
+            description: Set("Timer for turning devices off during inactive periods".to_string()),
             enable: Set(true),
         },
     ];

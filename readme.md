@@ -40,8 +40,8 @@ Database
 ```bash
 PGPASSWORD='123456' psql -h 192.168.64.9 -U postgres -c "DROP DATABASE raspberrypi;"
 PGPASSWORD='123456' psql -h 192.168.64.9 -U postgres -c "CREATE DATABASE raspberrypi"
-PGPASSWORD='123456' psql -h 192.168.64.9 -U postgres -d raspberrypi -f db_postgres2.sql
-PGPASSWORD='123456' pg_dump -h 192.168.64.9 -U postgres -d raspberrypi -s -n public > db_postgres2.sql
+PGPASSWORD='123456' psql -h 192.168.64.9 -U postgres -d raspberrypi -f db_postgres.sql
+PGPASSWORD='123456' pg_dump -h 192.168.64.9 -U postgres -d raspberrypi -s -n public > db_postgres.sql
 ```
 
 
@@ -63,7 +63,10 @@ sea-orm-cli generate entity -u postgres://postgres:123456@192.168.64.9:5432/rasp
 
 ## API
 
-**Add samples:** `cargo run -- --add-samples`
+**Add samples:** 
+```bash
+cargo run -- --add-samples
+```
 
 **Running the Server:** `cargo run`
 
