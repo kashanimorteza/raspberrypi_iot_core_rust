@@ -40,7 +40,8 @@ Database
 ```bash
 PGPASSWORD='123456' psql -h 192.168.64.9 -U postgres -c "DROP DATABASE raspberrypi;"
 PGPASSWORD='123456' psql -h 192.168.64.9 -U postgres -c "CREATE DATABASE raspberrypi"
-PGPASSWORD='123456' psql -U postgres -h 192.168.64.9 -d raspberrypi -f db_postgres.sql
+PGPASSWORD='123456' psql -h 192.168.64.9 -U postgres -d raspberrypi -f db_postgres2.sql
+PGPASSWORD='123456' pg_dump -h 192.168.64.9 -U postgres -d raspberrypi -s -n public > db_postgres2.sql
 ```
 
 
