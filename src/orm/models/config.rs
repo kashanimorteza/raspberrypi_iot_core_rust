@@ -16,7 +16,7 @@ pub struct Model {
     pub id: i32,
     #[sea_orm(column_type = "Text")]
     pub name: String,
-    #[sea_orm(column_name = "timeZone", column_type = "Text")]
+    #[sea_orm(column_type = "Text")]
     pub time_zone: String,
     #[sea_orm(column_type = "Text")]
     pub path_api: String,

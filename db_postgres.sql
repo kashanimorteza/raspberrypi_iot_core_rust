@@ -44,7 +44,7 @@ SET default_table_access_method = heap;
 CREATE TABLE public.config (
     id integer NOT NULL,
     name text DEFAULT ''::text NOT NULL,
-    "timeZone" text DEFAULT ''::text NOT NULL,
+    time_zone text DEFAULT ''::text NOT NULL,
     path_api text DEFAULT ''::text NOT NULL,
     path_gui text DEFAULT ''::text NOT NULL,
     webapi_title text DEFAULT ''::text NOT NULL,

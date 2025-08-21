@@ -142,63 +142,6 @@ pub async fn get_config(
     Ok(Json(result))
 }
 
-//------------------------- Add
-#[utoipa::path(
-    post,
-    path = "/config/add",
-    tag = "⚙️ Config",
-    request_body = CreateConfigRequest,
-    responses(
-        (status = 201, description = "Configuration created successfully", body = ConfigModel),
-        (status = 400, description = "Invalid request payload"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn create_config(
-    State(state): State<AppState>,
-    Json(payload): Json<CreateConfigRequest>,
-) -> Result<Json<ModelOutput<ConfigModel>>, StatusCode> {
-    let service = ConfigService::new();
-    let config_model = ConfigModel {
-        id: 0, // Will be auto-generated
-        name: payload.name,
-        time_zone: payload.time_zone,
-        path_api: payload.path_api,
-        path_gui: payload.path_gui,
-        webapi_title: payload.webapi_title,
-        webapi_description: payload.webapi_description,
-        webapi_version: payload.webapi_version,
-        webapi_openapi_url: payload.webapi_openapi_url,
-        webapi_docs_url: payload.webapi_docs_url,
-        webapi_redoc_url: payload.webapi_redoc_url,
-        webapi_key: payload.webapi_key,
-        webapi_host: payload.webapi_host,
-        webapi_port: payload.webapi_port,
-        webapi_workers: payload.webapi_workers,
-        nginx_api_host: payload.nginx_api_host,
-        nginx_api_port: payload.nginx_api_port,
-        nginx_api_key: payload.nginx_api_key,
-        nginx_gui_host: payload.nginx_gui_host,
-        nginx_gui_port: payload.nginx_gui_port,
-        nginx_gui_key: payload.nginx_gui_key,
-        git_email: payload.git_email,
-        git_name: payload.git_name,
-        git_key: payload.git_key,
-        hotspod_ssid: payload.hotspod_ssid,
-        hotspod_ip: payload.hotspod_ip,
-        hotspod_pass: payload.hotspod_pass,
-        wifi_ssid: payload.wifi_ssid,
-        wifi_ip: payload.wifi_ip,
-        wifi_pass: payload.wifi_pass,
-        debug: payload.debug,
-        log: payload.log,
-        verbose: payload.verbose,
-    };
-    
-    let result = service.add(&state.db, config_model).await;
-    Ok(Json(result))
-}
-
 //------------------------- Update
 #[utoipa::path(
     put,
@@ -259,6 +202,63 @@ pub async fn update_config(
     };
     
     let result = service.update(&state.db, config_model).await;
+    Ok(Json(result))
+}
+
+//------------------------- Add
+#[utoipa::path(
+    post,
+    path = "/config/add",
+    tag = "⚙️ Config",
+    request_body = CreateConfigRequest,
+    responses(
+        (status = 201, description = "Configuration created successfully", body = ConfigModel),
+        (status = 400, description = "Invalid request payload"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn create_config(
+    State(state): State<AppState>,
+    Json(payload): Json<CreateConfigRequest>,
+) -> Result<Json<ModelOutput<ConfigModel>>, StatusCode> {
+    let service = ConfigService::new();
+    let config_model = ConfigModel {
+        id: 0, // Will be auto-generated
+        name: payload.name,
+        time_zone: payload.time_zone,
+        path_api: payload.path_api,
+        path_gui: payload.path_gui,
+        webapi_title: payload.webapi_title,
+        webapi_description: payload.webapi_description,
+        webapi_version: payload.webapi_version,
+        webapi_openapi_url: payload.webapi_openapi_url,
+        webapi_docs_url: payload.webapi_docs_url,
+        webapi_redoc_url: payload.webapi_redoc_url,
+        webapi_key: payload.webapi_key,
+        webapi_host: payload.webapi_host,
+        webapi_port: payload.webapi_port,
+        webapi_workers: payload.webapi_workers,
+        nginx_api_host: payload.nginx_api_host,
+        nginx_api_port: payload.nginx_api_port,
+        nginx_api_key: payload.nginx_api_key,
+        nginx_gui_host: payload.nginx_gui_host,
+        nginx_gui_port: payload.nginx_gui_port,
+        nginx_gui_key: payload.nginx_gui_key,
+        git_email: payload.git_email,
+        git_name: payload.git_name,
+        git_key: payload.git_key,
+        hotspod_ssid: payload.hotspod_ssid,
+        hotspod_ip: payload.hotspod_ip,
+        hotspod_pass: payload.hotspod_pass,
+        wifi_ssid: payload.wifi_ssid,
+        wifi_ip: payload.wifi_ip,
+        wifi_pass: payload.wifi_pass,
+        debug: payload.debug,
+        log: payload.log,
+        verbose: payload.verbose,
+    };
+    
+    let result = service.add(&state.db, config_model).await;
     Ok(Json(result))
 }
 
