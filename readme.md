@@ -63,7 +63,7 @@ sea-orm-cli generate entity -u postgres://postgres:123456@192.168.64.9:5432/rasp
 
 ## API
 
-**Add samples:** 
+Add samples 
 ```bash
 cargo run -- --add-samples
 ```
