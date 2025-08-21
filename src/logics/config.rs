@@ -65,7 +65,7 @@ pub async fn add_sample_configs(db: &DatabaseConnection) -> Result<(), Box<dyn s
         println!("📝 Adding config {}: {}", index + 1, config_name);
         
         let result = config_orm.add(db, config).await;
-        if result.success 
+        if result.status 
         {
             if let Some(added_config) = result.data 
             {
@@ -94,7 +94,7 @@ pub async fn list_all_configs(db: &DatabaseConnection) -> Result<(), Box<dyn std
     
     let result = config_orm.items(db, filters).await;
     
-    if result.success {
+    if result.status {
         if let Some(configs) = result.data {
             println!("⚙️ Found {} configs:", configs.len());
             println!("{:-<80}", "");

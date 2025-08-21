@@ -49,7 +49,7 @@ pub async fn add_sample_timer_limits(db: &DatabaseConnection) -> Result<(), Box<
         println!("📝 Adding timer limit {}: Device ID {}", index + 1, device_id);
         
         let result = timer_limit_orm.add(db, timer_limit).await;
-        if result.success 
+        if result.status 
         {
             if let Some(added_limit) = result.data 
             {
@@ -78,7 +78,7 @@ pub async fn list_all_timer_limits(db: &DatabaseConnection) -> Result<(), Box<dy
     
     let result = timer_limit_orm.items(db, filters).await;
     
-    if result.success {
+    if result.status {
         if let Some(limits) = result.data {
             println!("⏱️ Found {} timer limits:", limits.len());
             println!("{:-<80}", "");

@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 //--------------------------------------------------------------------------------- Models
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ModelOutput<T> {
-    pub success: bool,
+    pub status: bool,
     pub message: String,
     pub data: Option<T>,
     pub error: Option<String>,
@@ -19,7 +19,7 @@ pub struct ModelOutput<T> {
 impl<T> ModelOutput<T> {
     pub fn success(data: T, message: String) -> Self {
         Self {
-            success: true,
+            status: true,
             message,
             data: Some(data),
             error: None,
@@ -28,7 +28,7 @@ impl<T> ModelOutput<T> {
 
     pub fn success_with_message(message: String) -> Self {
         Self {
-            success: true,
+            status: true,
             message,
             data: None,
             error: None,
@@ -37,7 +37,7 @@ impl<T> ModelOutput<T> {
 
     pub fn error(message: String) -> Self {
         Self {
-            success: false,
+            status: false,
             message: "Error".to_string(),
             data: None,
             error: Some(message),

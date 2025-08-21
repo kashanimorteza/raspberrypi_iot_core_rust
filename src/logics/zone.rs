@@ -85,7 +85,7 @@ pub async fn add_sample_zones(db: &DatabaseConnection) -> Result<(), Box<dyn std
         println!("📝 Adding zone {}: {}", index + 1, zone_name);
         
         let result = zone_orm.add(db, zone).await;
-        if result.success 
+        if result.status 
         {
             if let Some(added_zone) = result.data 
             {
@@ -114,7 +114,7 @@ pub async fn list_all_zones(db: &DatabaseConnection) -> Result<(), Box<dyn std::
     
     let result = zone_orm.items(db, filters).await;
     
-    if result.success {
+    if result.status {
         if let Some(zones) = result.data {
             println!("🏠 Found {} zones:", zones.len());
             println!("{:-<80}", "");

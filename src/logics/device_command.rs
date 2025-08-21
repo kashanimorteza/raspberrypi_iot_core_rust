@@ -154,7 +154,7 @@ pub async fn add_sample_device_commands(db: &DatabaseConnection) -> Result<(), B
         println!("📝 Adding device command {}: {}", index + 1, command_name);
         
         let result = device_command_orm.add(db, command).await;
-        if result.success 
+        if result.status 
         {
             if let Some(added_command) = result.data 
             {
@@ -183,7 +183,7 @@ pub async fn list_all_device_commands(db: &DatabaseConnection) -> Result<(), Box
     
     let result = device_command_orm.items(db, filters).await;
     
-    if result.success {
+    if result.status {
         if let Some(commands) = result.data {
             println!("🎮 Found {} device commands:", commands.len());
             println!("{:-<80}", "");

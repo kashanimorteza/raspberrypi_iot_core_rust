@@ -41,7 +41,7 @@ pub async fn add_sample_users(db: &DatabaseConnection) -> Result<(), Box<dyn std
         println!("📝 Adding user {}: {}", index + 1, user_name);
         
         let result = user_orm.add(db, user).await;
-        if result.success 
+        if result.status 
         {
             if let Some(added_user) = result.data 
             {
@@ -70,7 +70,7 @@ pub async fn list_all_users(db: &DatabaseConnection) -> Result<(), Box<dyn std::
     
     let result = user_orm.items(db, filters).await;
     
-    if result.success {
+    if result.status {
         if let Some(users) = result.data {
             println!("👥 Found {} users:", users.len());
             println!("{:-<80}", "");

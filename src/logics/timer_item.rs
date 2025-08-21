@@ -257,7 +257,7 @@ pub async fn add_sample_timer_items(db: &DatabaseConnection) -> Result<(), Box<d
         println!("📝 Adding timer item {}: {}", index + 1, item_name);
         
         let result = timer_item_orm.add(db, timer_item).await;
-        if result.success 
+        if result.status 
         {
             if let Some(added_item) = result.data 
             {
@@ -286,7 +286,7 @@ pub async fn list_all_timer_items(db: &DatabaseConnection) -> Result<(), Box<dyn
     
     let result = timer_item_orm.items(db, filters).await;
     
-    if result.success {
+    if result.status {
         if let Some(items) = result.data {
             println!("⏰ Found {} timer items:", items.len());
             println!("{:-<80}", "");

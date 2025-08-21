@@ -18,7 +18,7 @@ pub fn router() -> Router<AppState>
     Router::new()
         .route("/add", post(create_config))
         .route("/items", get(list_configs))
-        .route("/{id}", get(get_config))
+        .route("/item/{id}", get(get_config))
         .route("/update/{id}", put(update_config))
         .route("/delete/{id}", delete(delete_config))
 }

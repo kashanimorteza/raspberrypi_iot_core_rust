@@ -528,7 +528,7 @@ pub async fn add_sample_ports(db: &DatabaseConnection) -> Result<(), Box<dyn std
         println!("📝 Adding port {}: {}", index + 1, port_name);
         
         let result = port_orm.add(db, port).await;
-        if result.success 
+        if result.status 
         {
             if let Some(added_port) = result.data 
             {
@@ -557,7 +557,7 @@ pub async fn list_all_ports(db: &DatabaseConnection) -> Result<(), Box<dyn std::
     
     let result = port_orm.items(db, filters).await;
     
-    if result.success {
+    if result.status {
         if let Some(ports) = result.data {
             println!("🔌 Found {} ports:", ports.len());
             println!("{:-<80}", "");

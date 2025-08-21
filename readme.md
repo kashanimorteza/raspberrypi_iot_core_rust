@@ -73,7 +73,7 @@ cargo run
 ```
 Get All Users
 ```bash
-curl -X GET http://localhost:3000/users/items
+curl -X GET http://localhost:3000/user/items
 ```
 Get User by ID
 ```bash

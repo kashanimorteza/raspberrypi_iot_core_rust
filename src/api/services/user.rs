@@ -55,7 +55,7 @@ impl UserService {
         let output = self.logic.items(db, filters).await;
         
         // Convert data to dictionary format (equivalent to Python's item.toDict())
-        if output.success 
+        if output.status 
         {
             // In Rust, the serialization is handled by serde automatically
             // The models already have Serialize derive, so they convert to JSON properly

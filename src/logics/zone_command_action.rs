@@ -214,7 +214,7 @@ pub async fn add_sample_zone_command_actions(db: &DatabaseConnection) -> Result<
         println!("📝 Adding zone command action {}: {}", index + 1, action_name);
         
         let result = zone_command_action_orm.add(db, zone_command_action).await;
-        if result.success 
+        if result.status 
         {
             if let Some(added_action) = result.data 
             {
@@ -243,7 +243,7 @@ pub async fn list_all_zone_command_actions(db: &DatabaseConnection) -> Result<()
     
     let result = zone_command_action_orm.items(db, filters).await;
     
-    if result.success {
+    if result.status {
         if let Some(actions) = result.data {
             println!("⚡ Found {} zone command actions:", actions.len());
             println!("{:-<80}", "");

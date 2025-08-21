@@ -232,7 +232,7 @@ pub async fn add_sample_zone_command_ifs(db: &DatabaseConnection) -> Result<(), 
         println!("📝 Adding zone command if {}: {}", index + 1, if_name);
         
         let result = zone_command_if_orm.add(db, zone_command_if).await;
-        if result.success 
+        if result.status 
         {
             if let Some(added_if) = result.data 
             {
@@ -261,7 +261,7 @@ pub async fn list_all_zone_command_ifs(db: &DatabaseConnection) -> Result<(), Bo
     
     let result = zone_command_if_orm.items(db, filters).await;
     
-    if result.success {
+    if result.status {
         if let Some(ifs) = result.data {
             println!("🔀 Found {} zone command ifs:", ifs.len());
             println!("{:-<80}", "");

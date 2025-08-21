@@ -45,7 +45,7 @@ pub async fn add_sample_logs(db: &DatabaseConnection) -> Result<(), Box<dyn std:
         println!("📝 Adding log {}: {}", index + 1, log_name);
         
         let result = log_orm.add(db, log).await;
-        if result.success 
+        if result.status 
         {
             if let Some(added_log) = result.data 
             {
@@ -74,7 +74,7 @@ pub async fn list_all_logs(db: &DatabaseConnection) -> Result<(), Box<dyn std::e
     
     let result = log_orm.items(db, filters).await;
     
-    if result.success {
+    if result.status {
         if let Some(logs) = result.data {
             println!("📝 Found {} logs:", logs.len());
             println!("{:-<80}", "");

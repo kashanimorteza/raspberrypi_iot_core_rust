@@ -400,7 +400,7 @@ pub async fn add_sample_devices(db: &DatabaseConnection) -> Result<(), Box<dyn s
         println!("📝 Adding device {}: {}", index + 1, device_name);
         
         let result = device_orm.add(db, device).await;
-        if result.success 
+        if result.status 
         {
             if let Some(added_device) = result.data 
             {
@@ -429,7 +429,7 @@ pub async fn list_all_devices(db: &DatabaseConnection) -> Result<(), Box<dyn std
     
     let result = device_orm.items(db, filters).await;
     
-    if result.success {
+    if result.status {
         if let Some(devices) = result.data {
             println!("🔌 Found {} devices:", devices.len());
             println!("{:-<80}", "");
