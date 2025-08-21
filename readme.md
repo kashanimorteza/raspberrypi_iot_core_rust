@@ -63,9 +63,13 @@ sea-orm-cli generate entity -u postgres://postgres:123456@192.168.64.9:5432/rasp
 ## API
 
 **Add samples:** `cargo run -- --add-samples`
+
 **Running the Server:** `cargo run`
+
 **Get All Users:** `curl -X GET http://localhost:3000/users/items`
+
 **Get User by ID:** `curl -X GET http://localhost:3000/users/1`
+
 **Add New User:** 
 ```bash
 curl -X POST http://localhost:3000/users/add \
@@ -98,5 +102,7 @@ curl -X PUT http://localhost:3000/users/update \
   }'
 ```
 **Delete User:** `curl -X DELETE http://localhost:3000/users/delete/1`
+
 **Disable User:** `curl -X GET http://localhost:3000/users/disable/1`
+
 **Enable User:** `curl -X GET http://localhost:3000/users/enable/1`
