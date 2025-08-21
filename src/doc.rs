@@ -12,23 +12,15 @@ use utoipa::OpenApi;
 #[openapi(
     info(
         title = "🚀 Raspberry Pi IoT Core API",
-        version = "1.0.0",
-        description = "A comprehensive IoT management API for Raspberry Pi devices with full CRUD operations for all system components.",
-        terms_of_service = "https://example.com/terms",
-        contact(
-            name = "IoT Core API Support",
-            email = "support@iotcore.com",
-            url = "https://iotcore.com/support"
-        ),
-        license(
-            name = "MIT",
-            url = "https://opensource.org/licenses/MIT"
-        )
     ),
-    servers(
-        (url = "http://localhost:3000", description = "Local development server")
-    ),
+    servers((url = "http://localhost:3000", description = "Local development server")),
     paths(
+        // Config endpoints
+        crate::api::handlers::config::list_configs,
+        crate::api::handlers::config::get_config,
+        crate::api::handlers::config::update_config,
+        crate::api::handlers::config::delete_config,
+        crate::api::handlers::config::create_config,
         // User endpoints
         crate::api::handlers::user::list_users,
         crate::api::handlers::user::get_user,
@@ -41,12 +33,6 @@ use utoipa::OpenApi;
         crate::api::handlers::device::create_device,
         crate::api::handlers::device::update_device,
         crate::api::handlers::device::delete_device,
-        // Config endpoints
-        crate::api::handlers::config::list_configs,
-        crate::api::handlers::config::get_config,
-        crate::api::handlers::config::create_config,
-        crate::api::handlers::config::update_config,
-        crate::api::handlers::config::delete_config,
         // Zone endpoints
         crate::api::handlers::zone::list_zones,
         crate::api::handlers::zone::get_zone,
@@ -117,10 +103,10 @@ use utoipa::OpenApi;
     components(
         schemas(
             // Model schemas
+            crate::orm::models::config::Model,
             crate::orm::models::user::Model,
             crate::orm::models::device::Model,
             crate::orm::models::zone::Model,
-            crate::orm::models::config::Model,
             crate::orm::models::device_command::Model,
             crate::orm::models::log::Model,
             crate::orm::models::port::Model,
@@ -134,9 +120,15 @@ use utoipa::OpenApi;
         )
     ),
     tags(
+        // (name = "⚙️ Config - 1️⃣ Items", description = "User creation operations"),
+        // (name = "⚙️ Config - 2️⃣ Item", description = "User retrieval operations"),
+        // (name = "⚙️ Config - 3️⃣ Update", description = "User modification operations"),
+        // (name = "⚙️ Config - 4️⃣ Delete", description = "User deletion operations"),
+
+
+        (name = "⚙️ Config", description = "System configuration management operations"),
         (name = "👥 Users", description = "User management and authentication operations"),
         (name = "🔧 Devices", description = "IoT device management and control operations"),
-        (name = "⚙️ Configs", description = "System configuration management operations"),
         (name = "🏠 Zones", description = "Zone management for organizing devices"),
         (name = "📡 Device Commands", description = "Device command execution and management"),
         (name = "📋 Logs", description = "System logging and audit trail operations"),
@@ -149,9 +141,6 @@ use utoipa::OpenApi;
         (name = "⚡ Zone Command Actions", description = "Zone command action execution"),
         (name = "🔀 Zone Command Conditions", description = "Zone command conditional logic")
     ),
-    external_docs(
-        description = "Find more info about IoT Core API",
-        url = "https://docs.iotcore.com"
-    )
 )]
 pub struct ApiDoc;
+

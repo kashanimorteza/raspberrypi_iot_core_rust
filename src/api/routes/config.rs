@@ -16,9 +16,9 @@ use crate::api::handlers::config::{list_configs, get_config, create_config, upda
 pub fn router() -> Router<AppState> 
 {
     Router::new()
-        .route("/add", post(create_config))
         .route("/items", get(list_configs))
         .route("/item/{id}", get(get_config))
         .route("/update/{id}", put(update_config))
         .route("/delete/{id}", delete(delete_config))
+        .route("/add", post(create_config))
 }
