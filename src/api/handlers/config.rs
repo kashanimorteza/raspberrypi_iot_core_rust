@@ -103,9 +103,6 @@ pub struct UpdateConfigRequest {
     get,
     path = "/config/items",
     tag = "⚙️ Config",
-    summary = "List all configurations",
-    description = "Retrieve a list of all system configurations with optional query parameters for filtering",
-    operation_id="1_list_item",
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of configs to return"),
         ("offset" = Option<i32>, Query, description = "Number of configs to skip"),
@@ -129,12 +126,7 @@ pub async fn list_configs(
     get,
     path = "/config/item/{id}",
     tag = "⚙️ Config",
-    summary = "Get configuration by ID",
-    description = "Retrieve a specific configuration by its unique identifier",
-    operation_id="2_litem",
-    params(
-        ("id" = i32, Path, description = "Configuration ID")
-    ),
+    params(("id" = i32, Path, description = "Configuration ID")),
     responses(
         (status = 200, description = "Configuration retrieved successfully", body = ConfigModel),
         (status = 404, description = "Configuration not found"),
@@ -155,9 +147,6 @@ pub async fn get_config(
     post,
     path = "/config/add",
     tag = "⚙️ Config",
-    summary = "Create new configuration",
-    description = "Create a new system configuration with the provided details",
-    operation_id="3",
     request_body = CreateConfigRequest,
     responses(
         (status = 201, description = "Configuration created successfully", body = ConfigModel),
@@ -215,9 +204,6 @@ pub async fn create_config(
     put,
     path = "/config/update/{id}",
     tag = "⚙️ Config",
-    summary = "Update configuration",
-    description = "Update an existing configuration with the provided details",
-    operation_id="4",
     params(
         ("id" = i32, Path, description = "Configuration ID to update")
     ),
@@ -281,9 +267,6 @@ pub async fn update_config(
     delete,
     path = "/config/delete/{id}",
     tag = "⚙️ Config",
-    summary = "Delete configuration",
-    description = "Delete a configuration by its unique identifier",
-    operation_id="5",
     params(
         ("id" = i32, Path, description = "Configuration ID to delete")
     ),

@@ -120,26 +120,20 @@ use utoipa::OpenApi;
         )
     ),
     tags(
-        // (name = "⚙️ Config - 1️⃣ Items", description = "User creation operations"),
-        // (name = "⚙️ Config - 2️⃣ Item", description = "User retrieval operations"),
-        // (name = "⚙️ Config - 3️⃣ Update", description = "User modification operations"),
-        // (name = "⚙️ Config - 4️⃣ Delete", description = "User deletion operations"),
-
-
-        (name = "⚙️ Config", description = "System configuration management operations"),
-        (name = "👥 Users", description = "User management and authentication operations"),
-        (name = "🔧 Devices", description = "IoT device management and control operations"),
-        (name = "🏠 Zones", description = "Zone management for organizing devices"),
-        (name = "📡 Device Commands", description = "Device command execution and management"),
-        (name = "📋 Logs", description = "System logging and audit trail operations"),
-        (name = "🔌 Ports", description = "Hardware port configuration and management"),
-        (name = "⏰ Timers", description = "Timer and scheduling operations"),
-        (name = "🔗 Timer Devices", description = "Timer-device relationship management"),
-        (name = "📝 Timer Items", description = "Individual timer item configuration"),
-        (name = "⏱️ Timer Limits", description = "Timer limitation and constraint management"),
-        (name = "🎯 Zone Commands", description = "Zone-level command operations"),
-        (name = "⚡ Zone Command Actions", description = "Zone command action execution"),
-        (name = "🔀 Zone Command Conditions", description = "Zone command conditional logic")
+            (name = "⚙️ Config"),
+            (name = "👥 Users"),
+            (name = "🔧 Devices"),
+            (name = "🏠 Zones"),
+            (name = "📡 Device Commands"),
+            (name = "📋 Logs"),
+            (name = "🔌 Ports"),
+            (name = "⏰ Timers"),
+            (name = "🔗 Timer Devices"),
+            (name = "📝 Timer Items"),
+            (name = "⏱️ Timer Limits"),
+            (name = "🎯 Zone Commands"),
+            (name = "⚡ Zone Command Actions"),
+            (name = "🔀 Zone Command Conditions")
     ),
 )]
 pub struct ApiDoc;
