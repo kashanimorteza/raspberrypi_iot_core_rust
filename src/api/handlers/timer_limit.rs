@@ -12,31 +12,61 @@ use axum::{
 };
 use serde::Deserialize;
 use std::collections::HashMap;
+use utoipa::ToSchema;
 use crate::{orm::models::timer_limit::Model as TimerLimitModel, logics::general::ModelOutput, AppState};
 use crate::api::services::timer_limit::TimerLimitService;
 
 //--------------------------------------------------------------------------------- Request DTOs
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
+#[schema(description = "Request payload for creating a new timer limit")]
 pub struct CreateTimerLimitRequest {
+    #[schema(example = 1)]
     pub device_id: i32,
+    #[schema(example = 1)]
     pub command_from_id: i32,
+    #[schema(example = 2)]
     pub command_to_id: i32,
+    #[schema(example = 100)]
     pub value: i32,
+    #[schema(example = "Timer limit for device control")]
     pub description: String,
+    #[schema(example = true)]
     pub enable: bool,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
+#[schema(description = "Request payload for updating an existing timer limit")]
 pub struct UpdateTimerLimitRequest {
+    #[schema(example = 1)]
     pub device_id: Option<i32>,
+    #[schema(example = 1)]
     pub command_from_id: Option<i32>,
+    #[schema(example = 2)]
     pub command_to_id: Option<i32>,
+    #[schema(example = 100)]
     pub value: Option<i32>,
+    #[schema(example = "Timer limit for device control")]
     pub description: Option<String>,
+    #[schema(example = true)]
     pub enable: Option<bool>,
 }
 
 //--------------------------------------------------------------------------------- Handlers
+#[utoipa::path(
+    get,
+    path = "/timer_limits/items",
+    tag = "⏱️ Timer Limits",
+    summary = "List all timer limits",
+    description = "Retrieve a list of all timer limits with optional query parameters for filtering",
+    params(
+        ("limit" = Option<i32>, Query, description = "Maximum number of timer limits to return"),
+        ("offset" = Option<i32>, Query, description = "Number of timer limits to skip"),
+    ),
+    responses(
+        (status = 200, description = "List of timer limits retrieved successfully", body = Vec<TimerLimitModel>),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn list_timer_limits(
     State(state): State<AppState>,
     Query(params): Query<HashMap<String, String>>,
@@ -46,6 +76,21 @@ pub async fn list_timer_limits(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    get,
+    path = "/timer_limits/{id}",
+    tag = "⏱️ Timer Limits",
+    summary = "Get timer limit by ID",
+    description = "Retrieve a specific timer limit by its unique identifier",
+    params(
+        ("id" = i32, Path, description = "Timer limit ID")
+    ),
+    responses(
+        (status = 200, description = "Timer limit retrieved successfully", body = TimerLimitModel),
+        (status = 404, description = "Timer limit not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn get_timer_limit(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -55,6 +100,19 @@ pub async fn get_timer_limit(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    post,
+    path = "/timer_limits/add",
+    tag = "⏱️ Timer Limits",
+    summary = "Create new timer limit",
+    description = "Create a new timer limit with the provided information",
+    request_body = CreateTimerLimitRequest,
+    responses(
+        (status = 201, description = "Timer limit created successfully", body = TimerLimitModel),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn create_timer_limit(
     State(state): State<AppState>,
     Json(payload): Json<CreateTimerLimitRequest>,
@@ -74,6 +132,23 @@ pub async fn create_timer_limit(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    put,
+    path = "/timer_limits/update/{id}",
+    tag = "⏱️ Timer Limits",
+    summary = "Update timer limit",
+    description = "Update an existing timer limit with new information",
+    params(
+        ("id" = i32, Path, description = "Timer limit ID to update")
+    ),
+    request_body = UpdateTimerLimitRequest,
+    responses(
+        (status = 200, description = "Timer limit updated successfully", body = TimerLimitModel),
+        (status = 404, description = "Timer limit not found"),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn update_timer_limit(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -95,6 +170,21 @@ pub async fn update_timer_limit(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    delete,
+    path = "/timer_limits/delete/{id}",
+    tag = "⏱️ Timer Limits",
+    summary = "Delete timer limit",
+    description = "Delete a timer limit by its unique identifier",
+    params(
+        ("id" = i32, Path, description = "Timer limit ID to delete")
+    ),
+    responses(
+        (status = 200, description = "Timer limit deleted successfully"),
+        (status = 404, description = "Timer limit not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn delete_timer_limit(
     State(state): State<AppState>,
     Path(id): Path<i32>,

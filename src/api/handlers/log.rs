@@ -12,27 +12,53 @@ use axum::{
 };
 use serde::Deserialize;
 use std::collections::HashMap;
+use utoipa::ToSchema;
 use crate::{orm::models::log::Model as LogModel, logics::general::ModelOutput, AppState};
 use crate::api::services::log::LogService;
 
 //--------------------------------------------------------------------------------- Request DTOs
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
+#[schema(description = "Request payload for creating a new log entry")]
 pub struct CreateLogRequest {
+    #[schema(example = "2024-01-15")]
     pub date: String,
+    #[schema(example = "System startup")]
     pub name: String,
+    #[schema(example = true)]
     pub status: bool,
+    #[schema(example = "System initialized successfully")]
     pub data: String,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
+#[schema(description = "Request payload for updating an existing log entry")]
 pub struct UpdateLogRequest {
+    #[schema(example = "2024-01-15")]
     pub date: Option<String>,
+    #[schema(example = "System startup")]
     pub name: Option<String>,
+    #[schema(example = true)]
     pub status: Option<bool>,
+    #[schema(example = "System initialized successfully")]
     pub data: Option<String>,
 }
 
 //--------------------------------------------------------------------------------- Handlers
+#[utoipa::path(
+    get,
+    path = "/logs/items",
+    tag = "📋 Logs",
+    summary = "List all logs",
+    description = "Retrieve a list of all log entries with optional query parameters for filtering",
+    params(
+        ("limit" = Option<i32>, Query, description = "Maximum number of logs to return"),
+        ("offset" = Option<i32>, Query, description = "Number of logs to skip"),
+    ),
+    responses(
+        (status = 200, description = "List of logs retrieved successfully", body = Vec<LogModel>),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn list_logs(
     State(state): State<AppState>,
     Query(params): Query<HashMap<String, String>>,
@@ -42,6 +68,21 @@ pub async fn list_logs(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    get,
+    path = "/logs/{id}",
+    tag = "📋 Logs",
+    summary = "Get log by ID",
+    description = "Retrieve a specific log entry by its unique identifier",
+    params(
+        ("id" = i32, Path, description = "Log ID")
+    ),
+    responses(
+        (status = 200, description = "Log retrieved successfully", body = LogModel),
+        (status = 404, description = "Log not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn get_log(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -51,6 +92,19 @@ pub async fn get_log(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    post,
+    path = "/logs/add",
+    tag = "📋 Logs",
+    summary = "Create new log",
+    description = "Create a new log entry with the provided information",
+    request_body = CreateLogRequest,
+    responses(
+        (status = 201, description = "Log created successfully", body = LogModel),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn create_log(
     State(state): State<AppState>,
     Json(payload): Json<CreateLogRequest>,
@@ -68,6 +122,23 @@ pub async fn create_log(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    put,
+    path = "/logs/update/{id}",
+    tag = "📋 Logs",
+    summary = "Update log",
+    description = "Update an existing log entry with new information",
+    params(
+        ("id" = i32, Path, description = "Log ID to update")
+    ),
+    request_body = UpdateLogRequest,
+    responses(
+        (status = 200, description = "Log updated successfully", body = LogModel),
+        (status = 404, description = "Log not found"),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn update_log(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -87,6 +158,21 @@ pub async fn update_log(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    delete,
+    path = "/logs/delete/{id}",
+    tag = "📋 Logs",
+    summary = "Delete log",
+    description = "Delete a log entry by its unique identifier",
+    params(
+        ("id" = i32, Path, description = "Log ID to delete")
+    ),
+    responses(
+        (status = 200, description = "Log deleted successfully"),
+        (status = 404, description = "Log not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn delete_log(
     State(state): State<AppState>,
     Path(id): Path<i32>,

@@ -12,27 +12,53 @@ use axum::{
 };
 use serde::Deserialize;
 use std::collections::HashMap;
+use utoipa::ToSchema;
 use crate::{orm::models::zone_command::Model as ZoneCommandModel, logics::general::ModelOutput, AppState};
 use crate::api::services::zone_command::ZoneCommandService;
 
 //--------------------------------------------------------------------------------- Request DTOs
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
+#[schema(description = "Request payload for creating a new zone command")]
 pub struct CreateZoneCommandRequest {
+    #[schema(example = 1)]
     pub zone_id: i32,
+    #[schema(example = "Zone Control Command")]
     pub name: String,
+    #[schema(example = "Command to control zone devices")]
     pub description: String,
+    #[schema(example = true)]
     pub enable: bool,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
+#[schema(description = "Request payload for updating an existing zone command")]
 pub struct UpdateZoneCommandRequest {
+    #[schema(example = 1)]
     pub zone_id: Option<i32>,
+    #[schema(example = "Zone Control Command")]
     pub name: Option<String>,
+    #[schema(example = "Command to control zone devices")]
     pub description: Option<String>,
+    #[schema(example = true)]
     pub enable: Option<bool>,
 }
 
 //--------------------------------------------------------------------------------- Handlers
+#[utoipa::path(
+    get,
+    path = "/zone_commands/items",
+    tag = "🎯 Zone Commands",
+    summary = "List all zone commands",
+    description = "Retrieve a list of all zone commands with optional query parameters for filtering",
+    params(
+        ("limit" = Option<i32>, Query, description = "Maximum number of zone commands to return"),
+        ("offset" = Option<i32>, Query, description = "Number of zone commands to skip"),
+    ),
+    responses(
+        (status = 200, description = "List of zone commands retrieved successfully", body = Vec<ZoneCommandModel>),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn list_zone_commands(
     State(state): State<AppState>,
     Query(params): Query<HashMap<String, String>>,
@@ -42,6 +68,21 @@ pub async fn list_zone_commands(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    get,
+    path = "/zone_commands/{id}",
+    tag = "🎯 Zone Commands",
+    summary = "Get zone command by ID",
+    description = "Retrieve a specific zone command by its unique identifier",
+    params(
+        ("id" = i32, Path, description = "Zone command ID")
+    ),
+    responses(
+        (status = 200, description = "Zone command retrieved successfully", body = ZoneCommandModel),
+        (status = 404, description = "Zone command not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn get_zone_command(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -51,6 +92,19 @@ pub async fn get_zone_command(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    post,
+    path = "/zone_commands/add",
+    tag = "🎯 Zone Commands",
+    summary = "Create new zone command",
+    description = "Create a new zone command with the provided information",
+    request_body = CreateZoneCommandRequest,
+    responses(
+        (status = 201, description = "Zone command created successfully", body = ZoneCommandModel),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn create_zone_command(
     State(state): State<AppState>,
     Json(payload): Json<CreateZoneCommandRequest>,
@@ -68,6 +122,23 @@ pub async fn create_zone_command(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    put,
+    path = "/zone_commands/update/{id}",
+    tag = "🎯 Zone Commands",
+    summary = "Update zone command",
+    description = "Update an existing zone command with new information",
+    params(
+        ("id" = i32, Path, description = "Zone command ID to update")
+    ),
+    request_body = UpdateZoneCommandRequest,
+    responses(
+        (status = 200, description = "Zone command updated successfully", body = ZoneCommandModel),
+        (status = 404, description = "Zone command not found"),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn update_zone_command(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -87,6 +158,21 @@ pub async fn update_zone_command(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    delete,
+    path = "/zone_commands/delete/{id}",
+    tag = "🎯 Zone Commands",
+    summary = "Delete zone command",
+    description = "Delete a zone command by its unique identifier",
+    params(
+        ("id" = i32, Path, description = "Zone command ID to delete")
+    ),
+    responses(
+        (status = 200, description = "Zone command deleted successfully"),
+        (status = 404, description = "Zone command not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn delete_zone_command(
     State(state): State<AppState>,
     Path(id): Path<i32>,

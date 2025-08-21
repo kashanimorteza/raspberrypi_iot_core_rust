@@ -12,31 +12,61 @@ use axum::{
 };
 use serde::Deserialize;
 use std::collections::HashMap;
+use utoipa::ToSchema;
 use crate::{orm::models::timer_item::Model as TimerItemModel, logics::general::ModelOutput, AppState};
 use crate::api::services::timer_item::TimerItemService;
 
 //--------------------------------------------------------------------------------- Request DTOs
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
+#[schema(description = "Request payload for creating a new timer item")]
 pub struct CreateTimerItemRequest {
+    #[schema(example = 1)]
     pub timer_id: i32,
+    #[schema(example = "Morning Schedule")]
     pub name: String,
+    #[schema(example = "08:00")]
     pub value_from: String,
+    #[schema(example = "18:00")]
     pub value_to: String,
+    #[schema(example = "Daily morning to evening schedule")]
     pub description: String,
+    #[schema(example = true)]
     pub enable: bool,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
+#[schema(description = "Request payload for updating an existing timer item")]
 pub struct UpdateTimerItemRequest {
+    #[schema(example = 1)]
     pub timer_id: Option<i32>,
+    #[schema(example = "Morning Schedule")]
     pub name: Option<String>,
+    #[schema(example = "08:00")]
     pub value_from: Option<String>,
+    #[schema(example = "18:00")]
     pub value_to: Option<String>,
+    #[schema(example = "Daily morning to evening schedule")]
     pub description: Option<String>,
+    #[schema(example = true)]
     pub enable: Option<bool>,
 }
 
 //--------------------------------------------------------------------------------- Handlers
+#[utoipa::path(
+    get,
+    path = "/timer_items/items",
+    tag = "📝 Timer Items",
+    summary = "List all timer items",
+    description = "Retrieve a list of all timer items with optional query parameters for filtering",
+    params(
+        ("limit" = Option<i32>, Query, description = "Maximum number of timer items to return"),
+        ("offset" = Option<i32>, Query, description = "Number of timer items to skip"),
+    ),
+    responses(
+        (status = 200, description = "List of timer items retrieved successfully", body = Vec<TimerItemModel>),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn list_timer_items(
     State(state): State<AppState>,
     Query(params): Query<HashMap<String, String>>,
@@ -46,6 +76,21 @@ pub async fn list_timer_items(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    get,
+    path = "/timer_items/{id}",
+    tag = "📝 Timer Items",
+    summary = "Get timer item by ID",
+    description = "Retrieve a specific timer item by its unique identifier",
+    params(
+        ("id" = i32, Path, description = "Timer item ID")
+    ),
+    responses(
+        (status = 200, description = "Timer item retrieved successfully", body = TimerItemModel),
+        (status = 404, description = "Timer item not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn get_timer_item(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -55,6 +100,19 @@ pub async fn get_timer_item(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    post,
+    path = "/timer_items/add",
+    tag = "📝 Timer Items",
+    summary = "Create new timer item",
+    description = "Create a new timer item with the provided information",
+    request_body = CreateTimerItemRequest,
+    responses(
+        (status = 201, description = "Timer item created successfully", body = TimerItemModel),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn create_timer_item(
     State(state): State<AppState>,
     Json(payload): Json<CreateTimerItemRequest>,
@@ -74,6 +132,23 @@ pub async fn create_timer_item(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    put,
+    path = "/timer_items/update/{id}",
+    tag = "📝 Timer Items",
+    summary = "Update timer item",
+    description = "Update an existing timer item with new information",
+    params(
+        ("id" = i32, Path, description = "Timer item ID to update")
+    ),
+    request_body = UpdateTimerItemRequest,
+    responses(
+        (status = 200, description = "Timer item updated successfully", body = TimerItemModel),
+        (status = 404, description = "Timer item not found"),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn update_timer_item(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -95,6 +170,21 @@ pub async fn update_timer_item(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    delete,
+    path = "/timer_items/delete/{id}",
+    tag = "📝 Timer Items",
+    summary = "Delete timer item",
+    description = "Delete a timer item by its unique identifier",
+    params(
+        ("id" = i32, Path, description = "Timer item ID to delete")
+    ),
+    responses(
+        (status = 200, description = "Timer item deleted successfully"),
+        (status = 404, description = "Timer item not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn delete_timer_item(
     State(state): State<AppState>,
     Path(id): Path<i32>,

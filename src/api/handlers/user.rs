@@ -12,35 +12,69 @@ use axum::{
 };
 use serde::Deserialize;
 use std::collections::HashMap;
+use utoipa::ToSchema;
 use crate::{orm::models::user::Model as UserModel, logics::general::ModelOutput, AppState};
 use crate::api::services::user::UserService;
 
 //--------------------------------------------------------------------------------- Request DTOs
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
+#[schema(description = "Request payload for creating a new user")]
 pub struct CreateUserRequest {
+    #[schema(example = "John Doe")]
     pub name: String,
+    #[schema(example = "johndoe")]
     pub username: String,
+    #[schema(example = "secure_password")]
     pub password: String,
+    #[schema(example = "api_key_123")]
     pub key: String,
+    #[schema(example = "john@example.com")]
     pub email: String,
+    #[schema(example = "+1234567890")]
     pub phone: String,
+    #[schema(example = "telegram_123")]
     pub tg_id: String,
+    #[schema(example = true)]
     pub enable: bool,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
+#[schema(description = "Request payload for updating an existing user")]
 pub struct UpdateUserRequest {
+    #[schema(example = "John Doe")]
     pub name: Option<String>,
+    #[schema(example = "johndoe")]
     pub username: Option<String>,
+    #[schema(example = "secure_password")]
     pub password: Option<String>,
+    #[schema(example = "api_key_123")]
     pub key: Option<String>,
+    #[schema(example = "john@example.com")]
     pub email: Option<String>,
+    #[schema(example = "+1234567890")]
     pub phone: Option<String>,
+    #[schema(example = "telegram_123")]
     pub tg_id: Option<String>,
+    #[schema(example = true)]
     pub enable: Option<bool>,
 }
 
 //--------------------------------------------------------------------------------- Handlers
+#[utoipa::path(
+    get,
+    path = "/users/items",
+    tag = "👥 Users",
+    summary = "List all users",
+    description = "Retrieve a list of all users with optional query parameters for filtering",
+    params(
+        ("limit" = Option<i32>, Query, description = "Maximum number of users to return"),
+        ("offset" = Option<i32>, Query, description = "Number of users to skip"),
+    ),
+    responses(
+        (status = 200, description = "List of users retrieved successfully", body = Vec<UserModel>),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn list_users(
     State(state): State<AppState>,
     Query(params): Query<HashMap<String, String>>,
@@ -50,6 +84,21 @@ pub async fn list_users(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    get,
+    path = "/users/{id}",
+    tag = "👥 Users",
+    summary = "Get user by ID",
+    description = "Retrieve a specific user by their unique identifier",
+    params(
+        ("id" = i32, Path, description = "User ID")
+    ),
+    responses(
+        (status = 200, description = "User retrieved successfully", body = UserModel),
+        (status = 404, description = "User not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn get_user(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -59,6 +108,19 @@ pub async fn get_user(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    post,
+    path = "/users/add",
+    tag = "👥 Users",
+    summary = "Create new user",
+    description = "Create a new user with the provided information",
+    request_body = CreateUserRequest,
+    responses(
+        (status = 201, description = "User created successfully", body = UserModel),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn create_user(
     State(state): State<AppState>,
     Json(payload): Json<CreateUserRequest>,
@@ -80,6 +142,23 @@ pub async fn create_user(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    put,
+    path = "/users/update",
+    tag = "👥 Users",
+    summary = "Update user",
+    description = "Update an existing user with new information",
+    params(
+        ("id" = i32, Path, description = "User ID to update")
+    ),
+    request_body = UpdateUserRequest,
+    responses(
+        (status = 200, description = "User updated successfully", body = UserModel),
+        (status = 404, description = "User not found"),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn update_user(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -105,6 +184,21 @@ pub async fn update_user(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    delete,
+    path = "/users/delete/{id}",
+    tag = "👥 Users",
+    summary = "Delete user",
+    description = "Delete a user by their unique identifier",
+    params(
+        ("id" = i32, Path, description = "User ID to delete")
+    ),
+    responses(
+        (status = 200, description = "User deleted successfully"),
+        (status = 404, description = "User not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn delete_user(
     State(state): State<AppState>,
     Path(id): Path<i32>,

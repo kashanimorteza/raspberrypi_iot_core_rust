@@ -11,17 +11,24 @@ use axum::{
     Json,
 };
 use serde::Deserialize;
+use utoipa::ToSchema;
 use std::collections::HashMap;
 use crate::{orm::models::config::Model as ConfigModel, logics::general::ModelOutput, AppState};
 use crate::api::services::config::ConfigService;
 
 //--------------------------------------------------------------------------------- Request DTOs
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
+#[schema(description = "Request payload for creating a new configuration")]
 pub struct CreateConfigRequest {
+    #[schema(example = "Production Config")]
     pub name: String,
+    #[schema(example = "UTC")]
     pub time_zone: String,
+    #[schema(example = "/api/v1")]
     pub path_api: String,
+    #[schema(example = "/dashboard")]
     pub path_gui: String,
+    #[schema(example = "IoT Core API")]
     pub webapi_title: String,
     pub webapi_description: String,
     pub webapi_version: String,
@@ -52,8 +59,10 @@ pub struct CreateConfigRequest {
     pub verbose: bool,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
+#[schema(description = "Request payload for updating an existing configuration")]
 pub struct UpdateConfigRequest {
+    #[schema(example = "Production Config")]
     pub name: Option<String>,
     pub time_zone: Option<String>,
     pub path_api: Option<String>,
@@ -89,6 +98,21 @@ pub struct UpdateConfigRequest {
 }
 
 //--------------------------------------------------------------------------------- Handlers
+#[utoipa::path(
+    get,
+    path = "/configs/items",
+    tag = "⚙️ Configs",
+    summary = "List all configurations",
+    description = "Retrieve a list of all system configurations with optional query parameters for filtering",
+    params(
+        ("limit" = Option<i32>, Query, description = "Maximum number of configs to return"),
+        ("offset" = Option<i32>, Query, description = "Number of configs to skip"),
+    ),
+    responses(
+        (status = 200, description = "List of configurations retrieved successfully", body = Vec<ConfigModel>),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn list_configs(
     State(state): State<AppState>,
     Query(params): Query<HashMap<String, String>>,
@@ -98,6 +122,21 @@ pub async fn list_configs(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    get,
+    path = "/configs/{id}",
+    tag = "⚙️ Configs",
+    summary = "Get configuration by ID",
+    description = "Retrieve a specific configuration by its unique identifier",
+    params(
+        ("id" = i32, Path, description = "Configuration ID")
+    ),
+    responses(
+        (status = 200, description = "Configuration retrieved successfully", body = ConfigModel),
+        (status = 404, description = "Configuration not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn get_config(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -107,6 +146,19 @@ pub async fn get_config(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    post,
+    path = "/configs/add",
+    tag = "⚙️ Configs",
+    summary = "Create new configuration",
+    description = "Create a new system configuration with the provided details",
+    request_body = CreateConfigRequest,
+    responses(
+        (status = 201, description = "Configuration created successfully", body = ConfigModel),
+        (status = 400, description = "Invalid request payload"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn create_config(
     State(state): State<AppState>,
     Json(payload): Json<CreateConfigRequest>,
@@ -152,6 +204,23 @@ pub async fn create_config(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    put,
+    path = "/configs/update/{id}",
+    tag = "⚙️ Configs",
+    summary = "Update configuration",
+    description = "Update an existing configuration with the provided details",
+    params(
+        ("id" = i32, Path, description = "Configuration ID to update")
+    ),
+    request_body = UpdateConfigRequest,
+    responses(
+        (status = 200, description = "Configuration updated successfully", body = ConfigModel),
+        (status = 400, description = "Invalid request payload"),
+        (status = 404, description = "Configuration not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn update_config(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -199,6 +268,21 @@ pub async fn update_config(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    delete,
+    path = "/configs/delete/{id}",
+    tag = "⚙️ Configs",
+    summary = "Delete configuration",
+    description = "Delete a configuration by its unique identifier",
+    params(
+        ("id" = i32, Path, description = "Configuration ID to delete")
+    ),
+    responses(
+        (status = 200, description = "Configuration deleted successfully"),
+        (status = 404, description = "Configuration not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn delete_config(
     State(state): State<AppState>,
     Path(id): Path<i32>,

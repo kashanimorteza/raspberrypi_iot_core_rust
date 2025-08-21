@@ -12,10 +12,14 @@ pub use std::net::SocketAddr;
 pub use tower::ServiceBuilder;
 pub use tower_http::{cors::CorsLayer, trace::TraceLayer};
 pub use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+use utoipa::OpenApi;
+use utoipa_swagger_ui::SwaggerUi;
 pub mod api;
 pub mod orm;
 pub mod logics;
 pub mod args;
+mod doc;
+
 
 //--------------------------------------------------------------------------------- State Management
 #[derive(Clone)]
@@ -23,6 +27,8 @@ pub struct AppState
 {
     pub db: DatabaseConnection,
 }
+
+
 
 //--------------------------------------------------------------------------------- Main
 #[tokio::main]
@@ -70,8 +76,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>
         .nest("/timer_items", api::routes::timer_item::router())
         .nest("/timer_limits", api::routes::timer_limit::router())
         .nest("/zone_commands", api::routes::zone_command::router())
-        .nest("/zone_command-actions", api::routes::zone_command_action::router())
-        .nest("/zone_command-ifs", api::routes::zone_command_if::router())
+        .nest("/zone_command_actions", api::routes::zone_command_action::router())
+        .nest("/zone_command_ifs", api::routes::zone_command_if::router())
+        .merge(SwaggerUi::new("/doc").url("/api-doc/openapi.json", doc::ApiDoc::openapi()),)
         .layer(middleware_stack)
         .with_state(state);
 

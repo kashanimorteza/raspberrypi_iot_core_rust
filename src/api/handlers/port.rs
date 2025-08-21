@@ -12,11 +12,13 @@ use axum::{
 };
 use serde::Deserialize;
 use std::collections::HashMap;
+use utoipa::ToSchema;
 use crate::{orm::models::port::Model as PortModel, logics::general::ModelOutput, AppState};
 use crate::api::services::port::PortService;
 
 //--------------------------------------------------------------------------------- Request DTOs
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
+#[schema(description = "Request payload for creating a new port")]
 pub struct CreatePortRequest {
     pub user_id: i32,
     pub name: String,
@@ -29,7 +31,8 @@ pub struct CreatePortRequest {
     pub r#type: String,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
+#[schema(description = "Request payload for updating an existing port")]
 pub struct UpdatePortRequest {
     pub user_id: Option<i32>,
     pub name: Option<String>,
@@ -43,6 +46,21 @@ pub struct UpdatePortRequest {
 }
 
 //--------------------------------------------------------------------------------- Handlers
+#[utoipa::path(
+    get,
+    path = "/ports/items",
+    tag = "🔌 Ports",
+    summary = "List all ports",
+    description = "Retrieve a list of all ports with optional query parameters for filtering",
+    params(
+        ("limit" = Option<i32>, Query, description = "Maximum number of ports to return"),
+        ("offset" = Option<i32>, Query, description = "Number of ports to skip"),
+    ),
+    responses(
+        (status = 200, description = "List of ports retrieved successfully", body = Vec<PortModel>),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn list_ports(
     State(state): State<AppState>,
     Query(params): Query<HashMap<String, String>>,
@@ -52,6 +70,21 @@ pub async fn list_ports(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    get,
+    path = "/ports/{id}",
+    tag = "🔌 Ports",
+    summary = "Get port by ID",
+    description = "Retrieve a specific port by its unique identifier",
+    params(
+        ("id" = i32, Path, description = "Port ID")
+    ),
+    responses(
+        (status = 200, description = "Port retrieved successfully", body = PortModel),
+        (status = 404, description = "Port not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn get_port(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -61,6 +94,19 @@ pub async fn get_port(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    post,
+    path = "/ports/add",
+    tag = "🔌 Ports",
+    summary = "Create new port",
+    description = "Create a new port with the provided information",
+    request_body = CreatePortRequest,
+    responses(
+        (status = 201, description = "Port created successfully", body = PortModel),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn create_port(
     State(state): State<AppState>,
     Json(payload): Json<CreatePortRequest>,
@@ -83,6 +129,23 @@ pub async fn create_port(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    put,
+    path = "/ports/update/{id}",
+    tag = "🔌 Ports",
+    summary = "Update port",
+    description = "Update an existing port with new information",
+    params(
+        ("id" = i32, Path, description = "Port ID to update")
+    ),
+    request_body = UpdatePortRequest,
+    responses(
+        (status = 200, description = "Port updated successfully", body = PortModel),
+        (status = 404, description = "Port not found"),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn update_port(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -107,6 +170,21 @@ pub async fn update_port(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    delete,
+    path = "/ports/delete/{id}",
+    tag = "🔌 Ports",
+    summary = "Delete port",
+    description = "Delete a port by its unique identifier",
+    params(
+        ("id" = i32, Path, description = "Port ID to delete")
+    ),
+    responses(
+        (status = 200, description = "Port deleted successfully"),
+        (status = 404, description = "Port not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn delete_port(
     State(state): State<AppState>,
     Path(id): Path<i32>,

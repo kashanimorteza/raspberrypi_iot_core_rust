@@ -12,41 +12,81 @@ use axum::{
 };
 use serde::Deserialize;
 use std::collections::HashMap;
+use utoipa::ToSchema;
 use crate::{orm::models::device::Model as DeviceModel, logics::general::ModelOutput, AppState};
 use crate::api::services::device::DeviceService;
 
 //--------------------------------------------------------------------------------- Request DTOs
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
+#[schema(description = "Request payload for creating a new device")]
 pub struct CreateDeviceRequest {
+    #[schema(example = 1)]
     pub zone_id: i32,
+    #[schema(example = 1)]
     pub port_id: i32,
+    #[schema(example = 1)]
     pub power_id: i32,
+    #[schema(example = 1)]
     pub command_id: i32,
+    #[schema(example = 100)]
     pub value: i32,
+    #[schema(example = 50)]
     pub tune: i32,
+    #[schema(example = "2024-01-15")]
     pub date: String,
+    #[schema(example = "192.168.1.100")]
     pub address: String,
+    #[schema(example = "Living Room Sensor")]
     pub name: String,
+    #[schema(example = "Temperature and humidity sensor")]
     pub description: String,
+    #[schema(example = true)]
     pub enable: bool,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, ToSchema)]
+#[schema(description = "Request payload for updating an existing device")]
 pub struct UpdateDeviceRequest {
+    #[schema(example = 1)]
     pub zone_id: Option<i32>,
+    #[schema(example = 1)]
     pub port_id: Option<i32>,
+    #[schema(example = 1)]
     pub power_id: Option<i32>,
+    #[schema(example = 1)]
     pub command_id: Option<i32>,
+    #[schema(example = 100)]
     pub value: Option<i32>,
+    #[schema(example = 50)]
     pub tune: Option<i32>,
+    #[schema(example = "2024-01-15")]
     pub date: Option<String>,
+    #[schema(example = "192.168.1.100")]
     pub address: Option<String>,
+    #[schema(example = "Living Room Sensor")]
     pub name: Option<String>,
+    #[schema(example = "Temperature and humidity sensor")]
     pub description: Option<String>,
+    #[schema(example = true)]
     pub enable: Option<bool>,
 }
 
 //--------------------------------------------------------------------------------- Handlers
+#[utoipa::path(
+    get,
+    path = "/devices/items",
+    tag = "🔧 Devices",
+    summary = "List all devices",
+    description = "Retrieve a list of all IoT devices with optional query parameters for filtering",
+    params(
+        ("limit" = Option<i32>, Query, description = "Maximum number of devices to return"),
+        ("offset" = Option<i32>, Query, description = "Number of devices to skip"),
+    ),
+    responses(
+        (status = 200, description = "List of devices retrieved successfully", body = Vec<DeviceModel>),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn list_devices(
     State(state): State<AppState>,
     Query(params): Query<HashMap<String, String>>,
@@ -56,6 +96,21 @@ pub async fn list_devices(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    get,
+    path = "/devices/{id}",
+    tag = "🔧 Devices",
+    summary = "Get device by ID",
+    description = "Retrieve a specific IoT device by its unique identifier",
+    params(
+        ("id" = i32, Path, description = "Device ID")
+    ),
+    responses(
+        (status = 200, description = "Device retrieved successfully", body = DeviceModel),
+        (status = 404, description = "Device not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn get_device(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -65,6 +120,19 @@ pub async fn get_device(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    post,
+    path = "/devices/add",
+    tag = "🔧 Devices",
+    summary = "Create new device",
+    description = "Create a new IoT device with the provided information",
+    request_body = CreateDeviceRequest,
+    responses(
+        (status = 201, description = "Device created successfully", body = DeviceModel),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn create_device(
     State(state): State<AppState>,
     Json(payload): Json<CreateDeviceRequest>,
@@ -89,6 +157,23 @@ pub async fn create_device(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    put,
+    path = "/devices/update",
+    tag = "🔧 Devices",
+    summary = "Update device",
+    description = "Update an existing IoT device with new information",
+    params(
+        ("id" = i32, Path, description = "Device ID to update")
+    ),
+    request_body = UpdateDeviceRequest,
+    responses(
+        (status = 200, description = "Device updated successfully", body = DeviceModel),
+        (status = 404, description = "Device not found"),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn update_device(
     State(state): State<AppState>,
     Path(id): Path<i32>,
@@ -115,6 +200,21 @@ pub async fn update_device(
     Ok(Json(result))
 }
 
+#[utoipa::path(
+    delete,
+    path = "/devices/delete/{id}",
+    tag = "🔧 Devices",
+    summary = "Delete device",
+    description = "Delete an IoT device by its unique identifier",
+    params(
+        ("id" = i32, Path, description = "Device ID to delete")
+    ),
+    responses(
+        (status = 200, description = "Device deleted successfully"),
+        (status = 404, description = "Device not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
 pub async fn delete_device(
     State(state): State<AppState>,
     Path(id): Path<i32>,

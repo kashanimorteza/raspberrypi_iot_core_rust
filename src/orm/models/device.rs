@@ -8,26 +8,51 @@
 //--------------------------------------------------------------------------------- Import
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize, ToSchema)]
 #[sea_orm(table_name = "device")]
+#[schema(description = "IoT device model representing physical devices in the system")]
 pub struct Model {
     #[sea_orm(primary_key)]
+    #[schema(example = 1)]
     pub id: i32,
+    
+    #[schema(example = 1)]
     pub zone_id: i32,
+    
+    #[schema(example = 1)]
     pub port_id: i32,
+    
+    #[schema(example = 1)]
     pub power_id: i32,
+    
+    #[schema(example = 1)]
     pub command_id: i32,
+    
+    #[schema(example = 100)]
     pub value: i32,
+    
+    #[schema(example = 50)]
     pub tune: i32,
+    
     #[sea_orm(column_type = "Text")]
+    #[schema(example = "2024-01-15")]
     pub date: String,
+    
     #[sea_orm(column_type = "Text")]
+    #[schema(example = "192.168.1.100")]
     pub address: String,
+    
     #[sea_orm(column_type = "Text")]
+    #[schema(example = "Living Room Sensor")]
     pub name: String,
+    
     #[sea_orm(column_type = "Text")]
+    #[schema(example = "Temperature and humidity sensor")]
     pub description: String,
+    
+    #[schema(example = true)]
     pub enable: bool,
 }
 
