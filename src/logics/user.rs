@@ -18,13 +18,13 @@ pub async fn add_sample_users(db: &DatabaseConnection) -> Result<(), Box<dyn std
         UserActiveModel 
         {
             id: sea_orm::ActiveValue::NotSet,
-            name: Set("Morteza".to_string()),
-            username: Set("mkashanii".to_string()),
-            password: Set("aaaaa".to_string()),
-            key: Set("alice-api-key-001".to_string()),
-            email: Set("alice@example.com".to_string()),
-            phone: Set("+1-555-0101".to_string()),
-            tg_id: Set("alice_tg_123".to_string()),
+            name: Set("raspberrypi".to_string()),
+            username: Set("raspberrypi".to_string()),
+            password: Set("123456".to_string()),
+            key: Set("my_key".to_string()),
+            email: Set("app@raspberrypi.com".to_string()),
+            phone: Set("+1".to_string()),
+            tg_id: Set("@raspberrypi".to_string()),
             enable: Set(true),
         },
     ];

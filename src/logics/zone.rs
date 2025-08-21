@@ -19,24 +19,56 @@ pub async fn add_sample_zones(db: &DatabaseConnection) -> Result<(), Box<dyn std
         {
             id: sea_orm::ActiveValue::NotSet,
             user_id: Set(1),
-            name: Set("Living Room".to_string()),
-            description: Set("Main living area with smart devices".to_string()),
+            name: Set("Pool".to_string()),
+            description: Set("Swimming pool area control zone".to_string()),
             enable: Set(true),
         },
         ZoneActiveModel 
         {
             id: sea_orm::ActiveValue::NotSet,
             user_id: Set(1),
-            name: Set("Kitchen".to_string()),
-            description: Set("Kitchen area with appliances".to_string()),
+            name: Set("Jacuzzi".to_string()),
+            description: Set("Jacuzzi hot tub control zone".to_string()),
             enable: Set(true),
         },
         ZoneActiveModel 
         {
             id: sea_orm::ActiveValue::NotSet,
             user_id: Set(1),
-            name: Set("Bedroom".to_string()),
-            description: Set("Master bedroom with climate control".to_string()),
+            name: Set("Souna-Dry".to_string()),
+            description: Set("Dry sauna control zone".to_string()),
+            enable: Set(true),
+        },
+        ZoneActiveModel 
+        {
+            id: sea_orm::ActiveValue::NotSet,
+            user_id: Set(1),
+            name: Set("Fan".to_string()),
+            description: Set("Fan ventilation control zone".to_string()),
+            enable: Set(true),
+        },
+        ZoneActiveModel 
+        {
+            id: sea_orm::ActiveValue::NotSet,
+            user_id: Set(1),
+            name: Set("Cold".to_string()),
+            description: Set("Cold room control zone".to_string()),
+            enable: Set(true),
+        },
+        ZoneActiveModel 
+        {
+            id: sea_orm::ActiveValue::NotSet,
+            user_id: Set(1),
+            name: Set("Souna-Steam".to_string()),
+            description: Set("Steam sauna control zone".to_string()),
+            enable: Set(true),
+        },
+        ZoneActiveModel 
+        {
+            id: sea_orm::ActiveValue::NotSet,
+            user_id: Set(1),
+            name: Set("Abnama".to_string()),
+            description: Set("Abnama control zone".to_string()),
             enable: Set(true),
         },
     ];
