@@ -177,6 +177,47 @@ impl LogORM
             }
         }
     }
+
+    //------------------------- Status (Toggle Status)
+    pub async fn status(&self, db: &DbConn, id: i32) -> ModelOutput<LogModel>
+    {
+        let this_method = "status";
+
+        match LogEntity::find_by_id(id).one(db).await
+        {
+            Ok(Some(existing)) =>
+            {
+                // Get the current status value before moving existing
+                let current_status = existing.status;
+                let mut active: LogActiveModel = existing.into();
+                // Toggle the status field: if true, set to false; if false, set to true
+                active.status = sea_orm::Set(!current_status);
+
+                match active.update(db).await
+                {
+                    Ok(updated) => {
+                        let message = if current_status {
+                            "Log status disabled successfully".to_string()
+                        } else {
+                            "Log status enabled successfully".to_string()
+                        };
+                        ModelOutput::success(updated, message)
+                    },
+                    Err(e) => {
+                        let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                        error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                        ModelOutput::error(error_msg)
+                    }
+                }
+            }
+            Ok(None) => ModelOutput::error("Log not found".to_string()),
+            Err(e) => {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                ModelOutput::error(error_msg)
+            }
+        }
+    }
 }
 
 

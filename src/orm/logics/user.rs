@@ -391,4 +391,45 @@ impl UserORM
         // "Dead" operation - delete the user
         self.delete(db, id).await
     }
+
+    //------------------------- Status (Toggle Enable)
+    pub async fn status(&self, db: &DbConn, id: i32) -> ModelOutput<UserModel>
+    {
+        let this_method = "status";
+
+        match UserEntity::find_by_id(id).one(db).await
+        {
+            Ok(Some(existing)) =>
+            {
+                // Get the current enable value before moving existing
+                let current_enable = existing.enable;
+                let mut active: UserActiveModel = existing.into();
+                // Toggle the enable field: if true, set to false; if false, set to true
+                active.enable = sea_orm::Set(!current_enable);
+
+                match active.update(db).await
+                {
+                    Ok(updated) => {
+                        let message = if current_enable {
+                            "User disabled successfully".to_string()
+                        } else {
+                            "User enabled successfully".to_string()
+                        };
+                        ModelOutput::success(updated, message)
+                    },
+                    Err(e) => {
+                        let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                        error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                        ModelOutput::error(error_msg)
+                    }
+                }
+            }
+            Ok(None) => ModelOutput::error("User not found".to_string()),
+            Err(e) => {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                ModelOutput::error(error_msg)
+            }
+        }
+    }
 }

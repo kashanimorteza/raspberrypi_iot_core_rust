@@ -177,6 +177,47 @@ impl ConfigORM
             }
         }
     }
+
+    //------------------------- Status (Toggle Debug)
+    pub async fn status(&self, db: &DbConn, id: i32) -> ModelOutput<ConfigModel>
+    {
+        let this_method = "status";
+
+        match ConfigEntity::find_by_id(id).one(db).await
+        {
+            Ok(Some(existing)) =>
+            {
+                // Get the current debug value before moving existing
+                let current_debug = existing.debug;
+                let mut active: ConfigActiveModel = existing.into();
+                // Toggle the debug field: if true, set to false; if false, set to true
+                active.debug = sea_orm::Set(!current_debug);
+
+                match active.update(db).await
+                {
+                    Ok(updated) => {
+                        let message = if current_debug {
+                            "Config debug disabled successfully".to_string()
+                        } else {
+                            "Config debug enabled successfully".to_string()
+                        };
+                        ModelOutput::success(updated, message)
+                    },
+                    Err(e) => {
+                        let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                        error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                        ModelOutput::error(error_msg)
+                    }
+                }
+            }
+            Ok(None) => ModelOutput::error("Config not found".to_string()),
+            Err(e) => {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                ModelOutput::error(error_msg)
+            }
+        }
+    }
 }
 
 
