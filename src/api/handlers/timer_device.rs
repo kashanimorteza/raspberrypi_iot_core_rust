@@ -235,3 +235,27 @@ pub async fn delete_timer_device(
     let result = service.delete(&state.db, id).await;
     Ok(Json(result))
 }
+
+//------------------------- StatusTimerDevice
+#[utoipa::path(
+    get,
+    path = "/timer_device/status/{id}",
+    tag = "⏰📱 Timer Device",
+
+    params(
+        ("id" = i32, Path, description = "Timer Device ID to toggle status")
+    ),
+    responses(
+        (status = 200, description = "Timer Device status toggled successfully", body = TimerDeviceModel),
+        (status = 404, description = "Timer Device not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn status_timer_device(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<TimerDeviceModel>>, StatusCode> {
+    let service = TimerDeviceService::new();
+    let result = service.status(&state.db, id).await;
+    Ok(Json(result))
+}

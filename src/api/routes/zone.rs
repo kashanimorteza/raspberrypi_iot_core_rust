@@ -8,7 +8,7 @@
 use axum::routing::{get, post, put, delete};
 use axum::Router;
 use crate::AppState;
-use crate::api::handlers::zone::{list_zones, get_zone, create_zone, update_zone, delete_zone, disable_zone, enable_zone};
+use crate::api::handlers::zone::{list_zones, get_zone, create_zone, update_zone, delete_zone, disable_zone, enable_zone, status_zone};
 
 //--------------------------------------------------------------------------------- Router
 pub fn router() -> Router<AppState> 
@@ -16,6 +16,7 @@ pub fn router() -> Router<AppState>
     Router::new()
         .route("/items", get(list_zones))
         .route("/item/{id}", get(get_zone))
+        .route("/status/{id}", get(status_zone))
         .route("/enable/{id}", get(enable_zone))
         .route("/disable/{id}", get(disable_zone))
         .route("/update/{id}", put(update_zone))

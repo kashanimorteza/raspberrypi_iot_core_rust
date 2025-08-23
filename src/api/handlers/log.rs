@@ -229,3 +229,27 @@ pub async fn delete_log(
     let result = service.delete(&state.db, id).await;
     Ok(Json(result))
 }
+
+//------------------------- StatusLog
+#[utoipa::path(
+    get,
+    path = "/log/status/{id}",
+    tag = "📝 Log",
+
+    params(
+        ("id" = i32, Path, description = "Log ID to toggle status")
+    ),
+    responses(
+        (status = 200, description = "Log status toggled successfully", body = LogModel),
+        (status = 404, description = "Log not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn status_log(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<LogModel>>, StatusCode> {
+    let service = LogService::new();
+    let result = service.status(&state.db, id).await;
+    Ok(Json(result))
+}

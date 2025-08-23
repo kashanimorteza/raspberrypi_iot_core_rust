@@ -139,12 +139,34 @@ pub async fn disable_zone(
     Ok(Json(result))
 }
 
+//------------------------- StatusZone
+#[utoipa::path(
+    get,
+    path = "/zone/status/{id}",
+    tag = "🏠 Zone",
+    params(
+        ("id" = i32, Path, description = "Zone ID to toggle status")
+    ),
+    responses(
+        (status = 200, description = "Zone status toggled successfully", body = ZoneModel),
+        (status = 404, description = "Zone not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn status_zone(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<ZoneModel>>, StatusCode> {
+    let service = ZoneService::new();
+    let result = service.status(&state.db, id).await;
+    Ok(Json(result))
+}
+
 //------------------------- UpdateZone
 #[utoipa::path(
     put,
     path = "/zone/update/{id}",
     tag = "🏠 Zone",
-
     params(
         ("id" = i32, Path, description = "Zone ID to update")
     ),

@@ -258,3 +258,27 @@ pub async fn delete_device_command(
     let result = service.delete(&state.db, id).await;
     Ok(Json(result))
 }
+
+//------------------------- StatusDeviceCommand
+#[utoipa::path(
+    get,
+    path = "/device_command/status/{id}",
+    tag = "🔧 Device Command",
+
+    params(
+        ("id" = i32, Path, description = "Device Command ID to toggle status")
+    ),
+    responses(
+        (status = 200, description = "Device Command status toggled successfully", body = DeviceCommandModel),
+        (status = 404, description = "Device Command not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn status_device_command(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<DeviceCommandModel>>, StatusCode> {
+    let service = DeviceCommandService::new();
+    let result = service.status(&state.db, id).await;
+    Ok(Json(result))
+}

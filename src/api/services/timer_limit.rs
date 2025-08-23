@@ -91,4 +91,10 @@ impl TimerLimitService
     {
         self.logic.delete(db, id).await
     }
+
+    //------------------------- Status
+    pub async fn status(&self, db: &DatabaseConnection, id: i32) -> ModelOutput<TimerLimitModel> 
+    {
+        self.logic.status(db, id).await
+    }
 }

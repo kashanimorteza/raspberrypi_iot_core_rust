@@ -246,3 +246,27 @@ pub async fn delete_user(
     let result = service.delete(&state.db, id).await;
     Ok(Json(result))
 }
+
+//------------------------- StatusUser
+#[utoipa::path(
+    get,
+    path = "/user/status/{id}",
+    tag = "👤 User",
+
+    params(
+        ("id" = i32, Path, description = "User ID to toggle status")
+    ),
+    responses(
+        (status = 200, description = "User status toggled successfully", body = UserModel),
+        (status = 404, description = "User not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn status_user(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<UserModel>>, StatusCode> {
+    let service = UserService::new();
+    let result = service.status(&state.db, id).await;
+    Ok(Json(result))
+}

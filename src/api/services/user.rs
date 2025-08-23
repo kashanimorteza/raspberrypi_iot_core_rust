@@ -101,4 +101,10 @@ impl UserService
     {
         self.logic.dead(db, id).await
     }
+
+    //------------------------- Status
+    pub async fn status(&self, db: &DatabaseConnection, id: i32) -> ModelOutput<UserModel> 
+    {
+        self.logic.status(db, id).await
+    }
 }

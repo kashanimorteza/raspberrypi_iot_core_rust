@@ -241,3 +241,27 @@ pub async fn delete_timer_limit(
     let result = service.delete(&state.db, id).await;
     Ok(Json(result))
 }
+
+//------------------------- StatusTimerLimit
+#[utoipa::path(
+    get,
+    path = "/timer_limit/status/{id}",
+    tag = "⏰⚡ Timer Limit",
+
+    params(
+        ("id" = i32, Path, description = "Timer Limit ID to toggle status")
+    ),
+    responses(
+        (status = 200, description = "Timer Limit status toggled successfully", body = TimerLimitModel),
+        (status = 404, description = "Timer Limit not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn status_timer_limit(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<TimerLimitModel>>, StatusCode> {
+    let service = TimerLimitService::new();
+    let result = service.status(&state.db, id).await;
+    Ok(Json(result))
+}

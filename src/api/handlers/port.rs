@@ -241,3 +241,27 @@ pub async fn delete_port(
     let result = service.delete(&state.db, id).await;
     Ok(Json(result))
 }
+
+//------------------------- StatusPort
+#[utoipa::path(
+    get,
+    path = "/port/status/{id}",
+    tag = "🔌 Port",
+
+    params(
+        ("id" = i32, Path, description = "Port ID to toggle status")
+    ),
+    responses(
+        (status = 200, description = "Port status toggled successfully", body = PortModel),
+        (status = 404, description = "Port not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn status_port(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<PortModel>>, StatusCode> {
+    let service = PortService::new();
+    let result = service.status(&state.db, id).await;
+    Ok(Json(result))
+}

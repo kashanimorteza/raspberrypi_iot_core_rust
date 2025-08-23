@@ -234,3 +234,27 @@ pub async fn delete_zone_command_if(
     let result = service.delete(&state.db, id).await;
     Ok(Json(result))
 }
+
+//------------------------- StatusZoneCommandIf
+#[utoipa::path(
+    get,
+    path = "/zone_command_if/status/{id}",
+    tag = "🏠🔧❓ Zone Command If",
+
+    params(
+        ("id" = i32, Path, description = "Zone Command If ID to toggle status")
+    ),
+    responses(
+        (status = 200, description = "Zone Command If status toggled successfully", body = ZoneCommandIfModel),
+        (status = 404, description = "Zone Command If not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn status_zone_command_if(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<ZoneCommandIfModel>>, StatusCode> {
+    let service = ZoneCommandIfService::new();
+    let result = service.status(&state.db, id).await;
+    Ok(Json(result))
+}

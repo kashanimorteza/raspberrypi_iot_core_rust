@@ -87,4 +87,10 @@ impl ZoneService
     {
         self.logic.delete(db, id).await
     }
+
+    //------------------------- Status
+    pub async fn status(&self, db: &DatabaseConnection, id: i32) -> ModelOutput<ZoneModel> 
+    {
+        self.logic.status(db, id).await
+    }
 }

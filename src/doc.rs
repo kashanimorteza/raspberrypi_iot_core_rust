@@ -16,6 +16,7 @@ use utoipa::OpenApi;
         // Config 
         crate::api::handlers::config::list_configs,
         crate::api::handlers::config::get_config,
+        crate::api::handlers::config::status_config,
         crate::api::handlers::config::enable_config,
         crate::api::handlers::config::disable_config,
         crate::api::handlers::config::update_config,
@@ -24,6 +25,7 @@ use utoipa::OpenApi;
         // User 
         crate::api::handlers::user::list_users,
         crate::api::handlers::user::get_user,
+        crate::api::handlers::user::status_user,
         crate::api::handlers::user::enable_user,
         crate::api::handlers::user::disable_user,
         crate::api::handlers::user::update_user,
@@ -32,6 +34,7 @@ use utoipa::OpenApi;
         // Device 
         crate::api::handlers::device::list_devices,
         crate::api::handlers::device::get_device,
+        crate::api::handlers::device::status_device,
         crate::api::handlers::device::enable_device,
         crate::api::handlers::device::disable_device,
         crate::api::handlers::device::update_device,
@@ -40,6 +43,7 @@ use utoipa::OpenApi;
         // Zone 
         crate::api::handlers::zone::list_zones,
         crate::api::handlers::zone::get_zone,
+        crate::api::handlers::zone::status_zone,
         crate::api::handlers::zone::enable_zone,
         crate::api::handlers::zone::disable_zone,
         crate::api::handlers::zone::update_zone,
@@ -48,6 +52,7 @@ use utoipa::OpenApi;
         // Device Command 
         crate::api::handlers::device_command::list_device_commands,
         crate::api::handlers::device_command::get_device_command,
+        crate::api::handlers::device_command::status_device_command,
         crate::api::handlers::device_command::enable_device_command,
         crate::api::handlers::device_command::disable_device_command,
         crate::api::handlers::device_command::update_device_command,
@@ -56,6 +61,7 @@ use utoipa::OpenApi;
         // Log 
         crate::api::handlers::log::list_logs,
         crate::api::handlers::log::get_log,
+        crate::api::handlers::log::status_log,
         crate::api::handlers::log::enable_log,
         crate::api::handlers::log::disable_log,
         crate::api::handlers::log::update_log,
@@ -64,6 +70,7 @@ use utoipa::OpenApi;
         // Port 
         crate::api::handlers::port::list_ports,
         crate::api::handlers::port::get_port,
+        crate::api::handlers::port::status_port,
         crate::api::handlers::port::enable_port,
         crate::api::handlers::port::disable_port,
         crate::api::handlers::port::update_port,
@@ -72,6 +79,7 @@ use utoipa::OpenApi;
         // Timer 
         crate::api::handlers::timer::list_timers,
         crate::api::handlers::timer::get_timer,
+        crate::api::handlers::timer::status_timer,
         crate::api::handlers::timer::enable_timer,
         crate::api::handlers::timer::disable_timer,
         crate::api::handlers::timer::update_timer,
@@ -80,6 +88,7 @@ use utoipa::OpenApi;
         // Timer Device  (temporarily commented out)
         crate::api::handlers::timer_device::list_timer_devices,
         crate::api::handlers::timer_device::get_timer_device,
+        crate::api::handlers::timer_device::status_timer_device,
         crate::api::handlers::timer_device::enable_timer_device,
         crate::api::handlers::timer_device::disable_timer_device,
         crate::api::handlers::timer_device::update_timer_device,
@@ -88,6 +97,7 @@ use utoipa::OpenApi;
         // Timer Item 
         crate::api::handlers::timer_item::list_timer_items,
         crate::api::handlers::timer_item::get_timer_item,
+        crate::api::handlers::timer_item::status_timer_item,
         crate::api::handlers::timer_item::enable_timer_item,
         crate::api::handlers::timer_item::disable_timer_item,
         crate::api::handlers::timer_item::update_timer_item,
@@ -96,6 +106,7 @@ use utoipa::OpenApi;
         // Timer Limit 
         crate::api::handlers::timer_limit::list_timer_limits,
         crate::api::handlers::timer_limit::get_timer_limit,
+        crate::api::handlers::timer_limit::status_timer_limit,
         crate::api::handlers::timer_limit::enable_timer_limit,
         crate::api::handlers::timer_limit::disable_timer_limit,
         crate::api::handlers::timer_limit::update_timer_limit,
@@ -104,6 +115,7 @@ use utoipa::OpenApi;
         // Zone Command 
         crate::api::handlers::zone_command::list_zone_commands,
         crate::api::handlers::zone_command::get_zone_command,
+        crate::api::handlers::zone_command::status_zone_command,
         crate::api::handlers::zone_command::enable_zone_command,
         crate::api::handlers::zone_command::disable_zone_command,
         crate::api::handlers::zone_command::update_zone_command,
@@ -112,6 +124,7 @@ use utoipa::OpenApi;
         // Zone Command Action 
         crate::api::handlers::zone_command_action::list_zone_command_actions,
         crate::api::handlers::zone_command_action::get_zone_command_action,
+        crate::api::handlers::zone_command_action::status_zone_command_action,
         crate::api::handlers::zone_command_action::enable_zone_command_action,
         crate::api::handlers::zone_command_action::disable_zone_command_action,
         crate::api::handlers::zone_command_action::update_zone_command_action,
@@ -120,6 +133,7 @@ use utoipa::OpenApi;
         // Zone Command If 
         crate::api::handlers::zone_command_if::list_zone_command_ifs,
         crate::api::handlers::zone_command_if::get_zone_command_if,
+        crate::api::handlers::zone_command_if::status_zone_command_if,
         crate::api::handlers::zone_command_if::enable_zone_command_if,
         crate::api::handlers::zone_command_if::disable_zone_command_if,
         crate::api::handlers::zone_command_if::update_zone_command_if,

@@ -332,3 +332,27 @@ pub async fn delete_config(
     let result = service.delete(&state.db, id).await;
     Ok(Json(result))
 }
+
+//------------------------- StatusConfig
+#[utoipa::path(
+    get,
+    path = "/config/status/{id}",
+    tag = "⚙️ Config",
+
+    params(
+        ("id" = i32, Path, description = "Config ID to toggle status")
+    ),
+    responses(
+        (status = 200, description = "Config status toggled successfully", body = ConfigModel),
+        (status = 404, description = "Config not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn status_config(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<ConfigModel>>, StatusCode> {
+    let service = ConfigService::new();
+    let result = service.status(&state.db, id).await;
+    Ok(Json(result))
+}
