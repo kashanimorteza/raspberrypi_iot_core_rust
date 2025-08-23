@@ -9,8 +9,8 @@
 //--------------------------------------------------------------------------------- Import
 use std::collections::HashMap;
 use tracing::{info, error, debug};
-use sea_orm::{ActiveModelTrait, DbConn, EntityTrait};
-use crate::orm::models::user::{ActiveModel as UserActiveModel, Entity as UserEntity, Model as UserModel};
+use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder};
+use crate::orm::models::user::{ActiveModel as UserActiveModel, Entity as UserEntity, Model as UserModel, Column as UserColumn};
 use crate::logics::general::ModelOutput;
 
 
@@ -87,7 +87,7 @@ impl UserORM
 
         // For now, ignore filters and return all users
         // In a real implementation, you'd apply filters here
-        match UserEntity::find().all(db).await 
+        match UserEntity::find().order_by_asc(UserColumn::Id).all(db).await 
         {
             Ok(users) => 
             {

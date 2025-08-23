@@ -7,8 +7,8 @@
 //--------------------------------------------------------------------------------- Import
 use std::collections::HashMap;
 use tracing::{info, error, debug};
-use sea_orm::{ActiveModelTrait, DbConn, EntityTrait};
-use crate::orm::models::log::{ActiveModel as LogActiveModel, Entity as LogEntity, Model as LogModel};
+use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder};
+use crate::orm::models::log::{ActiveModel as LogActiveModel, Entity as LogEntity, Model as LogModel, Column as LogColumn};
 use crate::logics::general::ModelOutput;
 
 //--------------------------------------------------------------------------------- Class
@@ -65,7 +65,7 @@ impl LogORM
         let this_method = "items";
         if self.verbose { debug!("{}::{} - Starting items operation with filters: {:?}", self.this_class, this_method, filters); }
 
-        match LogEntity::find().all(db).await 
+        match LogEntity::find().order_by_asc(LogColumn::Id).all(db).await 
         {
             Ok(items) => 
             {

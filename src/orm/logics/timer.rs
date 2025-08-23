@@ -7,8 +7,8 @@
 //--------------------------------------------------------------------------------- Import
 use std::collections::HashMap;
 use tracing::{info, error, debug};
-use sea_orm::{ActiveModelTrait, DbConn, EntityTrait};
-use crate::orm::models::timer::{ActiveModel as TimerActiveModel, Entity as TimerEntity, Model as TimerModel};
+use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder};
+use crate::orm::models::timer::{ActiveModel as TimerActiveModel, Entity as TimerEntity, Model as TimerModel, Column as TimerColumn};
 use crate::logics::general::ModelOutput;
 
 //--------------------------------------------------------------------------------- Class
@@ -65,7 +65,7 @@ impl TimerORM
         let this_method = "items";
         if self.verbose { debug!("{}::{} - Starting items operation with filters: {:?}", self.this_class, this_method, filters); }
 
-        match TimerEntity::find().all(db).await 
+        match TimerEntity::find().order_by_asc(TimerColumn::Id).all(db).await 
         {
             Ok(items) => 
             {

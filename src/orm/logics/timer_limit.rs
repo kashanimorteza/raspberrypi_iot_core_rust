@@ -7,8 +7,8 @@
 //--------------------------------------------------------------------------------- Import
 use std::collections::HashMap;
 use tracing::{info, error, debug};
-use sea_orm::{ActiveModelTrait, DbConn, EntityTrait};
-use crate::orm::models::timer_limit::{ActiveModel as TimerLimitActiveModel, Entity as TimerLimitEntity, Model as TimerLimitModel};
+use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder};
+use crate::orm::models::timer_limit::{ActiveModel as TimerLimitActiveModel, Entity as TimerLimitEntity, Model as TimerLimitModel, Column as TimerLimitColumn};
 use crate::logics::general::ModelOutput;
 
 //--------------------------------------------------------------------------------- Class
@@ -65,7 +65,7 @@ impl TimerLimitORM
         let this_method = "items";
         if self.verbose { debug!("{}::{} - Starting items operation", self.this_class, this_method); }
 
-        match TimerLimitEntity::find().all(db).await 
+        match TimerLimitEntity::find().order_by_asc(TimerLimitColumn::Id).all(db).await 
         {
             Ok(items) => 
             {

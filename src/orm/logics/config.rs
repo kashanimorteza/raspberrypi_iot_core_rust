@@ -7,8 +7,8 @@
 //--------------------------------------------------------------------------------- Import
 use std::collections::HashMap;
 use tracing::{info, error, debug};
-use sea_orm::{ActiveModelTrait, DbConn, EntityTrait};
-use crate::orm::models::config::{ActiveModel as ConfigActiveModel, Entity as ConfigEntity, Model as ConfigModel};
+use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder};
+use crate::orm::models::config::{ActiveModel as ConfigActiveModel, Entity as ConfigEntity, Model as ConfigModel, Column as ConfigColumn};
 use crate::logics::general::ModelOutput;
 
 //--------------------------------------------------------------------------------- Class
@@ -65,7 +65,7 @@ impl ConfigORM
         let this_method = "items";
         if self.verbose { debug!("{}::{} - Starting items operation with filters: {:?}", self.this_class, this_method, filters); }
 
-        match ConfigEntity::find().all(db).await 
+        match ConfigEntity::find().order_by_asc(ConfigColumn::Id).all(db).await 
         {
             Ok(items) => 
             {

@@ -7,8 +7,8 @@
 //--------------------------------------------------------------------------------- Import
 use std::collections::HashMap;
 use tracing::{info, error, debug};
-use sea_orm::{ActiveModelTrait, DbConn, EntityTrait};
-use crate::orm::models::zone_command_action::{ActiveModel as ZoneCommandActionActiveModel, Entity as ZoneCommandActionEntity, Model as ZoneCommandActionModel};
+use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder};
+use crate::orm::models::zone_command_action::{ActiveModel as ZoneCommandActionActiveModel, Entity as ZoneCommandActionEntity, Model as ZoneCommandActionModel, Column as ZoneCommandActionColumn};
 use crate::logics::general::ModelOutput;
 
 //--------------------------------------------------------------------------------- Class
@@ -65,7 +65,7 @@ impl ZoneCommandActionORM
         let this_method = "items";
         if self.verbose { debug!("{}::{} - Starting items operation", self.this_class, this_method); }
 
-        match ZoneCommandActionEntity::find().all(db).await 
+        match ZoneCommandActionEntity::find().order_by_asc(ZoneCommandActionColumn::Id).all(db).await 
         {
             Ok(items) => 
             {

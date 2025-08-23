@@ -7,8 +7,8 @@
 //--------------------------------------------------------------------------------- Import
 use std::collections::HashMap;
 use tracing::{info, error, debug};
-use sea_orm::{ActiveModelTrait, DbConn, EntityTrait};
-use crate::orm::models::device::{ActiveModel as DeviceActiveModel, Entity as DeviceEntity, Model as DeviceModel};
+use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder};
+use crate::orm::models::device::{ActiveModel as DeviceActiveModel, Entity as DeviceEntity, Model as DeviceModel, Column as DeviceColumn};
 use crate::logics::general::ModelOutput;
 
 //--------------------------------------------------------------------------------- Class
@@ -65,7 +65,7 @@ impl DeviceORM
         let this_method = "items";
         if self.verbose { debug!("{}::{} - Starting items operation with filters: {:?}", self.this_class, this_method, filters); }
 
-        match DeviceEntity::find().all(db).await 
+        match DeviceEntity::find().order_by_asc(DeviceColumn::Id).all(db).await 
         {
             Ok(items) => 
             {
