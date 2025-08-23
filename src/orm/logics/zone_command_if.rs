@@ -241,4 +241,46 @@ impl ZoneCommandIfORM
             }
         }
     }
+
+    //------------------------- Status (Toggle Enable)
+    pub async fn status(&self, db: &DbConn, id: i32) -> ModelOutput<ZoneCommandIfModel>
+    {
+        let this_method = "status";
+        if self.verbose { debug!("{}::{} - Starting status operation for id: {}", self.this_class, this_method, id); }
+
+        match ZoneCommandIfEntity::find_by_id(id).one(db).await
+        {
+            Ok(Some(existing)) =>
+            {
+                // Get the current enable value before moving existing
+                let current_enable = existing.enable;
+                let mut active: ZoneCommandIfActiveModel = existing.into();
+                // Toggle the enable field: if true, set to false; if false, set to true
+                active.enable = sea_orm::Set(!current_enable);
+
+                match active.update(db).await
+                {
+                    Ok(updated) => {
+                        let message = if current_enable {
+                            "Zone command if disabled successfully".to_string()
+                        } else {
+                            "Zone command if enabled successfully".to_string()
+                        };
+                        ModelOutput::success(updated, message)
+                    },
+                    Err(e) => {
+                        let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                        error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                        ModelOutput::error(error_msg)
+                    }
+                }
+            }
+            Ok(None) => ModelOutput::error("Zone command if not found".to_string()),
+            Err(e) => {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                ModelOutput::error(error_msg)
+            }
+        }
+    }
 }
