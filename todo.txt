@@ -1,9 +1,9 @@
 read src/api/routes/zone.rs
 The priority of the route on the router function should be like this and dont add new comment:
-1 - /items
-2 - /item/{id}
-3 - /enable/{id}
-4 - /disable/{id}
-5 - /update/{id}
-6 - /add
-7 - /delete/{id}
+1 - list_users
+2 - get_user
+3 - enable_user
+4 - disable_user
+5 - update_user
+6 - create_user
+7 - delete_user

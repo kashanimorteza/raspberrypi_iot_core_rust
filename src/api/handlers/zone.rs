@@ -71,7 +71,6 @@ pub async fn list_zones(
     get,
     path = "/zone/item/{id}",
     tag = "🏠 Zone",
-
     params(
         ("id" = i32, Path, description = "Zone ID")
     ),

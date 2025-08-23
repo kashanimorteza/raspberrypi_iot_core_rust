@@ -129,8 +129,6 @@ pub async fn update_user(
 ) -> Result<Json<ModelOutput<UserModel>>, StatusCode> {
     let service = UserService::new();
     
-    // Create a user model with the provided data
-    // For simplicity, we'll use default values for required fields that aren't provided
     let user_model = UserModel {
         id,
         name: payload.name.unwrap_or_default(),
@@ -203,6 +201,7 @@ pub async fn delete_user(
     Ok(Json(result))
 }
 
+//------------------------- Disable
 #[utoipa::path(
     get,
     path = "/user/disable/{id}",
@@ -226,6 +225,7 @@ pub async fn disable_user(
     Ok(Json(result))
 }
 
+//------------------------- Enable
 #[utoipa::path(
     get,
     path = "/user/enable/{id}",
