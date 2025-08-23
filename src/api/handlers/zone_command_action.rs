@@ -52,6 +52,7 @@ pub struct UpdateZoneCommandActionRequest {
 }
 
 //--------------------------------------------------------------------------------- Handlers
+//------------------------- ListZoneCommandActions
 #[utoipa::path(
     get,
     path = "/zone_command_action/items",
@@ -75,6 +76,7 @@ pub async fn list_zone_command_actions(
     Ok(Json(result))
 }
 
+//------------------------- GetZoneCommandAction
 #[utoipa::path(
     get,
     path = "/zone_command_action/item/{id}",
@@ -98,6 +100,7 @@ pub async fn get_zone_command_action(
     Ok(Json(result))
 }
 
+//------------------------- EnableZoneCommandAction
 #[utoipa::path(
     get,
     path = "/zone_command_action/enable/{id}",
@@ -121,6 +124,7 @@ pub async fn enable_zone_command_action(
     Ok(Json(result))
 }
 
+//------------------------- DisableZoneCommandAction
 #[utoipa::path(
     get,
     path = "/zone_command_action/disable/{id}",
@@ -144,6 +148,7 @@ pub async fn disable_zone_command_action(
     Ok(Json(result))
 }
 
+//------------------------- UpdateZoneCommandAction
 #[utoipa::path(
     put,
     path = "/zone_command_action/update/{id}",

@@ -36,6 +36,7 @@ pub struct UpdateTimerRequest {
 }
 
 //--------------------------------------------------------------------------------- Handlers
+//------------------------- ListTimers
 #[utoipa::path(
     get,
     path = "/timer/items",
@@ -59,6 +60,7 @@ pub async fn list_timers(
     Ok(Json(result))
 }
 
+//------------------------- GetTimer
 #[utoipa::path(
     get,
     path = "/timer/item/{id}",
@@ -82,6 +84,7 @@ pub async fn get_timer(
     Ok(Json(result))
 }
 
+//------------------------- EnableTimer
 #[utoipa::path(
     get,
     path = "/timer/enable/{id}",
@@ -128,6 +131,7 @@ pub async fn disable_timer(
     Ok(Json(result))
 }
 
+//------------------------- UpdateTimer
 #[utoipa::path(
     put,
     path = "/timer/update/{id}",
@@ -163,6 +167,7 @@ pub async fn update_timer(
     Ok(Json(result))
 }
 
+//------------------------- CreateTimer
 #[utoipa::path(
     post,
     path = "/timer/add",
@@ -192,6 +197,7 @@ pub async fn create_timer(
     Ok(Json(result))
 }
 
+//------------------------- DeleteTimer
 #[utoipa::path(
     delete,
     path = "/timer/delete/{id}",

@@ -44,6 +44,7 @@ pub struct UpdateZoneRequest {
 }
 
 //--------------------------------------------------------------------------------- Handlers
+//------------------------- ListZones
 #[utoipa::path(
     get,
     path = "/zone/items",
@@ -67,6 +68,7 @@ pub async fn list_zones(
     Ok(Json(result))
 }
 
+//------------------------- GetZone
 #[utoipa::path(
     get,
     path = "/zone/item/{id}",
@@ -89,6 +91,7 @@ pub async fn get_zone(
     Ok(Json(result))
 }
 
+//------------------------- EnableZone
 #[utoipa::path(
     get,
     path = "/zone/enable/{id}",
@@ -112,6 +115,7 @@ pub async fn enable_zone(
     Ok(Json(result))
 }
 
+//------------------------- DisableZone
 #[utoipa::path(
     get,
     path = "/zone/disable/{id}",
@@ -135,6 +139,7 @@ pub async fn disable_zone(
     Ok(Json(result))
 }
 
+//------------------------- UpdateZone
 #[utoipa::path(
     put,
     path = "/zone/update/{id}",
@@ -170,6 +175,7 @@ pub async fn update_zone(
     Ok(Json(result))
 }
 
+//------------------------- CreateZone
 #[utoipa::path(
     post,
     path = "/zone/add",
@@ -199,6 +205,7 @@ pub async fn create_zone(
     Ok(Json(result))
 }
 
+//------------------------- DeleteZone
 #[utoipa::path(
     delete,
     path = "/zone/delete/{id}",

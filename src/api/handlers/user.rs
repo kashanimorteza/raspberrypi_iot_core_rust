@@ -60,7 +60,7 @@ pub struct UpdateUserRequest {
 }
 
 //--------------------------------------------------------------------------------- Handlers
-//------------------------- Items
+//------------------------- ListUsers
 #[utoipa::path(
     get,
     path = "/user/items",
@@ -83,7 +83,7 @@ pub async fn list_users(
     Ok(Json(result))
 }
 
-//------------------------- Item
+//------------------------- GetUser
 #[utoipa::path(
     get,
     path = "/user/item/{id}",
@@ -106,7 +106,7 @@ pub async fn get_user(
     Ok(Json(result))
 }
 
-//------------------------- Enable
+//------------------------- EnableUser
 #[utoipa::path(
     get,
     path = "/user/enable/{id}",
@@ -129,7 +129,7 @@ pub async fn enable_user(
     Ok(Json(result))
 }
 
-//------------------------- Disable
+//------------------------- DisableUser
 #[utoipa::path(
     get,
     path = "/user/disable/{id}",
@@ -152,7 +152,7 @@ pub async fn disable_user(
     Ok(Json(result))
 }
 
-//------------------------- Update
+//------------------------- UpdateUser
 #[utoipa::path(
     put,
     path = "/user/update/{id}",
@@ -191,7 +191,7 @@ pub async fn update_user(
     Ok(Json(result))
 }
 
-//------------------------- Add
+//------------------------- CreateUser
 #[utoipa::path(
     post,
     path = "/user/add",
@@ -224,7 +224,7 @@ pub async fn create_user(
     Ok(Json(result))
 }
 
-//------------------------- Delete
+//------------------------- DeleteUser
 #[utoipa::path(
     delete,
     path = "/user/delete/{id}",

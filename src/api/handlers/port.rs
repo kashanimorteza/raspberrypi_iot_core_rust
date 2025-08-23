@@ -46,6 +46,7 @@ pub struct UpdatePortRequest {
 }
 
 //--------------------------------------------------------------------------------- Handlers
+//------------------------- ListPorts
 #[utoipa::path(
     get,
     path = "/port/items",
@@ -69,6 +70,7 @@ pub async fn list_ports(
     Ok(Json(result))
 }
 
+//------------------------- GetPort
 #[utoipa::path(
     get,
     path = "/port/item/{id}",
@@ -92,6 +94,7 @@ pub async fn get_port(
     Ok(Json(result))
 }
 
+//------------------------- EnablePort
 #[utoipa::path(
     get,
     path = "/port/enable/{id}",
@@ -115,6 +118,7 @@ pub async fn enable_port(
     Ok(Json(result))
 }
 
+//------------------------- DisablePort
 #[utoipa::path(
     get,
     path = "/port/disable/{id}",
@@ -138,6 +142,7 @@ pub async fn disable_port(
     Ok(Json(result))
 }
 
+//------------------------- UpdatePort
 #[utoipa::path(
     put,
     path = "/port/update/{id}",
@@ -178,6 +183,7 @@ pub async fn update_port(
     Ok(Json(result))
 }
 
+//------------------------- CreatePort
 #[utoipa::path(
     post,
     path = "/port/add",
@@ -212,6 +218,7 @@ pub async fn create_port(
     Ok(Json(result))
 }
 
+//------------------------- DeletePort
 #[utoipa::path(
     delete,
     path = "/port/delete/{id}",

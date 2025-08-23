@@ -64,6 +64,7 @@ pub struct UpdateDeviceCommandRequest {
 }
 
 //--------------------------------------------------------------------------------- Handlers
+//------------------------- ListDeviceCommands
 #[utoipa::path(
     get,
     path = "/device_command/items",
@@ -87,6 +88,7 @@ pub async fn list_device_commands(
     Ok(Json(result))
 }
 
+//------------------------- GetDeviceCommand
 #[utoipa::path(
     get,
     path = "/device_command/item/{id}",
@@ -110,6 +112,7 @@ pub async fn get_device_command(
     Ok(Json(result))
 }
 
+//------------------------- EnableDeviceCommand
 #[utoipa::path(
     get,
     path = "/device_command/enable/{id}",
@@ -133,6 +136,7 @@ pub async fn enable_device_command(
     Ok(Json(result))
 }
 
+//------------------------- DisableDeviceCommand
 #[utoipa::path(
     get,
     path = "/device_command/disable/{id}",
@@ -156,6 +160,7 @@ pub async fn disable_device_command(
     Ok(Json(result))
 }
 
+//------------------------- UpdateDeviceCommand
 #[utoipa::path(
     put,
     path = "/device_command/update/{id}",
@@ -196,6 +201,7 @@ pub async fn update_device_command(
     Ok(Json(result))
 }
 
+//------------------------- CreateDeviceCommand
 #[utoipa::path(
     post,
     path = "/device_command/add",
@@ -230,11 +236,11 @@ pub async fn create_device_command(
     Ok(Json(result))
 }
 
+//------------------------- DeleteDeviceCommand
 #[utoipa::path(
     delete,
     path = "/device_command/delete/{id}",
     tag = "📡 Device Command",
-
     params(
         ("id" = i32, Path, description = "Device command ID to delete")
     ),

@@ -48,6 +48,7 @@ pub struct UpdateTimerDeviceRequest {
 }
 
 //--------------------------------------------------------------------------------- Handlers
+//------------------------- ListTimerDevices
 #[utoipa::path(
     get,
     path = "/timer_device/items",
@@ -71,6 +72,7 @@ pub async fn list_timer_devices(
     Ok(Json(result))
 }
 
+//------------------------- GetTimerDevice
 #[utoipa::path(
     get,
     path = "/timer_device/item/{id}",
@@ -94,6 +96,7 @@ pub async fn get_timer_device(
     Ok(Json(result))
 }
 
+//------------------------- EnableTimerDevice
 #[utoipa::path(
     get,
     path = "/timer_device/enable/{id}",
@@ -117,6 +120,7 @@ pub async fn enable_timer_device(
     Ok(Json(result))
 }
 
+//------------------------- DisableTimerDevice
 #[utoipa::path(
     get,
     path = "/timer_device/disable/{id}",
@@ -140,6 +144,7 @@ pub async fn disable_timer_device(
     Ok(Json(result))
 }
 
+//------------------------- UpdateTimerDevice
 #[utoipa::path(
     put,
     path = "/timer_device/update/{id}",
@@ -176,6 +181,7 @@ pub async fn update_timer_device(
     Ok(Json(result))
 }
 
+//------------------------- CreateTimerDevice
 #[utoipa::path(
     post,
     path = "/timer_device/add",
@@ -206,6 +212,7 @@ pub async fn create_timer_device(
     Ok(Json(result))
 }
 
+//------------------------- DeleteTimerDevice
 #[utoipa::path(
     delete,
     path = "/timer_device/delete/{id}",

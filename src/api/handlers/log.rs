@@ -44,6 +44,7 @@ pub struct UpdateLogRequest {
 }
 
 //--------------------------------------------------------------------------------- Handlers
+//------------------------- ListLogs
 #[utoipa::path(
     get,
     path = "/log/items",
@@ -67,6 +68,7 @@ pub async fn list_logs(
     Ok(Json(result))
 }
 
+//------------------------- GetLog
 #[utoipa::path(
     get,
     path = "/log/item/{id}",
@@ -90,6 +92,7 @@ pub async fn get_log(
     Ok(Json(result))
 }
 
+//------------------------- EnableLog
 #[utoipa::path(
     get,
     path = "/log/enable/{id}",
@@ -113,6 +116,7 @@ pub async fn enable_log(
     Ok(Json(result))
 }
 
+//------------------------- DisableLog
 #[utoipa::path(
     get,
     path = "/log/disable/{id}",
@@ -136,6 +140,7 @@ pub async fn disable_log(
     Ok(Json(result))
 }
 
+//------------------------- UpdateLog
 #[utoipa::path(
     put,
     path = "/log/update/{id}",
@@ -171,6 +176,7 @@ pub async fn update_log(
     Ok(Json(result))
 }
 
+//------------------------- CreateLog
 #[utoipa::path(
     post,
     path = "/log/add",
@@ -200,6 +206,7 @@ pub async fn create_log(
     Ok(Json(result))
 }
 
+//------------------------- DeleteLog
 #[utoipa::path(
     delete,
     path = "/log/delete/{id}",

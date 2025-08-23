@@ -98,7 +98,7 @@ pub struct UpdateConfigRequest {
 }
 
 //--------------------------------------------------------------------------------- Handlers
-//------------------------- Items
+//------------------------- ListConfigs
 #[utoipa::path(
     get,
     path = "/config/items",
@@ -121,7 +121,7 @@ pub async fn list_configs(
     Ok(Json(result))
 }
 
-//------------------------- Item
+//------------------------- GetConfig
 #[utoipa::path(
     get,
     path = "/config/item/{id}",
@@ -142,7 +142,7 @@ pub async fn get_config(
     Ok(Json(result))
 }
 
-//------------------------- Enable
+//------------------------- EnableConfig
 #[utoipa::path(
     get,
     path = "/config/enable/{id}",
@@ -166,7 +166,7 @@ pub async fn enable_config(
     Ok(Json(result))
 }
 
-//------------------------- Disable
+//------------------------- DisableConfig
 #[utoipa::path(
     get,
     path = "/config/disable/{id}",
@@ -190,7 +190,7 @@ pub async fn disable_config(
     Ok(Json(result))
 }
 
-//------------------------- Update
+//------------------------- UpdateConfig
 #[utoipa::path(
     put,
     path = "/config/update/{id}",
@@ -253,7 +253,7 @@ pub async fn update_config(
     Ok(Json(result))
 }
 
-//------------------------- Add
+//------------------------- CreateConfig
 #[utoipa::path(
     post,
     path = "/config/add",
@@ -310,7 +310,7 @@ pub async fn create_config(
     Ok(Json(result))
 }
 
-//------------------------- Delete
+//------------------------- DeleteConfig
 #[utoipa::path(
     delete,
     path = "/config/delete/{id}",

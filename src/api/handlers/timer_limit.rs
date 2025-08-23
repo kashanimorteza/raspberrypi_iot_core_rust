@@ -52,6 +52,7 @@ pub struct UpdateTimerLimitRequest {
 }
 
 //--------------------------------------------------------------------------------- Handlers
+//------------------------- ListTimerLimits
 #[utoipa::path(
     get,
     path = "/timer_limit/items",
@@ -75,6 +76,7 @@ pub async fn list_timer_limits(
     Ok(Json(result))
 }
 
+//------------------------- GetTimerLimit
 #[utoipa::path(
     get,
     path = "/timer_limit/item/{id}",
@@ -98,6 +100,7 @@ pub async fn get_timer_limit(
     Ok(Json(result))
 }
 
+//------------------------- EnableTimerLimit
 #[utoipa::path(
     get,
     path = "/timer_limit/enable/{id}",
@@ -121,6 +124,7 @@ pub async fn enable_timer_limit(
     Ok(Json(result))
 }
 
+//------------------------- DisableTimerLimit
 #[utoipa::path(
     get,
     path = "/timer_limit/disable/{id}",
@@ -144,6 +148,7 @@ pub async fn disable_timer_limit(
     Ok(Json(result))
 }
 
+//------------------------- UpdateTimerLimit
 #[utoipa::path(
     put,
     path = "/timer_limit/update/{id}",
@@ -181,6 +186,7 @@ pub async fn update_timer_limit(
     Ok(Json(result))
 }
 
+//------------------------- CreateTimerLimit
 #[utoipa::path(
     post,
     path = "/timer_limit/add",
@@ -212,6 +218,7 @@ pub async fn create_timer_limit(
     Ok(Json(result))
 }
 
+//------------------------- DeleteTimerLimit
 #[utoipa::path(
     delete,
     path = "/timer_limit/delete/{id}",

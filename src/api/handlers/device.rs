@@ -72,11 +72,11 @@ pub struct UpdateDeviceRequest {
 }
 
 //--------------------------------------------------------------------------------- Handlers
+//------------------------- ListDevices
 #[utoipa::path(
     get,
     path = "/device/items",
     tag = "🔧 Device",
-
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of devices to return"),
         ("offset" = Option<i32>, Query, description = "Number of devices to skip"),
@@ -95,6 +95,7 @@ pub async fn list_devices(
     Ok(Json(result))
 }
 
+//------------------------- GetDevice
 #[utoipa::path(
     get,
     path = "/device/item/{id}",
@@ -118,6 +119,7 @@ pub async fn get_device(
     Ok(Json(result))
 }
 
+//------------------------- EnableDevice
 #[utoipa::path(
     get,
     path = "/device/enable/{id}",
@@ -141,6 +143,7 @@ pub async fn enable_device(
     Ok(Json(result))
 }
 
+//------------------------- DisableDevice
 #[utoipa::path(
     get,
     path = "/device/disable/{id}",
@@ -164,6 +167,7 @@ pub async fn disable_device(
     Ok(Json(result))
 }
 
+//------------------------- UpdateDevice
 #[utoipa::path(
     put,
     path = "/device/update/{id}",
@@ -206,6 +210,7 @@ pub async fn update_device(
     Ok(Json(result))
 }
 
+//------------------------- CreateDevice
 #[utoipa::path(
     post,
     path = "/device/add",
@@ -242,6 +247,7 @@ pub async fn create_device(
     Ok(Json(result))
 }
 
+//------------------------- DeleteDevice
 #[utoipa::path(
     delete,
     path = "/device/delete/{id}",
