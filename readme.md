@@ -10,10 +10,10 @@ git clone git@github.com:kashanimorteza/raspberrypi_iot_core_rust.git
 cd raspberrypi_iot_core_rust
 ```
 
-<!--------------------------------------------------------------------------------- Database -->
+<!--------------------------------------------------------------------------------- Postgresql -->
 <br><br>
 
-## Database
+## Postgresql
 <!------------------------- Install -->
 Install
 ```bash
@@ -41,7 +41,6 @@ Database
 PGPASSWORD='123456' psql -h 192.168.64.9 -U postgres -c "DROP DATABASE raspberrypi;"
 PGPASSWORD='123456' psql -h 192.168.64.9 -U postgres -c "CREATE DATABASE raspberrypi"
 PGPASSWORD='123456' psql -h 192.168.64.9 -U postgres -d raspberrypi -f db_postgres.sql
-PGPASSWORD='123456' pg_dump -h 192.168.64.9 -U postgres -d raspberrypi -s -n public > db_postgres.sql
 ```
 
 
@@ -58,10 +57,10 @@ sea-orm-cli generate entity -u postgres://postgres:123456@192.168.64.9:5432/rasp
 
 
 
-<!--------------------------------------------------------------------------------- API -->
+<!--------------------------------------------------------------------------------- App -->
 <br><br>
 
-## API
+## App
 
 Add samples 
 ```bash
@@ -71,6 +70,14 @@ Running the Server
 ```bash
 cargo run
 ```
+
+
+
+
+<!--------------------------------------------------------------------------------- API -->
+<br><br>
+
+## API
 Get All Users
 ```bash
 curl -X GET http://localhost:3000/user/items
@@ -121,4 +128,14 @@ curl -X GET http://localhost:3000/users/enable/1
 Delete User
 ```bash
 curl -X DELETE http://localhost:3000/users/delete/1
+```
+
+
+
+<!--------------------------------------------------------------------------------- Note -->
+<br><br>
+
+## Note
+```bash
+PGPASSWORD='123456' pg_dump -h 192.168.64.9 -U postgres -d raspberrypi -s -n public > db_postgres.sql
 ```
