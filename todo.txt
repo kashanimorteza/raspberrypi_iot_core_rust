@@ -1,5 +1,5 @@
-read src/api/routes/zone.rs
-The priority of the route on the router function should be like this and dont add new comment:
+read src/api/handlers/user.rs
+The priority of the functions should be like this and no need to run cargo build:
 1 - list_users
 2 - get_user
 3 - enable_user
