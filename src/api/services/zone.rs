@@ -12,11 +12,13 @@ use crate::logics::general::ModelOutput;
 use crate::orm::logics::zone::ZoneORM;
 
 //--------------------------------------------------------------------------------- Service
-pub struct ZoneService {
+pub struct ZoneService 
+{
     pub logic: ZoneORM,
 }
 
-impl ZoneService {
+impl ZoneService 
+{
     //------------------------- New
     pub fn new() -> Self 
     {

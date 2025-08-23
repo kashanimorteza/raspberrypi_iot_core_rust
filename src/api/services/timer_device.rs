@@ -12,11 +12,13 @@ use crate::logics::general::ModelOutput;
 use crate::orm::logics::timer_device::TimerDeviceORM;
 
 //--------------------------------------------------------------------------------- Service
-pub struct TimerDeviceService {
+pub struct TimerDeviceService 
+{
     pub logic: TimerDeviceORM,
 }
 
-impl TimerDeviceService {
+impl TimerDeviceService 
+{
     //------------------------- New
     pub fn new() -> Self 
     {

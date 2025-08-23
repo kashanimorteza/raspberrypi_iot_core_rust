@@ -12,11 +12,13 @@ use crate::logics::general::ModelOutput;
 use crate::orm::logics::log::LogORM;
 
 //--------------------------------------------------------------------------------- Service
-pub struct LogService {
+pub struct LogService 
+{
     pub logic: LogORM,
 }
 
-impl LogService {
+impl LogService 
+{
     //------------------------- New
     pub fn new() -> Self 
     {

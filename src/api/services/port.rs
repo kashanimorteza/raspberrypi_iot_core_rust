@@ -12,11 +12,13 @@ use crate::logics::general::ModelOutput;
 use crate::orm::logics::port::PortORM;
 
 //--------------------------------------------------------------------------------- Service
-pub struct PortService {
+pub struct PortService 
+{
     pub logic: PortORM,
 }
 
-impl PortService {
+impl PortService 
+{
     //------------------------- New
     pub fn new() -> Self 
     {

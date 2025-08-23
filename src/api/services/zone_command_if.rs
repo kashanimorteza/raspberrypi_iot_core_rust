@@ -12,11 +12,13 @@ use crate::logics::general::ModelOutput;
 use crate::orm::logics::zone_command_if::ZoneCommandIfORM;
 
 //--------------------------------------------------------------------------------- Service
-pub struct ZoneCommandIfService {
+pub struct ZoneCommandIfService 
+{
     pub logic: ZoneCommandIfORM,
 }
 
-impl ZoneCommandIfService {
+impl ZoneCommandIfService 
+{
     //------------------------- New
     pub fn new() -> Self 
     {

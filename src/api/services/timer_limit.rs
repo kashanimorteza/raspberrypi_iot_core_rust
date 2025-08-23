@@ -12,11 +12,13 @@ use crate::logics::general::ModelOutput;
 use crate::orm::logics::timer_limit::TimerLimitORM;
 
 //--------------------------------------------------------------------------------- Service
-pub struct TimerLimitService {
+pub struct TimerLimitService 
+{
     pub logic: TimerLimitORM,
 }
 
-impl TimerLimitService {
+impl TimerLimitService 
+{
     //------------------------- New
     pub fn new() -> Self 
     {

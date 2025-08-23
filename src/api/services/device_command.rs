@@ -12,11 +12,13 @@ use crate::logics::general::ModelOutput;
 use crate::orm::logics::device_command::DeviceCommandORM;
 
 //--------------------------------------------------------------------------------- Service
-pub struct DeviceCommandService {
+pub struct DeviceCommandService 
+{
     pub logic: DeviceCommandORM,
 }
 
-impl DeviceCommandService {
+impl DeviceCommandService 
+{
     //------------------------- New
     pub fn new() -> Self 
     {

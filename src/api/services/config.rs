@@ -12,11 +12,13 @@ use crate::logics::general::ModelOutput;
 use crate::orm::logics::config::ConfigORM;
 
 //--------------------------------------------------------------------------------- Service
-pub struct ConfigService {
+pub struct ConfigService 
+{
     pub logic: ConfigORM,
 }
 
-impl ConfigService {
+impl ConfigService 
+{
     //------------------------- New
     pub fn new() -> Self 
     {

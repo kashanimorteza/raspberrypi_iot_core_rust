@@ -12,11 +12,13 @@ use crate::logics::general::ModelOutput;
 use crate::orm::logics::user::UserORM;
 
 //--------------------------------------------------------------------------------- Service
-pub struct UserService {
+pub struct UserService 
+{
     pub logic: UserORM,
 }
 
-impl UserService {
+impl UserService 
+{
     //------------------------- New
     pub fn new() -> Self 
     {
