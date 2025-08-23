@@ -1,10 +1,9 @@
-read src/api/services/timer_limit.rs
-The priority of the functions should be like this and dont add new comment:
-1 - new
-2 - items
-3 - item
-4 - enable
-5 - disable
-6 - update
-7 - add
-8 - delete
+read src/api/routes/zone.rs
+The priority of the route on the router function should be like this and dont add new comment:
+1 - /items
+2 - /item/{id}
+3 - /enable/{id}
+4 - /disable/{id}
+5 - /update/{id}
+6 - /add
+7 - /delete/{id}
