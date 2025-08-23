@@ -91,31 +91,48 @@ pub async fn get_log(
 }
 
 #[utoipa::path(
-    post,
-    path = "/log/add",
+    get,
+    path = "/log/enable/{id}",
     tag = "📋 Log",
 
-    request_body = CreateLogRequest,
+    params(
+        ("id" = i32, Path, description = "Log ID to enable")
+    ),
     responses(
-        (status = 201, description = "Log created successfully", body = LogModel),
-        (status = 400, description = "Invalid request data"),
+        (status = 200, description = "Log enabled successfully", body = LogModel),
+        (status = 404, description = "Log not found"),
         (status = 500, description = "Internal server error")
     )
 )]
-pub async fn create_log(
+pub async fn enable_log(
     State(state): State<AppState>,
-    Json(payload): Json<CreateLogRequest>,
+    Path(id): Path<i32>,
 ) -> Result<Json<ModelOutput<LogModel>>, StatusCode> {
     let service = LogService::new();
-    let log_model = LogModel {
-        id: 0, // Will be auto-generated
-        date: payload.date,
-        name: payload.name,
-        status: payload.status,
-        data: payload.data,
-    };
-    
-    let result = service.add(&state.db, log_model).await;
+    let result = service.enable(&state.db, id).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
+    get,
+    path = "/log/disable/{id}",
+    tag = "📋 Log",
+
+    params(
+        ("id" = i32, Path, description = "Log ID to disable")
+    ),
+    responses(
+        (status = 200, description = "Log disabled successfully", body = LogModel),
+        (status = 404, description = "Log not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn disable_log(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<LogModel>>, StatusCode> {
+    let service = LogService::new();
+    let result = service.disable(&state.db, id).await;
     Ok(Json(result))
 }
 
@@ -155,6 +172,35 @@ pub async fn update_log(
 }
 
 #[utoipa::path(
+    post,
+    path = "/log/add",
+    tag = "📋 Log",
+
+    request_body = CreateLogRequest,
+    responses(
+        (status = 201, description = "Log created successfully", body = LogModel),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn create_log(
+    State(state): State<AppState>,
+    Json(payload): Json<CreateLogRequest>,
+) -> Result<Json<ModelOutput<LogModel>>, StatusCode> {
+    let service = LogService::new();
+    let log_model = LogModel {
+        id: 0, // Will be auto-generated
+        date: payload.date,
+        name: payload.name,
+        status: payload.status,
+        data: payload.data,
+    };
+    
+    let result = service.add(&state.db, log_model).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
     delete,
     path = "/log/delete/{id}",
     tag = "📋 Log",
@@ -174,51 +220,5 @@ pub async fn delete_log(
 ) -> Result<Json<ModelOutput<String>>, StatusCode> {
     let service = LogService::new();
     let result = service.delete(&state.db, id).await;
-    Ok(Json(result))
-}
-
-#[utoipa::path(
-    get,
-    path = "/log/disable/{id}",
-    tag = "📄 Log",
-
-    params(
-        ("id" = i32, Path, description = "Log ID to disable")
-    ),
-    responses(
-        (status = 200, description = "Log disabled successfully", body = LogModel),
-        (status = 404, description = "Log not found"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn disable_log(
-    State(state): State<AppState>,
-    Path(id): Path<i32>,
-) -> Result<Json<ModelOutput<LogModel>>, StatusCode> {
-    let service = LogService::new();
-    let result = service.disable(&state.db, id).await;
-    Ok(Json(result))
-}
-
-#[utoipa::path(
-    get,
-    path = "/log/enable/{id}",
-    tag = "📄 Log",
-
-    params(
-        ("id" = i32, Path, description = "Log ID to enable")
-    ),
-    responses(
-        (status = 200, description = "Log enabled successfully", body = LogModel),
-        (status = 404, description = "Log not found"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn enable_log(
-    State(state): State<AppState>,
-    Path(id): Path<i32>,
-) -> Result<Json<ModelOutput<LogModel>>, StatusCode> {
-    let service = LogService::new();
-    let result = service.enable(&state.db, id).await;
     Ok(Json(result))
 }

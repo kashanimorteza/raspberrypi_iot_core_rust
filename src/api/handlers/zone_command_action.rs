@@ -99,33 +99,48 @@ pub async fn get_zone_command_action(
 }
 
 #[utoipa::path(
-    post,
-    path = "/zone_command_action/add",
+    get,
+    path = "/zone_command_action/enable/{id}",
     tag = "⚡ Zone Command Action",
 
-    request_body = CreateZoneCommandActionRequest,
+    params(
+        ("id" = i32, Path, description = "Zone command action ID to enable")
+    ),
     responses(
-        (status = 201, description = "Zone command action created successfully", body = ZoneCommandActionModel),
-        (status = 400, description = "Invalid request data"),
+        (status = 200, description = "Zone command action enabled successfully", body = ZoneCommandActionModel),
+        (status = 404, description = "Zone command action not found"),
         (status = 500, description = "Internal server error")
     )
 )]
-pub async fn create_zone_command_action(
+pub async fn enable_zone_command_action(
     State(state): State<AppState>,
-    Json(payload): Json<CreateZoneCommandActionRequest>,
+    Path(id): Path<i32>,
 ) -> Result<Json<ModelOutput<ZoneCommandActionModel>>, StatusCode> {
     let service = ZoneCommandActionService::new();
-    let zone_command_action_model = ZoneCommandActionModel {
-        id: 0, // Will be auto-generated
-        name: payload.name,
-        zone_command_id: payload.zone_command_id,
-        device_id: payload.device_id,
-        command_id: payload.command_id,
-        description: payload.description,
-        enable: payload.enable,
-    };
-    
-    let result = service.add(&state.db, zone_command_action_model).await;
+    let result = service.enable(&state.db, id).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
+    get,
+    path = "/zone_command_action/disable/{id}",
+    tag = "⚡ Zone Command Action",
+
+    params(
+        ("id" = i32, Path, description = "Zone command action ID to disable")
+    ),
+    responses(
+        (status = 200, description = "Zone command action disabled successfully", body = ZoneCommandActionModel),
+        (status = 404, description = "Zone command action not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn disable_zone_command_action(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<ZoneCommandActionModel>>, StatusCode> {
+    let service = ZoneCommandActionService::new();
+    let result = service.disable(&state.db, id).await;
     Ok(Json(result))
 }
 
@@ -167,6 +182,37 @@ pub async fn update_zone_command_action(
 }
 
 #[utoipa::path(
+    post,
+    path = "/zone_command_action/add",
+    tag = "⚡ Zone Command Action",
+
+    request_body = CreateZoneCommandActionRequest,
+    responses(
+        (status = 201, description = "Zone command action created successfully", body = ZoneCommandActionModel),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn create_zone_command_action(
+    State(state): State<AppState>,
+    Json(payload): Json<CreateZoneCommandActionRequest>,
+) -> Result<Json<ModelOutput<ZoneCommandActionModel>>, StatusCode> {
+    let service = ZoneCommandActionService::new();
+    let zone_command_action_model = ZoneCommandActionModel {
+        id: 0, // Will be auto-generated
+        name: payload.name,
+        zone_command_id: payload.zone_command_id,
+        device_id: payload.device_id,
+        command_id: payload.command_id,
+        description: payload.description,
+        enable: payload.enable,
+    };
+    
+    let result = service.add(&state.db, zone_command_action_model).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
     delete,
     path = "/zone_command_action/delete/{id}",
     tag = "⚡ Zone Command Action",
@@ -186,51 +232,5 @@ pub async fn delete_zone_command_action(
 ) -> Result<Json<ModelOutput<String>>, StatusCode> {
     let service = ZoneCommandActionService::new();
     let result = service.delete(&state.db, id).await;
-    Ok(Json(result))
-}
-
-#[utoipa::path(
-    get,
-    path = "/zone_command_action/disable/{id}",
-    tag = "⚡ Zone Command Action",
-
-    params(
-        ("id" = i32, Path, description = "Zone command action ID to disable")
-    ),
-    responses(
-        (status = 200, description = "Zone command action disabled successfully", body = ZoneCommandActionModel),
-        (status = 404, description = "Zone command action not found"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn disable_zone_command_action(
-    State(state): State<AppState>,
-    Path(id): Path<i32>,
-) -> Result<Json<ModelOutput<ZoneCommandActionModel>>, StatusCode> {
-    let service = ZoneCommandActionService::new();
-    let result = service.disable(&state.db, id).await;
-    Ok(Json(result))
-}
-
-#[utoipa::path(
-    get,
-    path = "/zone_command_action/enable/{id}",
-    tag = "⚡ Zone Command Action",
-
-    params(
-        ("id" = i32, Path, description = "Zone command action ID to enable")
-    ),
-    responses(
-        (status = 200, description = "Zone command action enabled successfully", body = ZoneCommandActionModel),
-        (status = 404, description = "Zone command action not found"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn enable_zone_command_action(
-    State(state): State<AppState>,
-    Path(id): Path<i32>,
-) -> Result<Json<ModelOutput<ZoneCommandActionModel>>, StatusCode> {
-    let service = ZoneCommandActionService::new();
-    let result = service.enable(&state.db, id).await;
     Ok(Json(result))
 }

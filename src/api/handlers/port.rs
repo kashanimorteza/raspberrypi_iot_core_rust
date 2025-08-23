@@ -93,36 +93,48 @@ pub async fn get_port(
 }
 
 #[utoipa::path(
-    post,
-    path = "/port/add",
+    get,
+    path = "/port/enable/{id}",
     tag = "🔌 Port",
 
-    request_body = CreatePortRequest,
+    params(
+        ("id" = i32, Path, description = "Port ID to enable")
+    ),
     responses(
-        (status = 201, description = "Port created successfully", body = PortModel),
-        (status = 400, description = "Invalid request data"),
+        (status = 200, description = "Port enabled successfully", body = PortModel),
+        (status = 404, description = "Port not found"),
         (status = 500, description = "Internal server error")
     )
 )]
-pub async fn create_port(
+pub async fn enable_port(
     State(state): State<AppState>,
-    Json(payload): Json<CreatePortRequest>,
+    Path(id): Path<i32>,
 ) -> Result<Json<ModelOutput<PortModel>>, StatusCode> {
     let service = PortService::new();
-    let port_model = PortModel {
-        id: 0, // Will be auto-generated
-        user_id: payload.user_id,
-        name: payload.name,
-        pin: payload.pin,
-        port: payload.port,
-        value: payload.value,
-        description: payload.description,
-        enable: payload.enable,
-        protocol: payload.protocol,
-        r#type: payload.r#type,
-    };
-    
-    let result = service.add(&state.db, port_model).await;
+    let result = service.enable(&state.db, id).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
+    get,
+    path = "/port/disable/{id}",
+    tag = "🔌 Port",
+
+    params(
+        ("id" = i32, Path, description = "Port ID to disable")
+    ),
+    responses(
+        (status = 200, description = "Port disabled successfully", body = PortModel),
+        (status = 404, description = "Port not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn disable_port(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<PortModel>>, StatusCode> {
+    let service = PortService::new();
+    let result = service.disable(&state.db, id).await;
     Ok(Json(result))
 }
 
@@ -167,6 +179,40 @@ pub async fn update_port(
 }
 
 #[utoipa::path(
+    post,
+    path = "/port/add",
+    tag = "🔌 Port",
+
+    request_body = CreatePortRequest,
+    responses(
+        (status = 201, description = "Port created successfully", body = PortModel),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn create_port(
+    State(state): State<AppState>,
+    Json(payload): Json<CreatePortRequest>,
+) -> Result<Json<ModelOutput<PortModel>>, StatusCode> {
+    let service = PortService::new();
+    let port_model = PortModel {
+        id: 0, // Will be auto-generated
+        user_id: payload.user_id,
+        name: payload.name,
+        pin: payload.pin,
+        port: payload.port,
+        value: payload.value,
+        description: payload.description,
+        enable: payload.enable,
+        protocol: payload.protocol,
+        r#type: payload.r#type,
+    };
+    
+    let result = service.add(&state.db, port_model).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
     delete,
     path = "/port/delete/{id}",
     tag = "🔌 Port",
@@ -186,51 +232,5 @@ pub async fn delete_port(
 ) -> Result<Json<ModelOutput<String>>, StatusCode> {
     let service = PortService::new();
     let result = service.delete(&state.db, id).await;
-    Ok(Json(result))
-}
-
-#[utoipa::path(
-    get,
-    path = "/port/disable/{id}",
-    tag = "🔌 Port",
-
-    params(
-        ("id" = i32, Path, description = "Port ID to disable")
-    ),
-    responses(
-        (status = 200, description = "Port disabled successfully", body = PortModel),
-        (status = 404, description = "Port not found"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn disable_port(
-    State(state): State<AppState>,
-    Path(id): Path<i32>,
-) -> Result<Json<ModelOutput<PortModel>>, StatusCode> {
-    let service = PortService::new();
-    let result = service.disable(&state.db, id).await;
-    Ok(Json(result))
-}
-
-#[utoipa::path(
-    get,
-    path = "/port/enable/{id}",
-    tag = "🔌 Port",
-
-    params(
-        ("id" = i32, Path, description = "Port ID to enable")
-    ),
-    responses(
-        (status = 200, description = "Port enabled successfully", body = PortModel),
-        (status = 404, description = "Port not found"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn enable_port(
-    State(state): State<AppState>,
-    Path(id): Path<i32>,
-) -> Result<Json<ModelOutput<PortModel>>, StatusCode> {
-    let service = PortService::new();
-    let result = service.enable(&state.db, id).await;
     Ok(Json(result))
 }

@@ -142,6 +142,54 @@ pub async fn get_config(
     Ok(Json(result))
 }
 
+//------------------------- Enable
+#[utoipa::path(
+    get,
+    path = "/config/enable/{id}",
+    tag = "⚙️ Config",
+
+    params(
+        ("id" = i32, Path, description = "Config ID to enable")
+    ),
+    responses(
+        (status = 200, description = "Config enabled successfully", body = ConfigModel),
+        (status = 404, description = "Config not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn enable_config(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<ConfigModel>>, StatusCode> {
+    let service = ConfigService::new();
+    let result = service.enable(&state.db, id).await;
+    Ok(Json(result))
+}
+
+//------------------------- Disable
+#[utoipa::path(
+    get,
+    path = "/config/disable/{id}",
+    tag = "⚙️ Config",
+
+    params(
+        ("id" = i32, Path, description = "Config ID to disable")
+    ),
+    responses(
+        (status = 200, description = "Config disabled successfully", body = ConfigModel),
+        (status = 404, description = "Config not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn disable_config(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<ConfigModel>>, StatusCode> {
+    let service = ConfigService::new();
+    let result = service.disable(&state.db, id).await;
+    Ok(Json(result))
+}
+
 //------------------------- Update
 #[utoipa::path(
     put,
@@ -282,53 +330,5 @@ pub async fn delete_config(
 ) -> Result<Json<ModelOutput<String>>, StatusCode> {
     let service = ConfigService::new();
     let result = service.delete(&state.db, id).await;
-    Ok(Json(result))
-}
-
-//------------------------- Disable
-#[utoipa::path(
-    get,
-    path = "/config/disable/{id}",
-    tag = "⚙️ Config",
-
-    params(
-        ("id" = i32, Path, description = "Config ID to disable")
-    ),
-    responses(
-        (status = 200, description = "Config disabled successfully", body = ConfigModel),
-        (status = 404, description = "Config not found"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn disable_config(
-    State(state): State<AppState>,
-    Path(id): Path<i32>,
-) -> Result<Json<ModelOutput<ConfigModel>>, StatusCode> {
-    let service = ConfigService::new();
-    let result = service.disable(&state.db, id).await;
-    Ok(Json(result))
-}
-
-//------------------------- Enable
-#[utoipa::path(
-    get,
-    path = "/config/enable/{id}",
-    tag = "⚙️ Config",
-
-    params(
-        ("id" = i32, Path, description = "Config ID to enable")
-    ),
-    responses(
-        (status = 200, description = "Config enabled successfully", body = ConfigModel),
-        (status = 404, description = "Config not found"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn enable_config(
-    State(state): State<AppState>,
-    Path(id): Path<i32>,
-) -> Result<Json<ModelOutput<ConfigModel>>, StatusCode> {
-    let service = ConfigService::new();
-    let result = service.enable(&state.db, id).await;
     Ok(Json(result))
 }

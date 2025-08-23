@@ -119,38 +119,48 @@ pub async fn get_device(
 }
 
 #[utoipa::path(
-    post,
-    path = "/device/add",
+    get,
+    path = "/device/enable/{id}",
     tag = "🔧 Device",
 
-    request_body = CreateDeviceRequest,
+    params(
+        ("id" = i32, Path, description = "Device ID to enable")
+    ),
     responses(
-        (status = 201, description = "Device created successfully", body = DeviceModel),
-        (status = 400, description = "Invalid request data"),
+        (status = 200, description = "Device enabled successfully", body = DeviceModel),
+        (status = 404, description = "Device not found"),
         (status = 500, description = "Internal server error")
     )
 )]
-pub async fn create_device(
+pub async fn enable_device(
     State(state): State<AppState>,
-    Json(payload): Json<CreateDeviceRequest>,
+    Path(id): Path<i32>,
 ) -> Result<Json<ModelOutput<DeviceModel>>, StatusCode> {
     let service = DeviceService::new();
-    let device_model = DeviceModel {
-        id: 0, // Will be auto-generated
-        zone_id: payload.zone_id,
-        port_id: payload.port_id,
-        power_id: payload.power_id,
-        command_id: payload.command_id,
-        value: payload.value,
-        tune: payload.tune,
-        date: payload.date,
-        address: payload.address,
-        name: payload.name,
-        description: payload.description,
-        enable: payload.enable,
-    };
-    
-    let result = service.add(&state.db, device_model).await;
+    let result = service.enable(&state.db, id).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
+    get,
+    path = "/device/disable/{id}",
+    tag = "🔧 Device",
+
+    params(
+        ("id" = i32, Path, description = "Device ID to disable")
+    ),
+    responses(
+        (status = 200, description = "Device disabled successfully", body = DeviceModel),
+        (status = 404, description = "Device not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn disable_device(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<DeviceModel>>, StatusCode> {
+    let service = DeviceService::new();
+    let result = service.disable(&state.db, id).await;
     Ok(Json(result))
 }
 
@@ -197,6 +207,42 @@ pub async fn update_device(
 }
 
 #[utoipa::path(
+    post,
+    path = "/device/add",
+    tag = "🔧 Device",
+
+    request_body = CreateDeviceRequest,
+    responses(
+        (status = 201, description = "Device created successfully", body = DeviceModel),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn create_device(
+    State(state): State<AppState>,
+    Json(payload): Json<CreateDeviceRequest>,
+) -> Result<Json<ModelOutput<DeviceModel>>, StatusCode> {
+    let service = DeviceService::new();
+    let device_model = DeviceModel {
+        id: 0, // Will be auto-generated
+        zone_id: payload.zone_id,
+        port_id: payload.port_id,
+        power_id: payload.power_id,
+        command_id: payload.command_id,
+        value: payload.value,
+        tune: payload.tune,
+        date: payload.date,
+        address: payload.address,
+        name: payload.name,
+        description: payload.description,
+        enable: payload.enable,
+    };
+    
+    let result = service.add(&state.db, device_model).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
     delete,
     path = "/device/delete/{id}",
     tag = "🔧 Device",
@@ -216,51 +262,5 @@ pub async fn delete_device(
 ) -> Result<Json<ModelOutput<String>>, StatusCode> {
     let service = DeviceService::new();
     let result = service.delete(&state.db, id).await;
-    Ok(Json(result))
-}
-
-#[utoipa::path(
-    get,
-    path = "/device/disable/{id}",
-    tag = "🔧 Device",
-
-    params(
-        ("id" = i32, Path, description = "Device ID to disable")
-    ),
-    responses(
-        (status = 200, description = "Device disabled successfully", body = DeviceModel),
-        (status = 404, description = "Device not found"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn disable_device(
-    State(state): State<AppState>,
-    Path(id): Path<i32>,
-) -> Result<Json<ModelOutput<DeviceModel>>, StatusCode> {
-    let service = DeviceService::new();
-    let result = service.disable(&state.db, id).await;
-    Ok(Json(result))
-}
-
-#[utoipa::path(
-    get,
-    path = "/device/enable/{id}",
-    tag = "🔧 Device",
-
-    params(
-        ("id" = i32, Path, description = "Device ID to enable")
-    ),
-    responses(
-        (status = 200, description = "Device enabled successfully", body = DeviceModel),
-        (status = 404, description = "Device not found"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn enable_device(
-    State(state): State<AppState>,
-    Path(id): Path<i32>,
-) -> Result<Json<ModelOutput<DeviceModel>>, StatusCode> {
-    let service = DeviceService::new();
-    let result = service.enable(&state.db, id).await;
     Ok(Json(result))
 }

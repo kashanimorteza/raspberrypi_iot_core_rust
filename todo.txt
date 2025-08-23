@@ -1,9 +1,3 @@
 read src/api/handlers/user.rs
-The priority of the functions should be like this and no need to run cargo build:
-1 - list_users
-2 - get_user
-3 - enable_user
-4 - disable_user
-5 - update_user
-6 - create_user
-7 - delete_user
+every method has a comment like this : //------------------------- Update
+i need it for all handler

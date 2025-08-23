@@ -99,33 +99,48 @@ pub async fn get_timer_item(
 }
 
 #[utoipa::path(
-    post,
-    path = "/timer_item/add",
+    get,
+    path = "/timer_item/enable/{id}",
     tag = "📝 Timer Item",
 
-    request_body = CreateTimerItemRequest,
+    params(
+        ("id" = i32, Path, description = "Timer item ID to enable")
+    ),
     responses(
-        (status = 201, description = "Timer item created successfully", body = TimerItemModel),
-        (status = 400, description = "Invalid request data"),
+        (status = 200, description = "Timer item enabled successfully", body = TimerItemModel),
+        (status = 404, description = "Timer item not found"),
         (status = 500, description = "Internal server error")
     )
 )]
-pub async fn create_timer_item(
+pub async fn enable_timer_item(
     State(state): State<AppState>,
-    Json(payload): Json<CreateTimerItemRequest>,
+    Path(id): Path<i32>,
 ) -> Result<Json<ModelOutput<TimerItemModel>>, StatusCode> {
     let service = TimerItemService::new();
-    let timer_item_model = TimerItemModel {
-        id: 0, // Will be auto-generated
-        timer_id: payload.timer_id,
-        name: payload.name,
-        value_from: payload.value_from,
-        value_to: payload.value_to,
-        description: payload.description,
-        enable: payload.enable,
-    };
-    
-    let result = service.add(&state.db, timer_item_model).await;
+    let result = service.enable(&state.db, id).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
+    get,
+    path = "/timer_item/disable/{id}",
+    tag = "📝 Timer Item",
+
+    params(
+        ("id" = i32, Path, description = "Timer item ID to disable")
+    ),
+    responses(
+        (status = 200, description = "Timer item disabled successfully", body = TimerItemModel),
+        (status = 404, description = "Timer item not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn disable_timer_item(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<TimerItemModel>>, StatusCode> {
+    let service = TimerItemService::new();
+    let result = service.disable(&state.db, id).await;
     Ok(Json(result))
 }
 
@@ -167,6 +182,37 @@ pub async fn update_timer_item(
 }
 
 #[utoipa::path(
+    post,
+    path = "/timer_item/add",
+    tag = "📝 Timer Item",
+
+    request_body = CreateTimerItemRequest,
+    responses(
+        (status = 201, description = "Timer item created successfully", body = TimerItemModel),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn create_timer_item(
+    State(state): State<AppState>,
+    Json(payload): Json<CreateTimerItemRequest>,
+) -> Result<Json<ModelOutput<TimerItemModel>>, StatusCode> {
+    let service = TimerItemService::new();
+    let timer_item_model = TimerItemModel {
+        id: 0, // Will be auto-generated
+        timer_id: payload.timer_id,
+        name: payload.name,
+        value_from: payload.value_from,
+        value_to: payload.value_to,
+        description: payload.description,
+        enable: payload.enable,
+    };
+    
+    let result = service.add(&state.db, timer_item_model).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
     delete,
     path = "/timer_item/delete/{id}",
     tag = "📝 Timer Item",
@@ -186,51 +232,5 @@ pub async fn delete_timer_item(
 ) -> Result<Json<ModelOutput<String>>, StatusCode> {
     let service = TimerItemService::new();
     let result = service.delete(&state.db, id).await;
-    Ok(Json(result))
-}
-
-#[utoipa::path(
-    get,
-    path = "/timer_item/disable/{id}",
-    tag = "🕰️ Timer Item",
-
-    params(
-        ("id" = i32, Path, description = "Timer item ID to disable")
-    ),
-    responses(
-        (status = 200, description = "Timer item disabled successfully", body = TimerItemModel),
-        (status = 404, description = "Timer item not found"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn disable_timer_item(
-    State(state): State<AppState>,
-    Path(id): Path<i32>,
-) -> Result<Json<ModelOutput<TimerItemModel>>, StatusCode> {
-    let service = TimerItemService::new();
-    let result = service.disable(&state.db, id).await;
-    Ok(Json(result))
-}
-
-#[utoipa::path(
-    get,
-    path = "/timer_item/enable/{id}",
-    tag = "🕰️ Timer Item",
-
-    params(
-        ("id" = i32, Path, description = "Timer item ID to enable")
-    ),
-    responses(
-        (status = 200, description = "Timer item enabled successfully", body = TimerItemModel),
-        (status = 404, description = "Timer item not found"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn enable_timer_item(
-    State(state): State<AppState>,
-    Path(id): Path<i32>,
-) -> Result<Json<ModelOutput<TimerItemModel>>, StatusCode> {
-    let service = TimerItemService::new();
-    let result = service.enable(&state.db, id).await;
     Ok(Json(result))
 }

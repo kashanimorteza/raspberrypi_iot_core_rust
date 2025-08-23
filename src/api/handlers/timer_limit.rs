@@ -99,33 +99,48 @@ pub async fn get_timer_limit(
 }
 
 #[utoipa::path(
-    post,
-    path = "/timer_limit/add",
+    get,
+    path = "/timer_limit/enable/{id}",
     tag = "⏱️ Timer Limit",
 
-    request_body = CreateTimerLimitRequest,
+    params(
+        ("id" = i32, Path, description = "Timer limit ID to enable")
+    ),
     responses(
-        (status = 201, description = "Timer limit created successfully", body = TimerLimitModel),
-        (status = 400, description = "Invalid request data"),
+        (status = 200, description = "Timer limit enabled successfully", body = TimerLimitModel),
+        (status = 404, description = "Timer limit not found"),
         (status = 500, description = "Internal server error")
     )
 )]
-pub async fn create_timer_limit(
+pub async fn enable_timer_limit(
     State(state): State<AppState>,
-    Json(payload): Json<CreateTimerLimitRequest>,
+    Path(id): Path<i32>,
 ) -> Result<Json<ModelOutput<TimerLimitModel>>, StatusCode> {
     let service = TimerLimitService::new();
-    let timer_limit_model = TimerLimitModel {
-        id: 0, // Will be auto-generated
-        device_id: payload.device_id,
-        command_from_id: payload.command_from_id,
-        command_to_id: payload.command_to_id,
-        value: payload.value,
-        description: payload.description,
-        enable: payload.enable,
-    };
-    
-    let result = service.add(&state.db, timer_limit_model).await;
+    let result = service.enable(&state.db, id).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
+    get,
+    path = "/timer_limit/disable/{id}",
+    tag = "⏱️ Timer Limit",
+
+    params(
+        ("id" = i32, Path, description = "Timer limit ID to disable")
+    ),
+    responses(
+        (status = 200, description = "Timer limit disabled successfully", body = TimerLimitModel),
+        (status = 404, description = "Timer limit not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn disable_timer_limit(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<TimerLimitModel>>, StatusCode> {
+    let service = TimerLimitService::new();
+    let result = service.disable(&state.db, id).await;
     Ok(Json(result))
 }
 
@@ -167,6 +182,37 @@ pub async fn update_timer_limit(
 }
 
 #[utoipa::path(
+    post,
+    path = "/timer_limit/add",
+    tag = "⏱️ Timer Limit",
+
+    request_body = CreateTimerLimitRequest,
+    responses(
+        (status = 201, description = "Timer limit created successfully", body = TimerLimitModel),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn create_timer_limit(
+    State(state): State<AppState>,
+    Json(payload): Json<CreateTimerLimitRequest>,
+) -> Result<Json<ModelOutput<TimerLimitModel>>, StatusCode> {
+    let service = TimerLimitService::new();
+    let timer_limit_model = TimerLimitModel {
+        id: 0, // Will be auto-generated
+        device_id: payload.device_id,
+        command_from_id: payload.command_from_id,
+        command_to_id: payload.command_to_id,
+        value: payload.value,
+        description: payload.description,
+        enable: payload.enable,
+    };
+    
+    let result = service.add(&state.db, timer_limit_model).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
     delete,
     path = "/timer_limit/delete/{id}",
     tag = "⏱️ Timer Limit",
@@ -186,51 +232,5 @@ pub async fn delete_timer_limit(
 ) -> Result<Json<ModelOutput<String>>, StatusCode> {
     let service = TimerLimitService::new();
     let result = service.delete(&state.db, id).await;
-    Ok(Json(result))
-}
-
-#[utoipa::path(
-    get,
-    path = "/timer_limit/disable/{id}",
-    tag = "⏱️ Timer Limit",
-
-    params(
-        ("id" = i32, Path, description = "Timer limit ID to disable")
-    ),
-    responses(
-        (status = 200, description = "Timer limit disabled successfully", body = TimerLimitModel),
-        (status = 404, description = "Timer limit not found"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn disable_timer_limit(
-    State(state): State<AppState>,
-    Path(id): Path<i32>,
-) -> Result<Json<ModelOutput<TimerLimitModel>>, StatusCode> {
-    let service = TimerLimitService::new();
-    let result = service.disable(&state.db, id).await;
-    Ok(Json(result))
-}
-
-#[utoipa::path(
-    get,
-    path = "/timer_limit/enable/{id}",
-    tag = "⏱️ Timer Limit",
-
-    params(
-        ("id" = i32, Path, description = "Timer limit ID to enable")
-    ),
-    responses(
-        (status = 200, description = "Timer limit enabled successfully", body = TimerLimitModel),
-        (status = 404, description = "Timer limit not found"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn enable_timer_limit(
-    State(state): State<AppState>,
-    Path(id): Path<i32>,
-) -> Result<Json<ModelOutput<TimerLimitModel>>, StatusCode> {
-    let service = TimerLimitService::new();
-    let result = service.enable(&state.db, id).await;
     Ok(Json(result))
 }

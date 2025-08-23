@@ -83,31 +83,48 @@ pub async fn get_timer(
 }
 
 #[utoipa::path(
-    post,
-    path = "/timer/add",
+    get,
+    path = "/timer/enable/{id}",
     tag = "⏰ Timer",
 
-    request_body = CreateTimerRequest,
+    params(
+        ("id" = i32, Path, description = "Timer ID to enable")
+    ),
     responses(
-        (status = 201, description = "Timer created successfully", body = TimerModel),
-        (status = 400, description = "Invalid request data"),
+        (status = 200, description = "Timer enabled successfully", body = TimerModel),
+        (status = 404, description = "Timer not found"),
         (status = 500, description = "Internal server error")
     )
 )]
-pub async fn create_timer(
+pub async fn enable_timer(
     State(state): State<AppState>,
-    Json(payload): Json<CreateTimerRequest>,
+    Path(id): Path<i32>,
 ) -> Result<Json<ModelOutput<TimerModel>>, StatusCode> {
     let service = TimerService::new();
-    let timer_model = TimerModel {
-        id: 0, // Will be auto-generated
-        user_id: payload.user_id,
-        name: payload.name,
-        description: payload.description,
-        enable: payload.enable,
-    };
-    
-    let result = service.add(&state.db, timer_model).await;
+    let result = service.enable(&state.db, id).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
+    get,
+    path = "/timer/disable/{id}",
+    tag = "⏰ Timer",
+
+    params(
+        ("id" = i32, Path, description = "Timer ID to disable")
+    ),
+    responses(
+        (status = 200, description = "Timer disabled successfully", body = TimerModel),
+        (status = 404, description = "Timer not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn disable_timer(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<TimerModel>>, StatusCode> {
+    let service = TimerService::new();
+    let result = service.disable(&state.db, id).await;
     Ok(Json(result))
 }
 
@@ -147,6 +164,35 @@ pub async fn update_timer(
 }
 
 #[utoipa::path(
+    post,
+    path = "/timer/add",
+    tag = "⏰ Timer",
+
+    request_body = CreateTimerRequest,
+    responses(
+        (status = 201, description = "Timer created successfully", body = TimerModel),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn create_timer(
+    State(state): State<AppState>,
+    Json(payload): Json<CreateTimerRequest>,
+) -> Result<Json<ModelOutput<TimerModel>>, StatusCode> {
+    let service = TimerService::new();
+    let timer_model = TimerModel {
+        id: 0, // Will be auto-generated
+        user_id: payload.user_id,
+        name: payload.name,
+        description: payload.description,
+        enable: payload.enable,
+    };
+    
+    let result = service.add(&state.db, timer_model).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
     delete,
     path = "/timer/delete/{id}",
     tag = "⏰ Timer",
@@ -166,51 +212,5 @@ pub async fn delete_timer(
 ) -> Result<Json<ModelOutput<String>>, StatusCode> {
     let service = TimerService::new();
     let result = service.delete(&state.db, id).await;
-    Ok(Json(result))
-}
-
-#[utoipa::path(
-    get,
-    path = "/timer/disable/{id}",
-    tag = "⏰ Timer",
-
-    params(
-        ("id" = i32, Path, description = "Timer ID to disable")
-    ),
-    responses(
-        (status = 200, description = "Timer disabled successfully", body = TimerModel),
-        (status = 404, description = "Timer not found"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn disable_timer(
-    State(state): State<AppState>,
-    Path(id): Path<i32>,
-) -> Result<Json<ModelOutput<TimerModel>>, StatusCode> {
-    let service = TimerService::new();
-    let result = service.disable(&state.db, id).await;
-    Ok(Json(result))
-}
-
-#[utoipa::path(
-    get,
-    path = "/timer/enable/{id}",
-    tag = "⏰ Timer",
-
-    params(
-        ("id" = i32, Path, description = "Timer ID to enable")
-    ),
-    responses(
-        (status = 200, description = "Timer enabled successfully", body = TimerModel),
-        (status = 404, description = "Timer not found"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn enable_timer(
-    State(state): State<AppState>,
-    Path(id): Path<i32>,
-) -> Result<Json<ModelOutput<TimerModel>>, StatusCode> {
-    let service = TimerService::new();
-    let result = service.enable(&state.db, id).await;
     Ok(Json(result))
 }
