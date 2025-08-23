@@ -178,3 +178,100 @@ impl PortORM
         }
     }
 }
+
+impl PortORM
+{
+    //-------------------------- [Disable]
+    pub async fn disable(&self, db: &DbConn, id: i32) -> ModelOutput<PortModel>
+    {
+        let this_method = "disable";
+        if self.verbose { debug!("{}::{} - Starting disable operation for id: {}", self.this_class, this_method, id); }
+
+        match PortEntity::find_by_id(id).one(db).await
+        {
+            Ok(Some(existing)) =>
+            {
+                let mut active: PortActiveModel = existing.into();
+                active.enable = sea_orm::Set(false);
+
+                match active.update(db).await
+                {
+                    Ok(updated) =>
+                    {
+                        let output = ModelOutput::success(updated, "Port disabled successfully".to_string());
+                        if self.verbose { info!("{}::{} - Success: Port {} disabled", self.this_class, this_method, id); }
+                        if self.log { info!("LOG: {}::{} - Port {} disabled", self.this_class, this_method, id); }
+                        output
+                    }
+                    Err(e) =>
+                    {
+                        let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                        let output = ModelOutput::error(error_msg.clone());
+                        error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                        output
+                    }
+                }
+            }
+            Ok(None) =>
+            {
+                let output = ModelOutput::error("Port not found".to_string());
+                if self.verbose { info!("{}::{} - Port {} not found", self.this_class, this_method, id); }
+                output
+            }
+            Err(e) =>
+            {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                let output = ModelOutput::error(error_msg.clone());
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                output
+            }
+        }
+    }
+
+    //-------------------------- [Enable]
+    pub async fn enable(&self, db: &DbConn, id: i32) -> ModelOutput<PortModel>
+    {
+        let this_method = "enable";
+        if self.verbose { debug!("{}::{} - Starting enable operation for id: {}", self.this_class, this_method, id); }
+
+        match PortEntity::find_by_id(id).one(db).await
+        {
+            Ok(Some(existing)) =>
+            {
+                let mut active: PortActiveModel = existing.into();
+                active.enable = sea_orm::Set(true);
+
+                match active.update(db).await
+                {
+                    Ok(updated) =>
+                    {
+                        let output = ModelOutput::success(updated, "Port enabled successfully".to_string());
+                        if self.verbose { info!("{}::{} - Success: Port {} enabled", self.this_class, this_method, id); }
+                        if self.log { info!("LOG: {}::{} - Port {} enabled", self.this_class, this_method, id); }
+                        output
+                    }
+                    Err(e) =>
+                    {
+                        let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                        let output = ModelOutput::error(error_msg.clone());
+                        error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                        output
+                    }
+                }
+            }
+            Ok(None) =>
+            {
+                let output = ModelOutput::error("Port not found".to_string());
+                if self.verbose { info!("{}::{} - Port {} not found", self.this_class, this_method, id); }
+                output
+            }
+            Err(e) =>
+            {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                let output = ModelOutput::error(error_msg.clone());
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                output
+            }
+        }
+    }
+}

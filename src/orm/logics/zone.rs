@@ -22,6 +22,7 @@ pub struct ZoneORM
 
 impl ZoneORM
 {
+    //------------------------- New
     pub fn new(verbose: bool, log: bool) -> Self 
     {
         Self 
@@ -33,30 +34,7 @@ impl ZoneORM
         }
     }
 
-    pub async fn add(&self, db: &DbConn, item: ZoneActiveModel) -> ModelOutput<ZoneModel> 
-    {
-        let this_method = "add";
-        if self.verbose { debug!("{}::{} - Starting add operation", self.this_class, this_method); }
-
-        match item.insert(db).await 
-        {
-            Ok(model) => {
-                let output = ModelOutput::success(model, "Zone added successfully".to_string());
-                if self.verbose { info!("{}::{} - Success: Zone added", self.this_class, this_method); }
-                if self.log { info!("LOG: {}::{} - Zone added", self.this_class, this_method); }
-                output
-            }
-            Err(e) => 
-            {
-                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
-                let output = ModelOutput::error(error_msg.clone());
-                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
-                if self.log { error!("LOG: {}::{} - Error: {}", self.this_class, this_method, error_msg); }
-                output
-            }
-        }
-    }
-
+    //------------------------- Items
     pub async fn items(&self, db: &DbConn, _filters: HashMap<String, String>) -> ModelOutput<Vec<ZoneModel>> 
     {
         let this_method = "items";
@@ -82,6 +60,7 @@ impl ZoneORM
         }
     }
 
+    //------------------------- Item
     pub async fn item(&self, db: &DbConn, id: i32) -> ModelOutput<ZoneModel> 
     {
         let this_method = "item";
@@ -113,6 +92,7 @@ impl ZoneORM
         }
     }
 
+    //------------------------- Update
     pub async fn update(&self, db: &DbConn, item: ZoneActiveModel) -> ModelOutput<ZoneModel> 
     {
         let this_method = "update";
@@ -138,6 +118,32 @@ impl ZoneORM
         }
     }
 
+    //------------------------- Add
+    pub async fn add(&self, db: &DbConn, item: ZoneActiveModel) -> ModelOutput<ZoneModel> 
+    {
+        let this_method = "add";
+        if self.verbose { debug!("{}::{} - Starting add operation", self.this_class, this_method); }
+
+        match item.insert(db).await 
+        {
+            Ok(model) => {
+                let output = ModelOutput::success(model, "Zone added successfully".to_string());
+                if self.verbose { info!("{}::{} - Success: Zone added", self.this_class, this_method); }
+                if self.log { info!("LOG: {}::{} - Zone added", self.this_class, this_method); }
+                output
+            }
+            Err(e) => 
+            {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                let output = ModelOutput::error(error_msg.clone());
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                if self.log { error!("LOG: {}::{} - Error: {}", self.this_class, this_method, error_msg); }
+                output
+            }
+        }
+    }
+
+    //------------------------- Delete
     pub async fn delete(&self, db: &DbConn, id: i32) -> ModelOutput<String> 
     {
         let this_method = "delete";
@@ -172,3 +178,67 @@ impl ZoneORM
         }
     }
 }
+    
+    //-------------------------- [Disable]
+    pub async fn disable(&self, db: &DbConn, id: i32) -> ModelOutput<ZoneModel>
+    {
+        let this_method = "disable";
+        if self.verbose { debug!("{}::{} - Starting disable operation for id: {}", self.this_class, this_method, id); }
+
+        match ZoneEntity::find_by_id(id).one(db).await
+        {
+            Ok(Some(existing)) =>
+            {
+                let mut active: ZoneActiveModel = existing.into();
+                active.enable = sea_orm::Set(false);
+
+                match active.update(db).await
+                {
+                    Ok(updated) => ModelOutput::success(updated, "Zone disabled successfully".to_string()),
+                    Err(e) => {
+                        let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                        error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                        ModelOutput::error(error_msg)
+                    }
+                }
+            }
+            Ok(None) => ModelOutput::error("Zone not found".to_string()),
+            Err(e) => {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                ModelOutput::error(error_msg)
+            }
+        }
+    }
+
+    //-------------------------- [Enable]
+    pub async fn enable(&self, db: &DbConn, id: i32) -> ModelOutput<ZoneModel>
+    {
+        let this_method = "enable";
+        if self.verbose { debug!("{}::{} - Starting enable operation for id: {}", self.this_class, this_method, id); }
+
+        match ZoneEntity::find_by_id(id).one(db).await
+        {
+            Ok(Some(existing)) =>
+            {
+                let mut active: ZoneActiveModel = existing.into();
+                active.enable = sea_orm::Set(true);
+
+                match active.update(db).await
+                {
+                    Ok(updated) => ModelOutput::success(updated, "Zone enabled successfully".to_string()),
+                    Err(e) => {
+                        let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                        error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                        ModelOutput::error(error_msg)
+                    }
+                }
+            }
+            Ok(None) => ModelOutput::error("Zone not found".to_string()),
+            Err(e) => {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                ModelOutput::error(error_msg)
+            }
+        }
+    }

@@ -177,6 +177,100 @@ impl DeviceORM
             }
         }
     }
+
+    //-------------------------- [Disable]
+    pub async fn disable(&self, db: &DbConn, id: i32) -> ModelOutput<DeviceModel>
+    {
+        let this_method = "disable";
+        if self.verbose { debug!("{}::{} - Starting disable operation for id: {}", self.this_class, this_method, id); }
+
+        match DeviceEntity::find_by_id(id).one(db).await
+        {
+            Ok(Some(existing)) =>
+            {
+                let mut active: DeviceActiveModel = existing.into();
+                active.enable = sea_orm::Set(false);
+
+                match active.update(db).await
+                {
+                    Ok(updated) =>
+                    {
+                        let output = ModelOutput::success(updated, "Device disabled successfully".to_string());
+                        if self.verbose { info!("{}::{} - Success: Device {} disabled", self.this_class, this_method, id); }
+                        if self.log { info!("LOG: {}::{} - Device {} disabled", self.this_class, this_method, id); }
+                        output
+                    }
+                    Err(e) =>
+                    {
+                        let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                        let output = ModelOutput::error(error_msg.clone());
+                        error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                        output
+                    }
+                }
+            }
+            Ok(None) =>
+            {
+                let output = ModelOutput::error("Device not found".to_string());
+                if self.verbose { info!("{}::{} - Device {} not found", self.this_class, this_method, id); }
+                output
+            }
+            Err(e) =>
+            {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                let output = ModelOutput::error(error_msg.clone());
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                output
+            }
+        }
+    }
+
+    //-------------------------- [Enable]
+    pub async fn enable(&self, db: &DbConn, id: i32) -> ModelOutput<DeviceModel>
+    {
+        let this_method = "enable";
+        if self.verbose { debug!("{}::{} - Starting enable operation for id: {}", self.this_class, this_method, id); }
+
+        match DeviceEntity::find_by_id(id).one(db).await
+        {
+            Ok(Some(existing)) =>
+            {
+                let mut active: DeviceActiveModel = existing.into();
+                active.enable = sea_orm::Set(true);
+
+                match active.update(db).await
+                {
+                    Ok(updated) =>
+                    {
+                        let output = ModelOutput::success(updated, "Device enabled successfully".to_string());
+                        if self.verbose { info!("{}::{} - Success: Device {} enabled", self.this_class, this_method, id); }
+                        if self.log { info!("LOG: {}::{} - Device {} enabled", self.this_class, this_method, id); }
+                        output
+                    }
+                    Err(e) =>
+                    {
+                        let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                        let output = ModelOutput::error(error_msg.clone());
+                        error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                        output
+                    }
+                }
+            }
+            Ok(None) =>
+            {
+                let output = ModelOutput::error("Device not found".to_string());
+                if self.verbose { info!("{}::{} - Device {} not found", self.this_class, this_method, id); }
+                output
+            }
+            Err(e) =>
+            {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                let output = ModelOutput::error(error_msg.clone());
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                output
+            }
+        }
+    }
 }
 
 

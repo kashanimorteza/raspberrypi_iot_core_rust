@@ -1,2 +1,3 @@
-on src/api/handlers
-I don't want the nouns to be plural on path and tag inside utoipa::path
+read src/orm/logic/user.rs
+there is a disable and enable 
+i need generate enable and disable for all logic on src/orm/logic

@@ -172,3 +172,67 @@ impl ZoneCommandIfORM
         }
     }
 }
+    
+    //-------------------------- [Disable]
+    pub async fn disable(&self, db: &DbConn, id: i32) -> ModelOutput<ZoneCommandIfModel>
+    {
+        let this_method = "disable";
+        if self.verbose { debug!("{}::{} - Starting disable operation for id: {}", self.this_class, this_method, id); }
+
+        match ZoneCommandIfEntity::find_by_id(id).one(db).await
+        {
+            Ok(Some(existing)) =>
+            {
+                let mut active: ZoneCommandIfActiveModel = existing.into();
+                active.enable = sea_orm::Set(false);
+
+                match active.update(db).await
+                {
+                    Ok(updated) => ModelOutput::success(updated, "ZoneCommandIf disabled successfully".to_string()),
+                    Err(e) => {
+                        let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                        error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                        ModelOutput::error(error_msg)
+                    }
+                }
+            }
+            Ok(None) => ModelOutput::error("ZoneCommandIf not found".to_string()),
+            Err(e) => {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                ModelOutput::error(error_msg)
+            }
+        }
+    }
+
+    //-------------------------- [Enable]
+    pub async fn enable(&self, db: &DbConn, id: i32) -> ModelOutput<ZoneCommandIfModel>
+    {
+        let this_method = "enable";
+        if self.verbose { debug!("{}::{} - Starting enable operation for id: {}", self.this_class, this_method, id); }
+
+        match ZoneCommandIfEntity::find_by_id(id).one(db).await
+        {
+            Ok(Some(existing)) =>
+            {
+                let mut active: ZoneCommandIfActiveModel = existing.into();
+                active.enable = sea_orm::Set(true);
+
+                match active.update(db).await
+                {
+                    Ok(updated) => ModelOutput::success(updated, "ZoneCommandIf enabled successfully".to_string()),
+                    Err(e) => {
+                        let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                        error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                        ModelOutput::error(error_msg)
+                    }
+                }
+            }
+            Ok(None) => ModelOutput::error("ZoneCommandIf not found".to_string()),
+            Err(e) => {
+                let error_msg = format!("Database error in {}::{}: {}", self.this_class, this_method, e);
+                error!("{}::{} - Error: {}", self.this_class, this_method, error_msg);
+                ModelOutput::error(error_msg)
+            }
+        }
+    }
