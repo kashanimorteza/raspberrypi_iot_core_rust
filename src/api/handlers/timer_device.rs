@@ -52,8 +52,7 @@ pub struct UpdateTimerDeviceRequest {
     get,
     path = "/timer_devices/items",
     tag = "🔗 Timer Devices",
-    summary = "List all timer devices",
-    description = "Retrieve a list of all timer devices with optional query parameters for filtering",
+
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of timer devices to return"),
         ("offset" = Option<i32>, Query, description = "Number of timer devices to skip"),
@@ -76,8 +75,7 @@ pub async fn list_timer_devices(
     get,
     path = "/timer_devices/{id}",
     tag = "🔗 Timer Devices",
-    summary = "Get timer device by ID",
-    description = "Retrieve a specific timer device by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Timer device ID")
     ),
@@ -100,8 +98,7 @@ pub async fn get_timer_device(
     post,
     path = "/timer_devices/add",
     tag = "🔗 Timer Devices",
-    summary = "Create new timer device",
-    description = "Create a new timer device with the provided information",
+
     request_body = CreateTimerDeviceRequest,
     responses(
         (status = 201, description = "Timer device created successfully", body = TimerDeviceModel),
@@ -131,8 +128,7 @@ pub async fn create_timer_device(
     put,
     path = "/timer_devices/update/{id}",
     tag = "🔗 Timer Devices",
-    summary = "Update timer device",
-    description = "Update an existing timer device with new information",
+
     params(
         ("id" = i32, Path, description = "Timer device ID to update")
     ),
@@ -168,8 +164,7 @@ pub async fn update_timer_device(
     delete,
     path = "/timer_devices/delete/{id}",
     tag = "🔗 Timer Devices",
-    summary = "Delete timer device",
-    description = "Delete a timer device by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Timer device ID to delete")
     ),

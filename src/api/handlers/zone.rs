@@ -48,8 +48,7 @@ pub struct UpdateZoneRequest {
     get,
     path = "/zones/items",
     tag = "🏠 Zones",
-    summary = "List all zones",
-    description = "Retrieve a list of all zones with optional query parameters for filtering",
+
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of zones to return"),
         ("offset" = Option<i32>, Query, description = "Number of zones to skip"),
@@ -72,8 +71,7 @@ pub async fn list_zones(
     get,
     path = "/zones/{id}",
     tag = "🏠 Zones",
-    summary = "Get zone by ID",
-    description = "Retrieve a specific zone by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Zone ID")
     ),
@@ -96,8 +94,7 @@ pub async fn get_zone(
     post,
     path = "/zones/add",
     tag = "🏠 Zones",
-    summary = "Create new zone",
-    description = "Create a new zone with the provided information",
+
     request_body = CreateZoneRequest,
     responses(
         (status = 201, description = "Zone created successfully", body = ZoneModel),
@@ -126,8 +123,7 @@ pub async fn create_zone(
     put,
     path = "/zones/update/{id}",
     tag = "🏠 Zones",
-    summary = "Update zone",
-    description = "Update an existing zone with new information",
+
     params(
         ("id" = i32, Path, description = "Zone ID to update")
     ),
@@ -162,8 +158,7 @@ pub async fn update_zone(
     delete,
     path = "/zones/delete/{id}",
     tag = "🏠 Zones",
-    summary = "Delete zone",
-    description = "Delete a zone by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Zone ID to delete")
     ),

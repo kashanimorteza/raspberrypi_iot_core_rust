@@ -56,8 +56,7 @@ pub struct UpdateZoneCommandActionRequest {
     get,
     path = "/zone_command_actions/items",
     tag = "⚡ Zone Command Actions",
-    summary = "List all zone command actions",
-    description = "Retrieve a list of all zone command actions with optional query parameters for filtering",
+
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of zone command actions to return"),
         ("offset" = Option<i32>, Query, description = "Number of zone command actions to skip"),
@@ -80,8 +79,7 @@ pub async fn list_zone_command_actions(
     get,
     path = "/zone_command_actions/{id}",
     tag = "⚡ Zone Command Actions",
-    summary = "Get zone command action by ID",
-    description = "Retrieve a specific zone command action by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Zone command action ID")
     ),
@@ -104,8 +102,7 @@ pub async fn get_zone_command_action(
     post,
     path = "/zone_command_actions/add",
     tag = "⚡ Zone Command Actions",
-    summary = "Create new zone command action",
-    description = "Create a new zone command action with the provided information",
+
     request_body = CreateZoneCommandActionRequest,
     responses(
         (status = 201, description = "Zone command action created successfully", body = ZoneCommandActionModel),
@@ -136,8 +133,7 @@ pub async fn create_zone_command_action(
     put,
     path = "/zone_command_actions/update/{id}",
     tag = "⚡ Zone Command Actions",
-    summary = "Update zone command action",
-    description = "Update an existing zone command action with new information",
+
     params(
         ("id" = i32, Path, description = "Zone command action ID to update")
     ),
@@ -174,8 +170,7 @@ pub async fn update_zone_command_action(
     delete,
     path = "/zone_command_actions/delete/{id}",
     tag = "⚡ Zone Command Actions",
-    summary = "Delete zone command action",
-    description = "Delete a zone command action by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Zone command action ID to delete")
     ),

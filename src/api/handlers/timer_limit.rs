@@ -56,8 +56,7 @@ pub struct UpdateTimerLimitRequest {
     get,
     path = "/timer_limits/items",
     tag = "⏱️ Timer Limits",
-    summary = "List all timer limits",
-    description = "Retrieve a list of all timer limits with optional query parameters for filtering",
+
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of timer limits to return"),
         ("offset" = Option<i32>, Query, description = "Number of timer limits to skip"),
@@ -80,8 +79,7 @@ pub async fn list_timer_limits(
     get,
     path = "/timer_limits/{id}",
     tag = "⏱️ Timer Limits",
-    summary = "Get timer limit by ID",
-    description = "Retrieve a specific timer limit by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Timer limit ID")
     ),
@@ -104,8 +102,7 @@ pub async fn get_timer_limit(
     post,
     path = "/timer_limits/add",
     tag = "⏱️ Timer Limits",
-    summary = "Create new timer limit",
-    description = "Create a new timer limit with the provided information",
+
     request_body = CreateTimerLimitRequest,
     responses(
         (status = 201, description = "Timer limit created successfully", body = TimerLimitModel),
@@ -136,8 +133,7 @@ pub async fn create_timer_limit(
     put,
     path = "/timer_limits/update/{id}",
     tag = "⏱️ Timer Limits",
-    summary = "Update timer limit",
-    description = "Update an existing timer limit with new information",
+
     params(
         ("id" = i32, Path, description = "Timer limit ID to update")
     ),
@@ -174,8 +170,7 @@ pub async fn update_timer_limit(
     delete,
     path = "/timer_limits/delete/{id}",
     tag = "⏱️ Timer Limits",
-    summary = "Delete timer limit",
-    description = "Delete a timer limit by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Timer limit ID to delete")
     ),

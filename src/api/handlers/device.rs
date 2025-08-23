@@ -76,8 +76,7 @@ pub struct UpdateDeviceRequest {
     get,
     path = "/devices/items",
     tag = "🔧 Devices",
-    summary = "List all devices",
-    description = "Retrieve a list of all IoT devices with optional query parameters for filtering",
+
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of devices to return"),
         ("offset" = Option<i32>, Query, description = "Number of devices to skip"),
@@ -100,8 +99,7 @@ pub async fn list_devices(
     get,
     path = "/devices/{id}",
     tag = "🔧 Devices",
-    summary = "Get device by ID",
-    description = "Retrieve a specific IoT device by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Device ID")
     ),
@@ -124,8 +122,7 @@ pub async fn get_device(
     post,
     path = "/devices/add",
     tag = "🔧 Devices",
-    summary = "Create new device",
-    description = "Create a new IoT device with the provided information",
+
     request_body = CreateDeviceRequest,
     responses(
         (status = 201, description = "Device created successfully", body = DeviceModel),
@@ -161,8 +158,7 @@ pub async fn create_device(
     put,
     path = "/devices/update",
     tag = "🔧 Devices",
-    summary = "Update device",
-    description = "Update an existing IoT device with new information",
+
     params(
         ("id" = i32, Path, description = "Device ID to update")
     ),
@@ -204,8 +200,7 @@ pub async fn update_device(
     delete,
     path = "/devices/delete/{id}",
     tag = "🔧 Devices",
-    summary = "Delete device",
-    description = "Delete an IoT device by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Device ID to delete")
     ),

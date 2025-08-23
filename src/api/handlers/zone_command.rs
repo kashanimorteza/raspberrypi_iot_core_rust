@@ -48,8 +48,7 @@ pub struct UpdateZoneCommandRequest {
     get,
     path = "/zone_commands/items",
     tag = "🎯 Zone Commands",
-    summary = "List all zone commands",
-    description = "Retrieve a list of all zone commands with optional query parameters for filtering",
+
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of zone commands to return"),
         ("offset" = Option<i32>, Query, description = "Number of zone commands to skip"),
@@ -72,8 +71,7 @@ pub async fn list_zone_commands(
     get,
     path = "/zone_commands/{id}",
     tag = "🎯 Zone Commands",
-    summary = "Get zone command by ID",
-    description = "Retrieve a specific zone command by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Zone command ID")
     ),
@@ -96,8 +94,7 @@ pub async fn get_zone_command(
     post,
     path = "/zone_commands/add",
     tag = "🎯 Zone Commands",
-    summary = "Create new zone command",
-    description = "Create a new zone command with the provided information",
+
     request_body = CreateZoneCommandRequest,
     responses(
         (status = 201, description = "Zone command created successfully", body = ZoneCommandModel),
@@ -126,8 +123,7 @@ pub async fn create_zone_command(
     put,
     path = "/zone_commands/update/{id}",
     tag = "🎯 Zone Commands",
-    summary = "Update zone command",
-    description = "Update an existing zone command with new information",
+
     params(
         ("id" = i32, Path, description = "Zone command ID to update")
     ),
@@ -162,8 +158,7 @@ pub async fn update_zone_command(
     delete,
     path = "/zone_commands/delete/{id}",
     tag = "🎯 Zone Commands",
-    summary = "Delete zone command",
-    description = "Delete a zone command by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Zone command ID to delete")
     ),

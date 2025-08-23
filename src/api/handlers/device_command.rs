@@ -68,8 +68,7 @@ pub struct UpdateDeviceCommandRequest {
     get,
     path = "/device_commands/items",
     tag = "📡 Device Commands",
-    summary = "List all device commands",
-    description = "Retrieve a list of all device commands with optional query parameters for filtering",
+
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of device commands to return"),
         ("offset" = Option<i32>, Query, description = "Number of device commands to skip"),
@@ -92,8 +91,7 @@ pub async fn list_device_commands(
     get,
     path = "/device_commands/{id}",
     tag = "📡 Device Commands",
-    summary = "Get device command by ID",
-    description = "Retrieve a specific device command by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Device command ID")
     ),
@@ -116,8 +114,7 @@ pub async fn get_device_command(
     post,
     path = "/device_commands/add",
     tag = "📡 Device Commands",
-    summary = "Create new device command",
-    description = "Create a new device command with the provided information",
+
     request_body = CreateDeviceCommandRequest,
     responses(
         (status = 201, description = "Device command created successfully", body = DeviceCommandModel),
@@ -151,8 +148,7 @@ pub async fn create_device_command(
     put,
     path = "/device_commands/update/{id}",
     tag = "📡 Device Commands",
-    summary = "Update device command",
-    description = "Update an existing device command with new information",
+
     params(
         ("id" = i32, Path, description = "Device command ID to update")
     ),
@@ -192,8 +188,7 @@ pub async fn update_device_command(
     delete,
     path = "/device_commands/delete/{id}",
     tag = "📡 Device Commands",
-    summary = "Delete device command",
-    description = "Delete a device command by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Device command ID to delete")
     ),

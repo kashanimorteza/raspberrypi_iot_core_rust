@@ -40,8 +40,7 @@ pub struct UpdateTimerRequest {
     get,
     path = "/timers/items",
     tag = "⏰ Timers",
-    summary = "List all timers",
-    description = "Retrieve a list of all timers with optional query parameters for filtering",
+
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of timers to return"),
         ("offset" = Option<i32>, Query, description = "Number of timers to skip"),
@@ -64,8 +63,7 @@ pub async fn list_timers(
     get,
     path = "/timers/{id}",
     tag = "⏰ Timers",
-    summary = "Get timer by ID",
-    description = "Retrieve a specific timer by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Timer ID")
     ),
@@ -88,8 +86,7 @@ pub async fn get_timer(
     post,
     path = "/timers/add",
     tag = "⏰ Timers",
-    summary = "Create new timer",
-    description = "Create a new timer with the provided information",
+
     request_body = CreateTimerRequest,
     responses(
         (status = 201, description = "Timer created successfully", body = TimerModel),
@@ -118,8 +115,7 @@ pub async fn create_timer(
     put,
     path = "/timers/update/{id}",
     tag = "⏰ Timers",
-    summary = "Update timer",
-    description = "Update an existing timer with new information",
+
     params(
         ("id" = i32, Path, description = "Timer ID to update")
     ),
@@ -154,8 +150,7 @@ pub async fn update_timer(
     delete,
     path = "/timers/delete/{id}",
     tag = "⏰ Timers",
-    summary = "Delete timer",
-    description = "Delete a timer by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Timer ID to delete")
     ),

@@ -56,8 +56,7 @@ pub struct UpdateZoneCommandIfRequest {
     get,
     path = "/zone_command_ifs/items",
     tag = "🔀 Zone Command Conditions",
-    summary = "List all zone command conditions",
-    description = "Retrieve a list of all zone command conditions with optional query parameters for filtering",
+
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of zone command conditions to return"),
         ("offset" = Option<i32>, Query, description = "Number of zone command conditions to skip"),
@@ -80,8 +79,7 @@ pub async fn list_zone_command_ifs(
     get,
     path = "/zone_command_ifs/{id}",
     tag = "🔀 Zone Command Conditions",
-    summary = "Get zone command condition by ID",
-    description = "Retrieve a specific zone command condition by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Zone command condition ID")
     ),
@@ -104,8 +102,7 @@ pub async fn get_zone_command_if(
     post,
     path = "/zone_command_ifs/add",
     tag = "🔀 Zone Command Conditions",
-    summary = "Create new zone command condition",
-    description = "Create a new zone command condition with the provided information",
+
     request_body = CreateZoneCommandIfRequest,
     responses(
         (status = 201, description = "Zone command condition created successfully", body = ZoneCommandIfModel),
@@ -136,8 +133,7 @@ pub async fn create_zone_command_if(
     put,
     path = "/zone_command_ifs/update/{id}",
     tag = "🔀 Zone Command Conditions",
-    summary = "Update zone command condition",
-    description = "Update an existing zone command condition with new information",
+
     params(
         ("id" = i32, Path, description = "Zone command condition ID to update")
     ),
@@ -174,8 +170,7 @@ pub async fn update_zone_command_if(
     delete,
     path = "/zone_command_ifs/delete/{id}",
     tag = "🔀 Zone Command Conditions",
-    summary = "Delete zone command condition",
-    description = "Delete a zone command condition by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Zone command condition ID to delete")
     ),

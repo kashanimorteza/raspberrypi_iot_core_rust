@@ -1,2 +1,2 @@
-read src/api/routes/config 
-regenerate all models on src/api/routes/ like congig
+on src/api/handlers
+i need remove description and summary from utoipa::path

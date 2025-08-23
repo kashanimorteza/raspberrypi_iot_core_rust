@@ -48,8 +48,7 @@ pub struct UpdateLogRequest {
     get,
     path = "/logs/items",
     tag = "📋 Logs",
-    summary = "List all logs",
-    description = "Retrieve a list of all log entries with optional query parameters for filtering",
+
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of logs to return"),
         ("offset" = Option<i32>, Query, description = "Number of logs to skip"),
@@ -72,8 +71,7 @@ pub async fn list_logs(
     get,
     path = "/logs/{id}",
     tag = "📋 Logs",
-    summary = "Get log by ID",
-    description = "Retrieve a specific log entry by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Log ID")
     ),
@@ -96,8 +94,7 @@ pub async fn get_log(
     post,
     path = "/logs/add",
     tag = "📋 Logs",
-    summary = "Create new log",
-    description = "Create a new log entry with the provided information",
+
     request_body = CreateLogRequest,
     responses(
         (status = 201, description = "Log created successfully", body = LogModel),
@@ -126,8 +123,7 @@ pub async fn create_log(
     put,
     path = "/logs/update/{id}",
     tag = "📋 Logs",
-    summary = "Update log",
-    description = "Update an existing log entry with new information",
+
     params(
         ("id" = i32, Path, description = "Log ID to update")
     ),
@@ -162,8 +158,7 @@ pub async fn update_log(
     delete,
     path = "/logs/delete/{id}",
     tag = "📋 Logs",
-    summary = "Delete log",
-    description = "Delete a log entry by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Log ID to delete")
     ),

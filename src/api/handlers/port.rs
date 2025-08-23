@@ -50,8 +50,7 @@ pub struct UpdatePortRequest {
     get,
     path = "/ports/items",
     tag = "🔌 Ports",
-    summary = "List all ports",
-    description = "Retrieve a list of all ports with optional query parameters for filtering",
+
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of ports to return"),
         ("offset" = Option<i32>, Query, description = "Number of ports to skip"),
@@ -74,8 +73,7 @@ pub async fn list_ports(
     get,
     path = "/ports/{id}",
     tag = "🔌 Ports",
-    summary = "Get port by ID",
-    description = "Retrieve a specific port by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Port ID")
     ),
@@ -98,8 +96,7 @@ pub async fn get_port(
     post,
     path = "/ports/add",
     tag = "🔌 Ports",
-    summary = "Create new port",
-    description = "Create a new port with the provided information",
+
     request_body = CreatePortRequest,
     responses(
         (status = 201, description = "Port created successfully", body = PortModel),
@@ -133,8 +130,7 @@ pub async fn create_port(
     put,
     path = "/ports/update/{id}",
     tag = "🔌 Ports",
-    summary = "Update port",
-    description = "Update an existing port with new information",
+
     params(
         ("id" = i32, Path, description = "Port ID to update")
     ),
@@ -174,8 +170,7 @@ pub async fn update_port(
     delete,
     path = "/ports/delete/{id}",
     tag = "🔌 Ports",
-    summary = "Delete port",
-    description = "Delete a port by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Port ID to delete")
     ),

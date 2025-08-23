@@ -56,8 +56,7 @@ pub struct UpdateTimerItemRequest {
     get,
     path = "/timer_items/items",
     tag = "📝 Timer Items",
-    summary = "List all timer items",
-    description = "Retrieve a list of all timer items with optional query parameters for filtering",
+
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of timer items to return"),
         ("offset" = Option<i32>, Query, description = "Number of timer items to skip"),
@@ -80,8 +79,7 @@ pub async fn list_timer_items(
     get,
     path = "/timer_items/{id}",
     tag = "📝 Timer Items",
-    summary = "Get timer item by ID",
-    description = "Retrieve a specific timer item by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Timer item ID")
     ),
@@ -104,8 +102,7 @@ pub async fn get_timer_item(
     post,
     path = "/timer_items/add",
     tag = "📝 Timer Items",
-    summary = "Create new timer item",
-    description = "Create a new timer item with the provided information",
+
     request_body = CreateTimerItemRequest,
     responses(
         (status = 201, description = "Timer item created successfully", body = TimerItemModel),
@@ -136,8 +133,7 @@ pub async fn create_timer_item(
     put,
     path = "/timer_items/update/{id}",
     tag = "📝 Timer Items",
-    summary = "Update timer item",
-    description = "Update an existing timer item with new information",
+
     params(
         ("id" = i32, Path, description = "Timer item ID to update")
     ),
@@ -174,8 +170,7 @@ pub async fn update_timer_item(
     delete,
     path = "/timer_items/delete/{id}",
     tag = "📝 Timer Items",
-    summary = "Delete timer item",
-    description = "Delete a timer item by its unique identifier",
+
     params(
         ("id" = i32, Path, description = "Timer item ID to delete")
     ),
