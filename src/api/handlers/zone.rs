@@ -46,8 +46,8 @@ pub struct UpdateZoneRequest {
 //--------------------------------------------------------------------------------- Handlers
 #[utoipa::path(
     get,
-    path = "/zones/items",
-    tag = "🏠 Zones",
+    path = "/zone/items",
+    tag = "🏠 Zone",
 
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of zones to return"),
@@ -69,8 +69,8 @@ pub async fn list_zones(
 
 #[utoipa::path(
     get,
-    path = "/zones/{id}",
-    tag = "🏠 Zones",
+    path = "/zone/item/{id}",
+    tag = "🏠 Zone",
 
     params(
         ("id" = i32, Path, description = "Zone ID")
@@ -92,8 +92,8 @@ pub async fn get_zone(
 
 #[utoipa::path(
     post,
-    path = "/zones/add",
-    tag = "🏠 Zones",
+    path = "/zone/add",
+    tag = "🏠 Zone",
 
     request_body = CreateZoneRequest,
     responses(
@@ -121,8 +121,8 @@ pub async fn create_zone(
 
 #[utoipa::path(
     put,
-    path = "/zones/update/{id}",
-    tag = "🏠 Zones",
+    path = "/zone/update/{id}",
+    tag = "🏠 Zone",
 
     params(
         ("id" = i32, Path, description = "Zone ID to update")
@@ -156,8 +156,8 @@ pub async fn update_zone(
 
 #[utoipa::path(
     delete,
-    path = "/zones/delete/{id}",
-    tag = "🏠 Zones",
+    path = "/zone/delete/{id}",
+    tag = "🏠 Zone",
 
     params(
         ("id" = i32, Path, description = "Zone ID to delete")

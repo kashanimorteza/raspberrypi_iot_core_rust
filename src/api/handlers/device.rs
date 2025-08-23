@@ -74,8 +74,8 @@ pub struct UpdateDeviceRequest {
 //--------------------------------------------------------------------------------- Handlers
 #[utoipa::path(
     get,
-    path = "/devices/items",
-    tag = "🔧 Devices",
+    path = "/device/items",
+    tag = "🔧 Device",
 
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of devices to return"),
@@ -97,8 +97,8 @@ pub async fn list_devices(
 
 #[utoipa::path(
     get,
-    path = "/devices/{id}",
-    tag = "🔧 Devices",
+    path = "/device/item/{id}",
+    tag = "🔧 Device",
 
     params(
         ("id" = i32, Path, description = "Device ID")
@@ -120,8 +120,8 @@ pub async fn get_device(
 
 #[utoipa::path(
     post,
-    path = "/devices/add",
-    tag = "🔧 Devices",
+    path = "/device/add",
+    tag = "🔧 Device",
 
     request_body = CreateDeviceRequest,
     responses(
@@ -156,8 +156,8 @@ pub async fn create_device(
 
 #[utoipa::path(
     put,
-    path = "/devices/update",
-    tag = "🔧 Devices",
+    path = "/device/update/{id}",
+    tag = "🔧 Device",
 
     params(
         ("id" = i32, Path, description = "Device ID to update")
@@ -198,8 +198,8 @@ pub async fn update_device(
 
 #[utoipa::path(
     delete,
-    path = "/devices/delete/{id}",
-    tag = "🔧 Devices",
+    path = "/device/delete/{id}",
+    tag = "🔧 Device",
 
     params(
         ("id" = i32, Path, description = "Device ID to delete")

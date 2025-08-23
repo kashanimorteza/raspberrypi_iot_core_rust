@@ -66,8 +66,8 @@ pub struct UpdateDeviceCommandRequest {
 //--------------------------------------------------------------------------------- Handlers
 #[utoipa::path(
     get,
-    path = "/device_commands/items",
-    tag = "📡 Device Commands",
+    path = "/device_command/items",
+    tag = "📡 Device Command",
 
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of device commands to return"),
@@ -89,8 +89,8 @@ pub async fn list_device_commands(
 
 #[utoipa::path(
     get,
-    path = "/device_commands/{id}",
-    tag = "📡 Device Commands",
+    path = "/device_command/item/{id}",
+    tag = "📡 Device Command",
 
     params(
         ("id" = i32, Path, description = "Device command ID")
@@ -112,8 +112,8 @@ pub async fn get_device_command(
 
 #[utoipa::path(
     post,
-    path = "/device_commands/add",
-    tag = "📡 Device Commands",
+    path = "/device_command/add",
+    tag = "📡 Device Command",
 
     request_body = CreateDeviceCommandRequest,
     responses(
@@ -146,8 +146,8 @@ pub async fn create_device_command(
 
 #[utoipa::path(
     put,
-    path = "/device_commands/update/{id}",
-    tag = "📡 Device Commands",
+    path = "/device_command/update/{id}",
+    tag = "📡 Device Command",
 
     params(
         ("id" = i32, Path, description = "Device command ID to update")
@@ -186,8 +186,8 @@ pub async fn update_device_command(
 
 #[utoipa::path(
     delete,
-    path = "/device_commands/delete/{id}",
-    tag = "📡 Device Commands",
+    path = "/device_command/delete/{id}",
+    tag = "📡 Device Command",
 
     params(
         ("id" = i32, Path, description = "Device command ID to delete")

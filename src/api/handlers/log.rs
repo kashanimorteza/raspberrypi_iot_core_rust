@@ -46,8 +46,8 @@ pub struct UpdateLogRequest {
 //--------------------------------------------------------------------------------- Handlers
 #[utoipa::path(
     get,
-    path = "/logs/items",
-    tag = "📋 Logs",
+    path = "/log/items",
+    tag = "📋 Log",
 
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of logs to return"),
@@ -69,8 +69,8 @@ pub async fn list_logs(
 
 #[utoipa::path(
     get,
-    path = "/logs/{id}",
-    tag = "📋 Logs",
+    path = "/log/item/{id}",
+    tag = "📋 Log",
 
     params(
         ("id" = i32, Path, description = "Log ID")
@@ -92,8 +92,8 @@ pub async fn get_log(
 
 #[utoipa::path(
     post,
-    path = "/logs/add",
-    tag = "📋 Logs",
+    path = "/log/add",
+    tag = "📋 Log",
 
     request_body = CreateLogRequest,
     responses(
@@ -121,8 +121,8 @@ pub async fn create_log(
 
 #[utoipa::path(
     put,
-    path = "/logs/update/{id}",
-    tag = "📋 Logs",
+    path = "/log/update/{id}",
+    tag = "📋 Log",
 
     params(
         ("id" = i32, Path, description = "Log ID to update")
@@ -156,8 +156,8 @@ pub async fn update_log(
 
 #[utoipa::path(
     delete,
-    path = "/logs/delete/{id}",
-    tag = "📋 Logs",
+    path = "/log/delete/{id}",
+    tag = "📋 Log",
 
     params(
         ("id" = i32, Path, description = "Log ID to delete")

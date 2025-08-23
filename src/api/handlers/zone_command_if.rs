@@ -54,8 +54,8 @@ pub struct UpdateZoneCommandIfRequest {
 //--------------------------------------------------------------------------------- Handlers
 #[utoipa::path(
     get,
-    path = "/zone_command_ifs/items",
-    tag = "🔀 Zone Command Conditions",
+    path = "/zone_command_if/items",
+    tag = "🔀 Zone Command Condition",
 
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of zone command conditions to return"),
@@ -77,8 +77,8 @@ pub async fn list_zone_command_ifs(
 
 #[utoipa::path(
     get,
-    path = "/zone_command_ifs/{id}",
-    tag = "🔀 Zone Command Conditions",
+    path = "/zone_command_if/item/{id}",
+    tag = "🔀 Zone Command Condition",
 
     params(
         ("id" = i32, Path, description = "Zone command condition ID")
@@ -100,8 +100,8 @@ pub async fn get_zone_command_if(
 
 #[utoipa::path(
     post,
-    path = "/zone_command_ifs/add",
-    tag = "🔀 Zone Command Conditions",
+    path = "/zone_command_if/add",
+    tag = "🔀 Zone Command Condition",
 
     request_body = CreateZoneCommandIfRequest,
     responses(
@@ -131,8 +131,8 @@ pub async fn create_zone_command_if(
 
 #[utoipa::path(
     put,
-    path = "/zone_command_ifs/update/{id}",
-    tag = "🔀 Zone Command Conditions",
+    path = "/zone_command_if/update/{id}",
+    tag = "🔀 Zone Command Condition",
 
     params(
         ("id" = i32, Path, description = "Zone command condition ID to update")
@@ -168,8 +168,8 @@ pub async fn update_zone_command_if(
 
 #[utoipa::path(
     delete,
-    path = "/zone_command_ifs/delete/{id}",
-    tag = "🔀 Zone Command Conditions",
+    path = "/zone_command_if/delete/{id}",
+    tag = "🔀 Zone Command Condition",
 
     params(
         ("id" = i32, Path, description = "Zone command condition ID to delete")

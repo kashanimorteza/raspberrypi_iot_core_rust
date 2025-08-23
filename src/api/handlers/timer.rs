@@ -38,8 +38,8 @@ pub struct UpdateTimerRequest {
 //--------------------------------------------------------------------------------- Handlers
 #[utoipa::path(
     get,
-    path = "/timers/items",
-    tag = "⏰ Timers",
+    path = "/timer/items",
+    tag = "⏰ Timer",
 
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of timers to return"),
@@ -61,8 +61,8 @@ pub async fn list_timers(
 
 #[utoipa::path(
     get,
-    path = "/timers/{id}",
-    tag = "⏰ Timers",
+    path = "/timer/item/{id}",
+    tag = "⏰ Timer",
 
     params(
         ("id" = i32, Path, description = "Timer ID")
@@ -84,8 +84,8 @@ pub async fn get_timer(
 
 #[utoipa::path(
     post,
-    path = "/timers/add",
-    tag = "⏰ Timers",
+    path = "/timer/add",
+    tag = "⏰ Timer",
 
     request_body = CreateTimerRequest,
     responses(
@@ -113,8 +113,8 @@ pub async fn create_timer(
 
 #[utoipa::path(
     put,
-    path = "/timers/update/{id}",
-    tag = "⏰ Timers",
+    path = "/timer/update/{id}",
+    tag = "⏰ Timer",
 
     params(
         ("id" = i32, Path, description = "Timer ID to update")
@@ -148,8 +148,8 @@ pub async fn update_timer(
 
 #[utoipa::path(
     delete,
-    path = "/timers/delete/{id}",
-    tag = "⏰ Timers",
+    path = "/timer/delete/{id}",
+    tag = "⏰ Timer",
 
     params(
         ("id" = i32, Path, description = "Timer ID to delete")

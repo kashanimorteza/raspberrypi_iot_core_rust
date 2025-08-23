@@ -1,2 +1,2 @@
 on src/api/handlers
-i need remove description and summary from utoipa::path
+I don't want the nouns to be plural on path and tag inside utoipa::path

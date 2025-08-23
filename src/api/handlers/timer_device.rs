@@ -50,8 +50,8 @@ pub struct UpdateTimerDeviceRequest {
 //--------------------------------------------------------------------------------- Handlers
 #[utoipa::path(
     get,
-    path = "/timer_devices/items",
-    tag = "🔗 Timer Devices",
+    path = "/timer_device/items",
+    tag = "🔗 Timer Device",
 
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of timer devices to return"),
@@ -73,8 +73,8 @@ pub async fn list_timer_devices(
 
 #[utoipa::path(
     get,
-    path = "/timer_devices/{id}",
-    tag = "🔗 Timer Devices",
+    path = "/timer_device/item/{id}",
+    tag = "🔗 Timer Device",
 
     params(
         ("id" = i32, Path, description = "Timer device ID")
@@ -96,8 +96,8 @@ pub async fn get_timer_device(
 
 #[utoipa::path(
     post,
-    path = "/timer_devices/add",
-    tag = "🔗 Timer Devices",
+    path = "/timer_device/add",
+    tag = "🔗 Timer Device",
 
     request_body = CreateTimerDeviceRequest,
     responses(
@@ -126,8 +126,8 @@ pub async fn create_timer_device(
 
 #[utoipa::path(
     put,
-    path = "/timer_devices/update/{id}",
-    tag = "🔗 Timer Devices",
+    path = "/timer_device/update/{id}",
+    tag = "🔗 Timer Device",
 
     params(
         ("id" = i32, Path, description = "Timer device ID to update")
@@ -162,8 +162,8 @@ pub async fn update_timer_device(
 
 #[utoipa::path(
     delete,
-    path = "/timer_devices/delete/{id}",
-    tag = "🔗 Timer Devices",
+    path = "/timer_device/delete/{id}",
+    tag = "🔗 Timer Device",
 
     params(
         ("id" = i32, Path, description = "Timer device ID to delete")

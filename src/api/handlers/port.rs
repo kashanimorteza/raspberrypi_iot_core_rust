@@ -48,8 +48,8 @@ pub struct UpdatePortRequest {
 //--------------------------------------------------------------------------------- Handlers
 #[utoipa::path(
     get,
-    path = "/ports/items",
-    tag = "🔌 Ports",
+    path = "/port/items",
+    tag = "🔌 Port",
 
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of ports to return"),
@@ -71,8 +71,8 @@ pub async fn list_ports(
 
 #[utoipa::path(
     get,
-    path = "/ports/{id}",
-    tag = "🔌 Ports",
+    path = "/port/item/{id}",
+    tag = "🔌 Port",
 
     params(
         ("id" = i32, Path, description = "Port ID")
@@ -94,8 +94,8 @@ pub async fn get_port(
 
 #[utoipa::path(
     post,
-    path = "/ports/add",
-    tag = "🔌 Ports",
+    path = "/port/add",
+    tag = "🔌 Port",
 
     request_body = CreatePortRequest,
     responses(
@@ -128,8 +128,8 @@ pub async fn create_port(
 
 #[utoipa::path(
     put,
-    path = "/ports/update/{id}",
-    tag = "🔌 Ports",
+    path = "/port/update/{id}",
+    tag = "🔌 Port",
 
     params(
         ("id" = i32, Path, description = "Port ID to update")
@@ -168,8 +168,8 @@ pub async fn update_port(
 
 #[utoipa::path(
     delete,
-    path = "/ports/delete/{id}",
-    tag = "🔌 Ports",
+    path = "/port/delete/{id}",
+    tag = "🔌 Port",
 
     params(
         ("id" = i32, Path, description = "Port ID to delete")
