@@ -5,103 +5,20 @@
 // This is route for zone
 
 //--------------------------------------------------------------------------------- Import
-use serde::Deserialize;
-use std::collections::HashMap;
-use axum::extract::{Path, Query, State};
 use axum::routing::{get, post, put, delete};
-use axum::{Json, Router};
+use axum::Router;
 use crate::AppState;
-use crate::orm::models::zone::Model as ZoneModel;
-use crate::logics::general::ModelOutput;
-use crate::api::services::zone::ZoneService;
+use crate::api::handlers::zone::{list_zones, get_zone, create_zone, update_zone, delete_zone};
 
-//--------------------------------------------------------------------------------- DTOs
-#[derive(Deserialize)]
-pub struct AddZoneRequest 
-{
-    pub user_id: i32,
-    pub name: String,
-    pub description: String,
-    pub enable: bool,
-}
 
-#[derive(Deserialize)]
-pub struct UpdateZoneRequest 
-{
-    pub id: i32,
-    pub user_id: i32,
-    pub name: String,
-    pub description: String,
-    pub enable: bool,
-}
-
-//--------------------------------------------------------------------------------- Route Handlers
-//-------------------------- [Add]
-async fn add(State(state): State<AppState>, Json(payload): Json<AddZoneRequest>) -> Json<ModelOutput<ZoneModel>> 
-{
-    let service = ZoneService::new();
-    
-    let zone_model = ZoneModel {
-        id: 0, // Will be auto-generated
-        user_id: payload.user_id,
-        name: payload.name,
-        description: payload.description,
-        enable: payload.enable,
-    };
-    
-    let result = service.add(&state.db, zone_model).await;
-    Json(result)
-}
-
-//-------------------------- [Items]
-async fn items(State(state): State<AppState>, Query(params): Query<HashMap<String, String>>,) -> Json<ModelOutput<Vec<ZoneModel>>> 
-{
-    let service = ZoneService::new();
-    let result = service.items(&state.db, params).await;
-    Json(result)
-}
-
-//-------------------------- [Item]
-async fn item(State(state): State<AppState>, Path(id): Path<i32>,) -> Json<ModelOutput<ZoneModel>> 
-{
-    let service = ZoneService::new();
-    let result = service.item(&state.db, id).await;
-    Json(result)
-}
-
-//-------------------------- [Update]
-async fn update(State(state): State<AppState>, Json(payload): Json<UpdateZoneRequest>, ) -> Json<ModelOutput<ZoneModel>> 
-{
-    let service = ZoneService::new();
-    
-    let zone_model = ZoneModel 
-    {
-        id: payload.id,
-        user_id: payload.user_id,
-        name: payload.name,
-        description: payload.description,
-        enable: payload.enable,
-    };
-    
-    let result = service.update(&state.db, zone_model).await;
-    Json(result)
-}
-
-//-------------------------- [Delete]
-async fn delete_zone(State(state): State<AppState>, Path(id): Path<i32>,) -> Json<ModelOutput<String>> 
-{
-    let service = ZoneService::new();
-    let result = service.delete(&state.db, id).await;
-    Json(result)
-}
 
 //--------------------------------------------------------------------------------- Router
 pub fn router() -> Router<AppState> 
 {
     Router::new()
-        .route("/add", post(add))
-        .route("/items", get(items))
-        .route("/{id}", get(item))
-        .route("/update", put(update))
-        .route("/delete/{id}", delete(delete_zone))
+        .route("/items", get(list_zones))
+        .route("/item/{id}", get(get_zone))
+        .route("/update/{id}", put(update_zone))
+        .route("/add", post(create_zone))
+        .route("/delete/{id}", delete(delete_zone))       
 }

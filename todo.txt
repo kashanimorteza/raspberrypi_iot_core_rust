@@ -1,0 +1,2 @@
+read src/api/routes/config 
+regenerate all models on src/api/routes/ like congig

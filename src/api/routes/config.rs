@@ -20,6 +20,5 @@ pub fn router() -> Router<AppState>
         .route("/item/{id}", get(get_config))
         .route("/update/{id}", put(update_config))
         .route("/add", post(create_config))
-        .route("/delete/{id}", delete(delete_config))
-        
+        .route("/delete/{id}", delete(delete_config))       
 }
