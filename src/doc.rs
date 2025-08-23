@@ -22,8 +22,8 @@ use utoipa::OpenApi;
         // User 
         crate::api::handlers::user::list_users,
         crate::api::handlers::user::get_user,
-        crate::api::handlers::user::create_user,
         crate::api::handlers::user::update_user,
+        crate::api::handlers::user::create_user,
         crate::api::handlers::user::delete_user,
         // Device 
         crate::api::handlers::device::list_devices,
@@ -118,19 +118,19 @@ use utoipa::OpenApi;
     ),
     tags(
             (name = "⚙️ Config"),
-            (name = "👥 Users"),
-            (name = "🔧 Devices"),
-            (name = "🏠 Zones"),
-            (name = "📡 Device Commands"),
-            (name = "📋 Logs"),
-            (name = "🔌 Ports"),
-            (name = "⏰ Timers"),
-            (name = "🔗 Timer Devices"),
-            (name = "📝 Timer Items"),
-            (name = "⏱️ Timer Limits"),
-            (name = "🎯 Zone Commands"),
-            (name = "⚡ Zone Command Actions"),
-            (name = "🔀 Zone Command Conditions")
+            (name = "👥 User"),
+            (name = "🔧 Device"),
+            (name = "🏠 Zone"),
+            (name = "📡 Device Command"),
+            (name = "📋 Log"),
+            (name = "🔌 Port"),
+            (name = "⏰ Timer"),
+            (name = "🔗 Timer Device"),
+            (name = "📝 Timer Item"),
+            (name = "⏱️ Timer Limit"),
+            (name = "🎯 Zone Command"),
+            (name = "⚡ Zone Command Action"),
+            (name = "🔀 Zone Command Condition")
     ),
 )]
 pub struct ApiDoc;

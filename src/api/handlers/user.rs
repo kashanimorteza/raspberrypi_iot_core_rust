@@ -60,12 +60,11 @@ pub struct UpdateUserRequest {
 }
 
 //--------------------------------------------------------------------------------- Handlers
+//------------------------- Items
 #[utoipa::path(
     get,
-    path = "/users/items",
-    tag = "👥 Users",
-    summary = "List all users",
-    description = "Retrieve a list of all users with optional query parameters for filtering",
+    path = "/user/items",
+    tag = "👥 User",
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of users to return"),
         ("offset" = Option<i32>, Query, description = "Number of users to skip"),
@@ -84,12 +83,11 @@ pub async fn list_users(
     Ok(Json(result))
 }
 
+//------------------------- Item
 #[utoipa::path(
     get,
-    path = "/users/{id}",
-    tag = "👥 Users",
-    summary = "Get user by ID",
-    description = "Retrieve a specific user by their unique identifier",
+    path = "/user/item/{id}",
+    tag = "👥 User",
     params(
         ("id" = i32, Path, description = "User ID")
     ),
@@ -108,46 +106,11 @@ pub async fn get_user(
     Ok(Json(result))
 }
 
-#[utoipa::path(
-    post,
-    path = "/users/add",
-    tag = "👥 Users",
-    summary = "Create new user",
-    description = "Create a new user with the provided information",
-    request_body = CreateUserRequest,
-    responses(
-        (status = 201, description = "User created successfully", body = UserModel),
-        (status = 400, description = "Invalid request data"),
-        (status = 500, description = "Internal server error")
-    )
-)]
-pub async fn create_user(
-    State(state): State<AppState>,
-    Json(payload): Json<CreateUserRequest>,
-) -> Result<Json<ModelOutput<UserModel>>, StatusCode> {
-    let service = UserService::new();
-    let user_model = UserModel {
-        id: 0, // Will be auto-generated
-        name: payload.name,
-        username: payload.username,
-        password: payload.password,
-        key: payload.key,
-        email: payload.email,
-        phone: payload.phone,
-        tg_id: payload.tg_id,
-        enable: payload.enable,
-    };
-    
-    let result = service.add(&state.db, user_model).await;
-    Ok(Json(result))
-}
-
+//------------------------- Update
 #[utoipa::path(
     put,
-    path = "/users/update",
-    tag = "👥 Users",
-    summary = "Update user",
-    description = "Update an existing user with new information",
+    path = "/user/update/{id}",
+    tag = "👥 User",
     params(
         ("id" = i32, Path, description = "User ID to update")
     ),
@@ -184,12 +147,44 @@ pub async fn update_user(
     Ok(Json(result))
 }
 
+//------------------------- Add
+#[utoipa::path(
+    post,
+    path = "/user/add",
+    tag = "👥 User",
+    request_body = CreateUserRequest,
+    responses(
+        (status = 201, description = "User created successfully", body = UserModel),
+        (status = 400, description = "Invalid request data"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn create_user(
+    State(state): State<AppState>,
+    Json(payload): Json<CreateUserRequest>,
+) -> Result<Json<ModelOutput<UserModel>>, StatusCode> {
+    let service = UserService::new();
+    let user_model = UserModel {
+        id: 0, // Will be auto-generated
+        name: payload.name,
+        username: payload.username,
+        password: payload.password,
+        key: payload.key,
+        email: payload.email,
+        phone: payload.phone,
+        tg_id: payload.tg_id,
+        enable: payload.enable,
+    };
+    
+    let result = service.add(&state.db, user_model).await;
+    Ok(Json(result))
+}
+
+//------------------------- Delete
 #[utoipa::path(
     delete,
-    path = "/users/delete/{id}",
-    tag = "👥 Users",
-    summary = "Delete user",
-    description = "Delete a user by their unique identifier",
+    path = "/user/delete/{id}",
+    tag = "👥 User",
     params(
         ("id" = i32, Path, description = "User ID to delete")
     ),
