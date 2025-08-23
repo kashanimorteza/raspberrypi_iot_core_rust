@@ -11,7 +11,7 @@ use utoipa::OpenApi;
 #[derive(OpenApi)]
 #[openapi(
     info(title = "🚀 Raspberry Pi IoT Core API"),
-    servers((url = "http://localhost:3000", description = "Local development server")),
+    servers((url = "http://localhost:3000")),
     paths(
         // Config 
         crate::api::handlers::config::list_configs,
