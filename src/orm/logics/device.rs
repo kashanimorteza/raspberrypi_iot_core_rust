@@ -22,7 +22,7 @@ pub struct DeviceORM
 
 impl DeviceORM
 {
-    //-------------------------- [Init]
+    //------------------------- New
     pub fn new(verbose: bool, log: bool) -> Self 
     {
         Self 
@@ -34,7 +34,7 @@ impl DeviceORM
         }
     }
 
-    //-------------------------- [Add]
+    //------------------------- Add
     pub async fn add(&self, db: &DbConn, item: DeviceActiveModel) -> ModelOutput<DeviceModel> 
     {
         let this_method = "add";
@@ -59,7 +59,7 @@ impl DeviceORM
         }
     }
 
-    //-------------------------- [Items]
+    //------------------------- Items
     pub async fn items(&self, db: &DbConn, filters: HashMap<String, String>) -> ModelOutput<Vec<DeviceModel>> 
     {
         let this_method = "items";
@@ -85,7 +85,7 @@ impl DeviceORM
         }
     }
 
-    //-------------------------- [Item]
+    //------------------------- Item
     pub async fn item(&self, db: &DbConn, id: i32) -> ModelOutput<DeviceModel> 
     {
         let this_method = "item";
@@ -117,7 +117,7 @@ impl DeviceORM
         }
     }
 
-    //-------------------------- [Update]
+    //------------------------- Update
     pub async fn update(&self, db: &DbConn, item: DeviceActiveModel) -> ModelOutput<DeviceModel> 
     {
         let this_method = "update";
@@ -143,7 +143,7 @@ impl DeviceORM
         }
     }
 
-    //-------------------------- [Delete]
+    //------------------------- Delete
     pub async fn delete(&self, db: &DbConn, id: i32) -> ModelOutput<String> 
     {
         let this_method = "delete";
@@ -178,7 +178,7 @@ impl DeviceORM
         }
     }
 
-    //-------------------------- [Disable]
+    //------------------------- Disable
     pub async fn disable(&self, db: &DbConn, id: i32) -> ModelOutput<DeviceModel>
     {
         let this_method = "disable";
@@ -225,7 +225,7 @@ impl DeviceORM
         }
     }
 
-    //-------------------------- [Enable]
+    //------------------------- Enable
     pub async fn enable(&self, db: &DbConn, id: i32) -> ModelOutput<DeviceModel>
     {
         let this_method = "enable";
@@ -272,5 +272,3 @@ impl DeviceORM
         }
     }
 }
-
-

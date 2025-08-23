@@ -22,7 +22,7 @@ pub struct PortORM
 
 impl PortORM
 {
-    //-------------------------- [Init]
+    //------------------------- New
     pub fn new(verbose: bool, log: bool) -> Self 
     {
         Self 
@@ -34,7 +34,7 @@ impl PortORM
         }
     }
 
-    //-------------------------- [Add]
+    //------------------------- Add
     pub async fn add(&self, db: &DbConn, item: PortActiveModel) -> ModelOutput<PortModel> 
     {
         let this_method = "add";
@@ -59,7 +59,7 @@ impl PortORM
         }
     }
 
-    //-------------------------- [Items]
+    //------------------------- Items
     pub async fn items(&self, db: &DbConn, filters: HashMap<String, String>) -> ModelOutput<Vec<PortModel>> 
     {
         let this_method = "items";
@@ -85,7 +85,7 @@ impl PortORM
         }
     }
 
-    //-------------------------- [Item]
+    //------------------------- Item
     pub async fn item(&self, db: &DbConn, id: i32) -> ModelOutput<PortModel> 
     {
         let this_method = "item";
@@ -117,7 +117,7 @@ impl PortORM
         }
     }
 
-    //-------------------------- [Update]
+    //------------------------- Update
     pub async fn update(&self, db: &DbConn, item: PortActiveModel) -> ModelOutput<PortModel> 
     {
         let this_method = "update";
@@ -143,7 +143,7 @@ impl PortORM
         }
     }
 
-    //-------------------------- [Delete]
+    //------------------------- Delete
     pub async fn delete(&self, db: &DbConn, id: i32) -> ModelOutput<String> 
     {
         let this_method = "delete";
@@ -177,11 +177,8 @@ impl PortORM
             }
         }
     }
-}
 
-impl PortORM
-{
-    //-------------------------- [Disable]
+    //------------------------- Disable
     pub async fn disable(&self, db: &DbConn, id: i32) -> ModelOutput<PortModel>
     {
         let this_method = "disable";
@@ -228,7 +225,7 @@ impl PortORM
         }
     }
 
-    //-------------------------- [Enable]
+    //------------------------- Enable
     pub async fn enable(&self, db: &DbConn, id: i32) -> ModelOutput<PortModel>
     {
         let this_method = "enable";

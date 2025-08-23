@@ -22,7 +22,7 @@ pub struct TimerORM
 
 impl TimerORM
 {
-    //-------------------------- [Init]
+    //------------------------- New
     pub fn new(verbose: bool, log: bool) -> Self 
     {
         Self 
@@ -34,7 +34,7 @@ impl TimerORM
         }
     }
 
-    //-------------------------- [Add]
+    //------------------------- Add
     pub async fn add(&self, db: &DbConn, item: TimerActiveModel) -> ModelOutput<TimerModel> 
     {
         let this_method = "add";
@@ -59,7 +59,7 @@ impl TimerORM
         }
     }
 
-    //-------------------------- [Items]
+    //------------------------- Items
     pub async fn items(&self, db: &DbConn, filters: HashMap<String, String>) -> ModelOutput<Vec<TimerModel>> 
     {
         let this_method = "items";
@@ -85,7 +85,7 @@ impl TimerORM
         }
     }
 
-    //-------------------------- [Item]
+    //------------------------- Item
     pub async fn item(&self, db: &DbConn, id: i32) -> ModelOutput<TimerModel> 
     {
         let this_method = "item";
@@ -117,7 +117,7 @@ impl TimerORM
         }
     }
 
-    //-------------------------- [Update]
+    //------------------------- Update
     pub async fn update(&self, db: &DbConn, item: TimerActiveModel) -> ModelOutput<TimerModel> 
     {
         let this_method = "update";
@@ -143,7 +143,7 @@ impl TimerORM
         }
     }
 
-    //-------------------------- [Delete]
+    //------------------------- Delete
     pub async fn delete(&self, db: &DbConn, id: i32) -> ModelOutput<String> 
     {
         let this_method = "delete";
@@ -177,11 +177,8 @@ impl TimerORM
             }
         }
     }
-}
 
-impl TimerORM
-{
-    //-------------------------- [Disable]
+    //------------------------- Disable
     pub async fn disable(&self, db: &DbConn, id: i32) -> ModelOutput<TimerModel>
     {
         let this_method = "disable";
@@ -213,7 +210,7 @@ impl TimerORM
         }
     }
 
-    //-------------------------- [Enable]
+    //------------------------- Enable
     pub async fn enable(&self, db: &DbConn, id: i32) -> ModelOutput<TimerModel>
     {
         let this_method = "enable";

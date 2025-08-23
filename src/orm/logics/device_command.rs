@@ -22,7 +22,7 @@ pub struct DeviceCommandORM
 
 impl DeviceCommandORM
 {
-    //-------------------------- [Init]
+    //------------------------- New
     pub fn new(verbose: bool, log: bool) -> Self 
     {
         Self 
@@ -34,7 +34,7 @@ impl DeviceCommandORM
         }
     }
 
-    //-------------------------- [Add]
+    //------------------------- Add
     pub async fn add(&self, db: &DbConn, item: DeviceCommandActiveModel) -> ModelOutput<DeviceCommandModel> 
     {
         let this_method = "add";
@@ -59,7 +59,7 @@ impl DeviceCommandORM
         }
     }
 
-    //-------------------------- [Items]
+    //------------------------- Items
     pub async fn items(&self, db: &DbConn, filters: HashMap<String, String>) -> ModelOutput<Vec<DeviceCommandModel>> 
     {
         let this_method = "items";
@@ -85,7 +85,7 @@ impl DeviceCommandORM
         }
     }
 
-    //-------------------------- [Item]
+    //------------------------- Item
     pub async fn item(&self, db: &DbConn, id: i32) -> ModelOutput<DeviceCommandModel> 
     {
         let this_method = "item";
@@ -117,7 +117,7 @@ impl DeviceCommandORM
         }
     }
 
-    //-------------------------- [Update]
+    //------------------------- Update
     pub async fn update(&self, db: &DbConn, item: DeviceCommandActiveModel) -> ModelOutput<DeviceCommandModel> 
     {
         let this_method = "update";
@@ -143,7 +143,7 @@ impl DeviceCommandORM
         }
     }
 
-    //-------------------------- [Delete]
+    //------------------------- Delete
     pub async fn delete(&self, db: &DbConn, id: i32) -> ModelOutput<String> 
     {
         let this_method = "delete";

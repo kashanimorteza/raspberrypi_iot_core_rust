@@ -171,9 +171,8 @@ impl ZoneCommandActionORM
             }
         }
     }
-}
-    
-    //-------------------------- [Disable]
+
+    //------------------------- Disable
     pub async fn disable(&self, db: &DbConn, id: i32) -> ModelOutput<ZoneCommandActionModel>
     {
         let this_method = "disable";
@@ -205,7 +204,7 @@ impl ZoneCommandActionORM
         }
     }
 
-    //-------------------------- [Enable]
+    //------------------------- Enable
     pub async fn enable(&self, db: &DbConn, id: i32) -> ModelOutput<ZoneCommandActionModel>
     {
         let this_method = "enable";
@@ -236,3 +235,4 @@ impl ZoneCommandActionORM
             }
         }
     }
+}

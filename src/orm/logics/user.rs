@@ -26,7 +26,7 @@ pub struct UserORM
 
 impl UserORM
 {
-    //-------------------------- [Init]
+    //------------------------- New
     pub fn new(verbose: bool, log: bool) -> Self 
     {
         Self 
@@ -38,7 +38,7 @@ impl UserORM
         }
     }
 
-    //-------------------------- [Add]
+    //------------------------- Add
     pub async fn add(&self, db: &DbConn, item: UserActiveModel) -> ModelOutput<UserModel> 
     {
         let this_method = "add";
@@ -75,7 +75,7 @@ impl UserORM
         }
     }
 
-    //-------------------------- [Items]
+    //------------------------- Items
     pub async fn items(&self, db: &DbConn, filters: HashMap<String, String>) -> ModelOutput<Vec<UserModel>> 
     {
         let this_method = "items";
@@ -116,7 +116,7 @@ impl UserORM
         }
     }
 
-    //-------------------------- [Item]
+    //------------------------- Item
     pub async fn item(&self, db: &DbConn, id: i32) -> ModelOutput<UserModel> 
     {
         let this_method = "item";
@@ -164,7 +164,7 @@ impl UserORM
         }
     }
 
-    //-------------------------- [Update]
+    //------------------------- Update
     pub async fn update(&self, db: &DbConn, item: UserActiveModel) -> ModelOutput<UserModel> 
     {
         let this_method = "update";
@@ -203,7 +203,7 @@ impl UserORM
         }
     }
 
-    //-------------------------- [Delete]
+    //------------------------- Delete
     pub async fn delete(&self, db: &DbConn, id: i32) -> ModelOutput<String> 
     {
         let this_method = "delete";
@@ -254,7 +254,7 @@ impl UserORM
         }
     }
 
-    //-------------------------- [Disable]
+    //------------------------- Disable
     pub async fn disable(&self, db: &DbConn, id: i32) -> ModelOutput<UserModel> 
     {
         let this_method = "disable";
@@ -314,7 +314,7 @@ impl UserORM
         }
     }
 
-    //-------------------------- [Enable]
+    //------------------------- Enable
     pub async fn enable(&self, db: &DbConn, id: i32) -> ModelOutput<UserModel> 
     {
         let this_method = "enable";

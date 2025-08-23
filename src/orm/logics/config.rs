@@ -22,7 +22,7 @@ pub struct ConfigORM
 
 impl ConfigORM
 {
-    //-------------------------- [Init]
+    //------------------------- New
     pub fn new(verbose: bool, log: bool) -> Self 
     {
         Self 
@@ -34,7 +34,7 @@ impl ConfigORM
         }
     }
 
-    //-------------------------- [Add]
+    //------------------------- Add
     pub async fn add(&self, db: &DbConn, item: ConfigActiveModel) -> ModelOutput<ConfigModel> 
     {
         let this_method = "add";
@@ -59,7 +59,7 @@ impl ConfigORM
         }
     }
 
-    //-------------------------- [Items]
+    //------------------------- Items
     pub async fn items(&self, db: &DbConn, filters: HashMap<String, String>) -> ModelOutput<Vec<ConfigModel>> 
     {
         let this_method = "items";
@@ -85,7 +85,7 @@ impl ConfigORM
         }
     }
 
-    //-------------------------- [Item]
+    //------------------------- Item
     pub async fn item(&self, db: &DbConn, id: i32) -> ModelOutput<ConfigModel> 
     {
         let this_method = "item";
@@ -117,7 +117,7 @@ impl ConfigORM
         }
     }
 
-    //-------------------------- [Update]
+    //------------------------- Update
     pub async fn update(&self, db: &DbConn, item: ConfigActiveModel) -> ModelOutput<ConfigModel> 
     {
         let this_method = "update";
@@ -143,7 +143,7 @@ impl ConfigORM
         }
     }
 
-    //-------------------------- [Delete]
+    //------------------------- Delete
     pub async fn delete(&self, db: &DbConn, id: i32) -> ModelOutput<String> 
     {
         let this_method = "delete";
