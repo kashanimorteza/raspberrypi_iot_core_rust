@@ -206,3 +206,49 @@ pub async fn delete_device_command(
     let result = service.delete(&state.db, id).await;
     Ok(Json(result))
 }
+
+#[utoipa::path(
+    get,
+    path = "/device_command/disable/{id}",
+    tag = "📱 Device Command",
+
+    params(
+        ("id" = i32, Path, description = "Device command ID to disable")
+    ),
+    responses(
+        (status = 200, description = "Device command disabled successfully", body = DeviceCommandModel),
+        (status = 404, description = "Device command not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn disable_device_command(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<DeviceCommandModel>>, StatusCode> {
+    let service = DeviceCommandService::new();
+    let result = service.disable(&state.db, id).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
+    get,
+    path = "/device_command/enable/{id}",
+    tag = "📱 Device Command",
+
+    params(
+        ("id" = i32, Path, description = "Device command ID to enable")
+    ),
+    responses(
+        (status = 200, description = "Device command enabled successfully", body = DeviceCommandModel),
+        (status = 404, description = "Device command not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn enable_device_command(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<DeviceCommandModel>>, StatusCode> {
+    let service = DeviceCommandService::new();
+    let result = service.enable(&state.db, id).await;
+    Ok(Json(result))
+}

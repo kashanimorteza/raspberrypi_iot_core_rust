@@ -1,3 +1,10 @@
-read src/orm/logic/zone.rs
-evert method has a comment like this : //------------------------- New
-i need this structure for all logic on src/orm/logic
+read src/api/services/timer_limit.rs
+The priority of the functions should be like this and dont add new comment:
+1 - new
+2 - items
+3 - item
+4 - enable
+5 - disable
+6 - update
+7 - add
+8 - delete

@@ -22,6 +22,7 @@ pub struct ZoneCommandORM
 
 impl ZoneCommandORM
 {
+    //------------------------- New
     pub fn new(verbose: bool, log: bool) -> Self 
     {
         Self 
@@ -33,6 +34,7 @@ impl ZoneCommandORM
         }
     }
 
+    //------------------------- Add
     pub async fn add(&self, db: &DbConn, item: ZoneCommandActiveModel) -> ModelOutput<ZoneCommandModel> 
     {
         let this_method = "add";
@@ -57,6 +59,7 @@ impl ZoneCommandORM
         }
     }
 
+    //------------------------- Items
     pub async fn items(&self, db: &DbConn, _filters: HashMap<String, String>) -> ModelOutput<Vec<ZoneCommandModel>> 
     {
         let this_method = "items";
@@ -82,6 +85,7 @@ impl ZoneCommandORM
         }
     }
 
+    //------------------------- Item
     pub async fn item(&self, db: &DbConn, id: i32) -> ModelOutput<ZoneCommandModel> 
     {
         let this_method = "item";
@@ -113,6 +117,7 @@ impl ZoneCommandORM
         }
     }
 
+    //------------------------- Update
     pub async fn update(&self, db: &DbConn, item: ZoneCommandActiveModel) -> ModelOutput<ZoneCommandModel> 
     {
         let this_method = "update";
@@ -138,6 +143,7 @@ impl ZoneCommandORM
         }
     }
 
+    //------------------------- Delete
     pub async fn delete(&self, db: &DbConn, id: i32) -> ModelOutput<String> 
     {
         let this_method = "delete";

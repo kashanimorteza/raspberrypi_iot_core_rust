@@ -168,3 +168,49 @@ pub async fn delete_timer(
     let result = service.delete(&state.db, id).await;
     Ok(Json(result))
 }
+
+#[utoipa::path(
+    get,
+    path = "/timer/disable/{id}",
+    tag = "⏰ Timer",
+
+    params(
+        ("id" = i32, Path, description = "Timer ID to disable")
+    ),
+    responses(
+        (status = 200, description = "Timer disabled successfully", body = TimerModel),
+        (status = 404, description = "Timer not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn disable_timer(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<TimerModel>>, StatusCode> {
+    let service = TimerService::new();
+    let result = service.disable(&state.db, id).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
+    get,
+    path = "/timer/enable/{id}",
+    tag = "⏰ Timer",
+
+    params(
+        ("id" = i32, Path, description = "Timer ID to enable")
+    ),
+    responses(
+        (status = 200, description = "Timer enabled successfully", body = TimerModel),
+        (status = 404, description = "Timer not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn enable_timer(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<TimerModel>>, StatusCode> {
+    let service = TimerService::new();
+    let result = service.enable(&state.db, id).await;
+    Ok(Json(result))
+}

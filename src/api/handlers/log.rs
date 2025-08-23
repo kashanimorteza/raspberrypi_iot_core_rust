@@ -176,3 +176,49 @@ pub async fn delete_log(
     let result = service.delete(&state.db, id).await;
     Ok(Json(result))
 }
+
+#[utoipa::path(
+    get,
+    path = "/log/disable/{id}",
+    tag = "📄 Log",
+
+    params(
+        ("id" = i32, Path, description = "Log ID to disable")
+    ),
+    responses(
+        (status = 200, description = "Log disabled successfully", body = LogModel),
+        (status = 404, description = "Log not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn disable_log(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<LogModel>>, StatusCode> {
+    let service = LogService::new();
+    let result = service.disable(&state.db, id).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
+    get,
+    path = "/log/enable/{id}",
+    tag = "📄 Log",
+
+    params(
+        ("id" = i32, Path, description = "Log ID to enable")
+    ),
+    responses(
+        (status = 200, description = "Log enabled successfully", body = LogModel),
+        (status = 404, description = "Log not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn enable_log(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<LogModel>>, StatusCode> {
+    let service = LogService::new();
+    let result = service.enable(&state.db, id).await;
+    Ok(Json(result))
+}

@@ -8,7 +8,7 @@
 use axum::routing::{get, post, put, delete};
 use axum::Router;
 use crate::AppState;
-use crate::api::handlers::timer::{list_timers, get_timer, create_timer, update_timer, delete_timer};
+use crate::api::handlers::timer::{list_timers, get_timer, create_timer, update_timer, delete_timer, disable_timer, enable_timer};
 
 
 
@@ -20,5 +20,7 @@ pub fn router() -> Router<AppState>
         .route("/item/{id}", get(get_timer))
         .route("/update/{id}", put(update_timer))
         .route("/add", post(create_timer))
-        .route("/delete/{id}", delete(delete_timer))       
+        .route("/delete/{id}", delete(delete_timer))
+        .route("/disable/{id}", get(disable_timer))
+        .route("/enable/{id}", get(enable_timer))       
 }

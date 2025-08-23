@@ -188,3 +188,49 @@ pub async fn delete_port(
     let result = service.delete(&state.db, id).await;
     Ok(Json(result))
 }
+
+#[utoipa::path(
+    get,
+    path = "/port/disable/{id}",
+    tag = "🔌 Port",
+
+    params(
+        ("id" = i32, Path, description = "Port ID to disable")
+    ),
+    responses(
+        (status = 200, description = "Port disabled successfully", body = PortModel),
+        (status = 404, description = "Port not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn disable_port(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<PortModel>>, StatusCode> {
+    let service = PortService::new();
+    let result = service.disable(&state.db, id).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
+    get,
+    path = "/port/enable/{id}",
+    tag = "🔌 Port",
+
+    params(
+        ("id" = i32, Path, description = "Port ID to enable")
+    ),
+    responses(
+        (status = 200, description = "Port enabled successfully", body = PortModel),
+        (status = 404, description = "Port not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn enable_port(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<PortModel>>, StatusCode> {
+    let service = PortService::new();
+    let result = service.enable(&state.db, id).await;
+    Ok(Json(result))
+}

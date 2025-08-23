@@ -176,3 +176,49 @@ pub async fn delete_zone_command(
     let result = service.delete(&state.db, id).await;
     Ok(Json(result))
 }
+
+#[utoipa::path(
+    get,
+    path = "/zone_command/disable/{id}",
+    tag = "🏠📝 Zone Command",
+
+    params(
+        ("id" = i32, Path, description = "Zone command ID to disable")
+    ),
+    responses(
+        (status = 200, description = "Zone command disabled successfully", body = ZoneCommandModel),
+        (status = 404, description = "Zone command not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn disable_zone_command(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<ZoneCommandModel>>, StatusCode> {
+    let service = ZoneCommandService::new();
+    let result = service.disable(&state.db, id).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
+    get,
+    path = "/zone_command/enable/{id}",
+    tag = "🏠📝 Zone Command",
+
+    params(
+        ("id" = i32, Path, description = "Zone command ID to enable")
+    ),
+    responses(
+        (status = 200, description = "Zone command enabled successfully", body = ZoneCommandModel),
+        (status = 404, description = "Zone command not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn enable_zone_command(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<ZoneCommandModel>>, StatusCode> {
+    let service = ZoneCommandService::new();
+    let result = service.enable(&state.db, id).await;
+    Ok(Json(result))
+}

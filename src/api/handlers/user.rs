@@ -202,3 +202,49 @@ pub async fn delete_user(
     let result = service.delete(&state.db, id).await;
     Ok(Json(result))
 }
+
+#[utoipa::path(
+    get,
+    path = "/user/disable/{id}",
+    tag = "👤 User",
+
+    params(
+        ("id" = i32, Path, description = "User ID to disable")
+    ),
+    responses(
+        (status = 200, description = "User disabled successfully", body = UserModel),
+        (status = 404, description = "User not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn disable_user(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<UserModel>>, StatusCode> {
+    let service = UserService::new();
+    let result = service.disable(&state.db, id).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
+    get,
+    path = "/user/enable/{id}",
+    tag = "👤 User",
+
+    params(
+        ("id" = i32, Path, description = "User ID to enable")
+    ),
+    responses(
+        (status = 200, description = "User enabled successfully", body = UserModel),
+        (status = 404, description = "User not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn enable_user(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<UserModel>>, StatusCode> {
+    let service = UserService::new();
+    let result = service.enable(&state.db, id).await;
+    Ok(Json(result))
+}

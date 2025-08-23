@@ -378,7 +378,7 @@ impl UserORM
         }
     }
 
-    //-------------------------- [Dead]
+    //------------------------- Dead
     pub async fn dead(&self, db: &DbConn, id: i32) -> ModelOutput<String> 
     {
         let this_method = "dead";

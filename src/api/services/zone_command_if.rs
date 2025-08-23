@@ -17,6 +17,7 @@ pub struct ZoneCommandIfService {
 }
 
 impl ZoneCommandIfService {
+    //------------------------- New
     pub fn new() -> Self 
     {
         Self 
@@ -25,32 +26,31 @@ impl ZoneCommandIfService {
         }
     }
 
-    pub async fn add(&self, db: &DatabaseConnection, item: ZoneCommandIfModel) -> ModelOutput<ZoneCommandIfModel> 
-    {
-        let active_zone_command_if = ZoneCommandIfActiveModel 
-        {
-            id: Default::default(),
-            name: Set(item.name),
-            zone_command_id: Set(item.zone_command_id),
-            device_id: Set(item.device_id),
-            command_id: Set(item.command_id),
-            description: Set(item.description),
-            enable: Set(item.enable),
-        };
-
-        self.logic.add(db, active_zone_command_if).await
-    }
-
+    //------------------------- Items
     pub async fn items(&self, db: &DatabaseConnection, filters: HashMap<String, String>) -> ModelOutput<Vec<ZoneCommandIfModel>> 
     {
         self.logic.items(db, filters).await
     }
 
+    //------------------------- Item
     pub async fn item(&self, db: &DatabaseConnection, id: i32) -> ModelOutput<ZoneCommandIfModel> 
     {
         self.logic.item(db, id).await
     }
 
+    //------------------------- Enable
+    pub async fn enable(&self, db: &DatabaseConnection, id: i32) -> ModelOutput<ZoneCommandIfModel> 
+    {
+        self.logic.enable(db, id).await
+    }
+
+    //------------------------- Disable
+    pub async fn disable(&self, db: &DatabaseConnection, id: i32) -> ModelOutput<ZoneCommandIfModel> 
+    {
+        self.logic.disable(db, id).await
+    }
+
+    //------------------------- Update
     pub async fn update(&self, db: &DatabaseConnection, item: ZoneCommandIfModel) -> ModelOutput<ZoneCommandIfModel> 
     {
         let active_zone_command_if = ZoneCommandIfActiveModel 
@@ -67,6 +67,24 @@ impl ZoneCommandIfService {
         self.logic.update(db, active_zone_command_if).await
     }
 
+    //------------------------- Add
+    pub async fn add(&self, db: &DatabaseConnection, item: ZoneCommandIfModel) -> ModelOutput<ZoneCommandIfModel> 
+    {
+        let active_zone_command_if = ZoneCommandIfActiveModel 
+        {
+            id: Default::default(),
+            name: Set(item.name),
+            zone_command_id: Set(item.zone_command_id),
+            device_id: Set(item.device_id),
+            command_id: Set(item.command_id),
+            description: Set(item.description),
+            enable: Set(item.enable),
+        };
+
+        self.logic.add(db, active_zone_command_if).await
+    }
+
+    //------------------------- Delete
     pub async fn delete(&self, db: &DatabaseConnection, id: i32) -> ModelOutput<String> 
     {
         self.logic.delete(db, id).await

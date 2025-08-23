@@ -17,6 +17,7 @@ pub struct TimerDeviceService {
 }
 
 impl TimerDeviceService {
+    //------------------------- New
     pub fn new() -> Self 
     {
         Self 
@@ -25,31 +26,31 @@ impl TimerDeviceService {
         }
     }
 
-    pub async fn add(&self, db: &DatabaseConnection, item: TimerDeviceModel) -> ModelOutput<TimerDeviceModel> 
-    {
-        let active_timer_device = TimerDeviceActiveModel 
-        {
-            id: Default::default(),
-            timer_id: Set(item.timer_id),
-            device_id: Set(item.device_id),
-            command_id: Set(item.command_id),
-            description: Set(item.description),
-            enable: Set(item.enable),
-        };
-
-        self.logic.add(db, active_timer_device).await
-    }
-
+    //------------------------- Items
     pub async fn items(&self, db: &DatabaseConnection, filters: HashMap<String, String>) -> ModelOutput<Vec<TimerDeviceModel>> 
     {
         self.logic.items(db, filters).await
     }
 
+    //------------------------- Item
     pub async fn item(&self, db: &DatabaseConnection, id: i32) -> ModelOutput<TimerDeviceModel> 
     {
         self.logic.item(db, id).await
     }
 
+    //------------------------- Enable
+    pub async fn enable(&self, db: &DatabaseConnection, id: i32) -> ModelOutput<TimerDeviceModel> 
+    {
+        self.logic.enable(db, id).await
+    }
+
+    //------------------------- Disable
+    pub async fn disable(&self, db: &DatabaseConnection, id: i32) -> ModelOutput<TimerDeviceModel> 
+    {
+        self.logic.disable(db, id).await
+    }
+
+    //------------------------- Update
     pub async fn update(&self, db: &DatabaseConnection, item: TimerDeviceModel) -> ModelOutput<TimerDeviceModel> 
     {
         let active_timer_device = TimerDeviceActiveModel 
@@ -65,6 +66,23 @@ impl TimerDeviceService {
         self.logic.update(db, active_timer_device).await
     }
 
+    //------------------------- Add
+    pub async fn add(&self, db: &DatabaseConnection, item: TimerDeviceModel) -> ModelOutput<TimerDeviceModel> 
+    {
+        let active_timer_device = TimerDeviceActiveModel 
+        {
+            id: Default::default(),
+            timer_id: Set(item.timer_id),
+            device_id: Set(item.device_id),
+            command_id: Set(item.command_id),
+            description: Set(item.description),
+            enable: Set(item.enable),
+        };
+
+        self.logic.add(db, active_timer_device).await
+    }
+
+    //------------------------- Delete
     pub async fn delete(&self, db: &DatabaseConnection, id: i32) -> ModelOutput<String> 
     {
         self.logic.delete(db, id).await

@@ -188,3 +188,49 @@ pub async fn delete_timer_limit(
     let result = service.delete(&state.db, id).await;
     Ok(Json(result))
 }
+
+#[utoipa::path(
+    get,
+    path = "/timer_limit/disable/{id}",
+    tag = "⏱️ Timer Limit",
+
+    params(
+        ("id" = i32, Path, description = "Timer limit ID to disable")
+    ),
+    responses(
+        (status = 200, description = "Timer limit disabled successfully", body = TimerLimitModel),
+        (status = 404, description = "Timer limit not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn disable_timer_limit(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<TimerLimitModel>>, StatusCode> {
+    let service = TimerLimitService::new();
+    let result = service.disable(&state.db, id).await;
+    Ok(Json(result))
+}
+
+#[utoipa::path(
+    get,
+    path = "/timer_limit/enable/{id}",
+    tag = "⏱️ Timer Limit",
+
+    params(
+        ("id" = i32, Path, description = "Timer limit ID to enable")
+    ),
+    responses(
+        (status = 200, description = "Timer limit enabled successfully", body = TimerLimitModel),
+        (status = 404, description = "Timer limit not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn enable_timer_limit(
+    State(state): State<AppState>,
+    Path(id): Path<i32>,
+) -> Result<Json<ModelOutput<TimerLimitModel>>, StatusCode> {
+    let service = TimerLimitService::new();
+    let result = service.enable(&state.db, id).await;
+    Ok(Json(result))
+}
