@@ -15,6 +15,7 @@ pub fn router() -> Router<AppState>
 {
     Router::new()
         .route("/items", get(list_device_commands))
+
         .route("/item/{id}", get(get_device_command))
         .route("/enable/{id}", get(enable_device_command))
         .route("/disable/{id}", get(disable_device_command))

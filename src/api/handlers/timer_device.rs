@@ -53,7 +53,6 @@ pub struct UpdateTimerDeviceRequest {
     get,
     path = "/timer_device/items",
     tag = "🔗 Timer Device",
-
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of timer devices to return"),
         ("offset" = Option<i32>, Query, description = "Number of timer devices to skip"),
@@ -257,5 +256,79 @@ pub async fn status_timer_device(
 ) -> Result<Json<ModelOutput<TimerDeviceModel>>, StatusCode> {
     let service = TimerDeviceService::new();
     let result = service.status(&state.db, id).await;
+    Ok(Json(result))
+}
+
+//------------------------- Import
+#[derive(Deserialize, ToSchema)]
+#[schema(description = "Query parameters for importing a timer-device-command mapping")]
+pub struct ImportTimerDeviceQuery {
+    pub timer_id: i32,
+    pub device_id: i32,
+    pub command_id: i32,
+    pub enable: bool,
+}
+
+#[utoipa::path(
+    get,
+    path = "/timer_device/import",
+    tag = "🔗 Timer Device",
+    params(
+        ("timer_id" = i32, Query, description = "Timer ID"),
+        ("device_id" = i32, Query, description = "Device ID"),
+        ("command_id" = i32, Query, description = "Command ID"),
+        ("enable" = bool, Query, description = "Enable mapping")
+    ),
+    responses(
+        (status = 200, description = "Mapping upserted successfully", body = TimerDeviceModel),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn import_timer_device(
+    State(state): State<AppState>,
+    Query(q): Query<ImportTimerDeviceQuery>,
+) -> Result<Json<ModelOutput<TimerDeviceModel>>, StatusCode> {
+    let service = TimerDeviceService::new();
+
+    // Build filters to check if mapping already exists
+    let mut filters: HashMap<String, String> = HashMap::new();
+    filters.insert("timer_id".to_string(), q.timer_id.to_string());
+    filters.insert("device_id".to_string(), q.device_id.to_string());
+
+
+    let existing = service.items(&state.db, filters).await;
+
+    if existing.status 
+    {
+        if let Some(items) = existing.data 
+        {
+            if let Some(current) = items.into_iter().next() 
+            {
+                // Update existing mapping's enable value
+                let updated = TimerDeviceModel 
+                {
+                    id: current.id,
+                    timer_id: current.timer_id,
+                    device_id: current.device_id,
+                    command_id: q.command_id,
+                    description: current.description,
+                    enable: q.enable,
+                };
+                let result = service.update(&state.db, updated).await;
+                return Ok(Json(result));
+            }
+        }
+    }
+
+    // Not found → create new mapping
+    let to_create = TimerDeviceModel {
+        id: 0,
+        timer_id: q.timer_id,
+        device_id: q.device_id,
+        command_id: q.command_id,
+        description: "".to_string(),
+        enable: q.enable,
+    };
+    let result = service.add(&state.db, to_create).await;
     Ok(Json(result))
 }

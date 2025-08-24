@@ -85,8 +85,9 @@ use utoipa::OpenApi;
         crate::api::handlers::timer::update_timer,
         crate::api::handlers::timer::create_timer,
         crate::api::handlers::timer::delete_timer,
-        // Timer Device  (temporarily commented out)
+        // Timer Device
         crate::api::handlers::timer_device::list_timer_devices,
+        crate::api::handlers::timer_device::import_timer_device,
         crate::api::handlers::timer_device::get_timer_device,
         crate::api::handlers::timer_device::status_timer_device,
         crate::api::handlers::timer_device::enable_timer_device,
