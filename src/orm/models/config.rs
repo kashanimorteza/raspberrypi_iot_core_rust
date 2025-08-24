@@ -2,15 +2,19 @@
 // src/orm/models/config.rs
 
 //--------------------------------------------------------------------------------- Description
-// CRUD logic methods for the Config model
+// Config model
 
 //--------------------------------------------------------------------------------- Import
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 
+//--------------------------------------------------------------------------------- Attribute
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize, ToSchema)]
 #[sea_orm(table_name = "config")]
+#[schema(description = "Config model representing system configuration settings")]
+
+//--------------------------------------------------------------------------------- Model
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,

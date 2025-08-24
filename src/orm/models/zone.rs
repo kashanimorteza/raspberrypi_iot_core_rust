@@ -2,15 +2,19 @@
 // src/orm/models/zone.rs
 
 //--------------------------------------------------------------------------------- Description
-// CRUD logic methods for the Zone model
+// Zone model
 
 //--------------------------------------------------------------------------------- Import
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 
+//--------------------------------------------------------------------------------- Attribute
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize, ToSchema)]
 #[sea_orm(table_name = "zone")]
+#[schema(description = "Zone model representing logical groupings of devices or areas")]
+
+//--------------------------------------------------------------------------------- Model
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,

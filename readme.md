@@ -52,7 +52,7 @@ PGPASSWORD='123456' psql -h 192.168.64.9 -U postgres -d raspberrypi -f db_postgr
 <!------------------------- Entity -->
 Entity
 ```bash
-sea-orm-cli generate entity -u postgres://postgres:123456@192.168.64.9:5432/raspberrypi -o ./src/orm/models
+sea-orm-cli generate entity -u postgres://postgres:123456@192.168.64.9:5432/raspberrypi -o ./src/orm/modelss
 ```
 
 
