@@ -1,2 +1,2 @@
-we hame list of port protocol that exist on src/logics/general.rs on PortProtocols
-i need check value of port protocol on src/api/services/port.rs on update method
+read src/orm/logics/port.rs on methpod items
+i need check if filter exist, select with filters value
