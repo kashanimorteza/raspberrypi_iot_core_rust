@@ -25,16 +25,6 @@ pub async fn add_sample_timer_limits(db: &DatabaseConnection) -> Result<(), Box<
             description: Set("Timer limit for jacuzzi erjet motor - from on to off with value 1".to_string()),
             enable: Set(true),
         },
-        // Timer limit for device 23 (Steam Sauna Temperature Sensor)
-        TimerLimitActiveModel {
-            id: sea_orm::ActiveValue::NotSet,
-            device_id: Set(23),
-            command_from_id: Set(52),
-            command_to_id: Set(52),
-            value: Set(1),
-            description: Set("Timer limit for steam sauna temperature sensor - same command with value 1".to_string()),
-            enable: Set(true),
-        },
     ];
 
     println!("🚀 Starting to add {} sample timer limits...", sample_timer_limits.len());

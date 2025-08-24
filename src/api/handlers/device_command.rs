@@ -64,12 +64,11 @@ pub struct UpdateDeviceCommandRequest {
 }
 
 //--------------------------------------------------------------------------------- Handlers
-//------------------------- ListDeviceCommands
+//------------------------- List
 #[utoipa::path(
     get,
     path = "/device_command/items",
     tag = "📡 Device Command",
-
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of device commands to return"),
         ("offset" = Option<i32>, Query, description = "Number of device commands to skip"),
@@ -88,7 +87,7 @@ pub async fn list_device_commands(
     Ok(Json(result))
 }
 
-//------------------------- GetDeviceCommand
+//------------------------- Get
 #[utoipa::path(
     get,
     path = "/device_command/item/{id}",
@@ -112,7 +111,7 @@ pub async fn get_device_command(
     Ok(Json(result))
 }
 
-//------------------------- EnableDeviceCommand
+//------------------------- Enable
 #[utoipa::path(
     get,
     path = "/device_command/enable/{id}",
@@ -136,7 +135,7 @@ pub async fn enable_device_command(
     Ok(Json(result))
 }
 
-//------------------------- DisableDeviceCommand
+//------------------------- Disable
 #[utoipa::path(
     get,
     path = "/device_command/disable/{id}",
@@ -160,7 +159,7 @@ pub async fn disable_device_command(
     Ok(Json(result))
 }
 
-//------------------------- UpdateDeviceCommand
+//------------------------- Update
 #[utoipa::path(
     put,
     path = "/device_command/update/{id}",
@@ -201,7 +200,7 @@ pub async fn update_device_command(
     Ok(Json(result))
 }
 
-//------------------------- CreateDeviceCommand
+//------------------------- Create
 #[utoipa::path(
     post,
     path = "/device_command/add",
@@ -236,7 +235,7 @@ pub async fn create_device_command(
     Ok(Json(result))
 }
 
-//------------------------- DeleteDeviceCommand
+//------------------------- Delete
 #[utoipa::path(
     delete,
     path = "/device_command/delete/{id}",
@@ -259,7 +258,7 @@ pub async fn delete_device_command(
     Ok(Json(result))
 }
 
-//------------------------- StatusDeviceCommand
+//------------------------- Status
 #[utoipa::path(
     get,
     path = "/device_command/status/{id}",
