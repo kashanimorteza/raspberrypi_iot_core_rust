@@ -160,10 +160,9 @@ use utoipa::OpenApi;
     ),
     tags(
             (name = "⚙️ Config"),
-            (name = "👥 User"),
             (name = "🔌 Port"),
-            (name = "🔧 Device"),
             (name = "🏠 Zone"),
+            (name = "🔧 Device"),
             (name = "📡 Device Command"),
             (name = "📋 Log"),
             (name = "⏰ Timer"),
@@ -172,7 +171,8 @@ use utoipa::OpenApi;
             (name = "⏱️ Timer Limit"),
             (name = "🎯 Zone Command"),
             (name = "⚡ Zone Command Action"),
-            (name = "🔀 Zone Command Condition")
+            (name = "🔀 Zone Command Condition"),
+            (name = "👥 User")
     ),
 )]
 pub struct ApiDoc;

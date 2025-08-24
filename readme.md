@@ -136,6 +136,26 @@ curl -X DELETE http://localhost:3000/users/delete/1
 <br><br>
 
 ## Note
+Create schema of a database
 ```bash
 PGPASSWORD='123456' pg_dump -h 192.168.64.9 -U postgres -d raspberrypi -s -n public > db_postgres.sql
+```
+
+Truncate all tables
+```sql
+DO
+$$
+DECLARE
+    tbl RECORD;
+BEGIN
+    -- Loop through all tables in the 'public' schema
+    FOR tbl IN
+        SELECT tablename
+        FROM pg_tables
+        WHERE schemaname = 'public'
+    LOOP
+        EXECUTE format('TRUNCATE TABLE public.%I RESTART IDENTITY CASCADE;', tbl.tablename);
+    END LOOP;
+END
+$$;
 ```
