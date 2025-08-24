@@ -56,22 +56,28 @@ impl<T> ModelOutput<T>
 
 //------------------------- PORT_PROTOCOLS
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum PortProtocols 
+pub enum PortProtocols {}
+
+impl PortProtocols 
 {
-    Pwr,
-    Gnd,
-    Reserved,
-    File,
-    Gpio,
-    Uart,
-    I2c,
-    Spi,
+    /// Validate if a string represents a valid port protocol
+    pub fn is_valid_protocol(protocol_str: &str) -> bool 
+    {
+        matches!(protocol_str.to_lowercase().as_str(), 
+            "pwr" | "gnd" | "reserved" | "file" | "gpio" | "uart" | "i2c" | "spi"
+        )
+    }
+
+    /// Get all valid port protocol strings
+    pub fn valid_protocols() -> Vec<&'static str> 
+    {
+        vec!["Pwr", "Gnd", "Reserved", "File", "Gpio", "Uart", "I2c", "Spi"]
+    }
 }
 
 //------------------------- PORT_TYPES
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum PortTypes 
-{}
+pub enum PortTypes {}
 
 impl PortTypes 
 {

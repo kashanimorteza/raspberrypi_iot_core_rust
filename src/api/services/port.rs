@@ -8,7 +8,7 @@
 use sea_orm::{DatabaseConnection, Set};
 use std::collections::HashMap;
 use crate::orm::models::port::{Model as PortModel, ActiveModel as PortActiveModel};
-use crate::logics::general::{ModelOutput, PortTypes};
+use crate::logics::general::{ModelOutput, PortTypes, PortProtocols};
 use crate::orm::logics::port::PortORM;
 
 //--------------------------------------------------------------------------------- Service
@@ -64,6 +64,15 @@ impl PortService
             ));
         }
 
+        // Validate port protocol if provided
+        if !item.protocol.is_empty() && !PortProtocols::is_valid_protocol(&item.protocol) {
+            return ModelOutput::error(format!(
+                "Invalid port protocol '{}'. Valid protocols are: {}",
+                item.protocol,
+                PortProtocols::valid_protocols().join(", ")
+            ));
+        }
+
         let active_port = PortActiveModel 
         {
             id: Set(item.id),
@@ -90,6 +99,15 @@ impl PortService
                 "Invalid port type '{}'. Valid types are: {}",
                 item.r#type,
                 PortTypes::valid_types().join(", ")
+            ));
+        }
+
+        // Validate port protocol if provided
+        if !item.protocol.is_empty() && !PortProtocols::is_valid_protocol(&item.protocol) {
+            return ModelOutput::error(format!(
+                "Invalid port protocol '{}'. Valid protocols are: {}",
+                item.protocol,
+                PortProtocols::valid_protocols().join(", ")
             ));
         }
 

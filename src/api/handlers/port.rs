@@ -145,7 +145,6 @@ pub async fn disable_port(
     put,
     path = "/port/update/{id}",
     tag = "🔌 Port",
-
     params(
         ("id" = i32, Path, description = "Port ID to update")
     ),
