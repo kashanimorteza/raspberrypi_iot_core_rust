@@ -122,7 +122,6 @@ pub async fn enable_port(
     get,
     path = "/port/disable/{id}",
     tag = "🔌 Port",
-
     params(
         ("id" = i32, Path, description = "Port ID to disable")
     ),

@@ -8,7 +8,7 @@
 use sea_orm::{DatabaseConnection, Set};
 use std::collections::HashMap;
 use crate::orm::models::port::{Model as PortModel, ActiveModel as PortActiveModel};
-use crate::logics::general::ModelOutput;
+use crate::logics::general::{ModelOutput, PortTypes};
 use crate::orm::logics::port::PortORM;
 
 //--------------------------------------------------------------------------------- Service
@@ -55,6 +55,15 @@ impl PortService
     //------------------------- Update
     pub async fn update(&self, db: &DatabaseConnection, item: PortModel) -> ModelOutput<PortModel> 
     {
+        // Validate port type if provided
+        if !item.r#type.is_empty() && !PortTypes::is_valid_type(&item.r#type) {
+            return ModelOutput::error(format!(
+                "Invalid port type '{}'. Valid types are: {}",
+                item.r#type,
+                PortTypes::valid_types().join(", ")
+            ));
+        }
+
         let active_port = PortActiveModel 
         {
             id: Set(item.id),
@@ -75,6 +84,15 @@ impl PortService
     //------------------------- Add
     pub async fn add(&self, db: &DatabaseConnection, item: PortModel) -> ModelOutput<PortModel> 
     {
+        // Validate port type if provided
+        if !item.r#type.is_empty() && !PortTypes::is_valid_type(&item.r#type) {
+            return ModelOutput::error(format!(
+                "Invalid port type '{}'. Valid types are: {}",
+                item.r#type,
+                PortTypes::valid_types().join(", ")
+            ));
+        }
+
         let active_port = PortActiveModel 
         {
             id: Default::default(),

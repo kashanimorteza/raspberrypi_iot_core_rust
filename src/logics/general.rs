@@ -71,18 +71,24 @@ pub enum PortProtocols
 //------------------------- PORT_TYPES
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum PortTypes 
+{}
+
+impl PortTypes 
 {
-    In,
-    Out,
-    Tx,
-    Rx,
-    Sda,
-    Scl,
-    Mosi,
-    Miso,
-    Sclk,
-    Cs0,
-    Cs1,
+    /// Validate if a string represents a valid port type
+    pub fn is_valid_type(type_str: &str) -> bool 
+    {
+        matches!(type_str.to_lowercase().as_str(), 
+            "in" | "out" | "tx" | "rx" | "sda" | "scl" | 
+            "mosi" | "miso" | "sclk" | "cs0" | "cs1"
+        )
+    }
+
+    /// Get all valid port type strings
+    pub fn valid_types() -> Vec<&'static str> 
+    {
+        vec!["In", "Out", "Tx", "Rx", "Sda", "Scl", "Mosi", "Miso", "Sclk", "Cs0", "Cs1"]
+    }
 }
 
 //------------------------- IF_TYPES
