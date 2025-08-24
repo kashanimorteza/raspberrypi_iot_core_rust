@@ -7,7 +7,7 @@
 //--------------------------------------------------------------------------------- Import
 use std::collections::HashMap;
 use tracing::{info, error, debug};
-use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder};
+use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder, QueryFilter, ColumnTrait, Condition};
 use crate::orm::models::timer_item::{ActiveModel as TimerItemActiveModel, Entity as TimerItemEntity, Model as TimerItemModel, Column as TimerItemColumn};
 use crate::logics::general::ModelOutput;
 
@@ -60,16 +60,32 @@ impl TimerItemORM
     }
 
     //------------------------- Items
-    pub async fn items(&self, db: &DbConn, _filters: HashMap<String, String>) -> ModelOutput<Vec<TimerItemModel>> 
+    pub async fn items(&self, db: &DbConn, filters: HashMap<String, String>) -> ModelOutput<Vec<TimerItemModel>> 
     {
         let this_method = "items";
-        if self.verbose { debug!("{}::{} - Starting items operation", self.this_class, this_method); }
+        if self.verbose { debug!("{}::{} - Starting items operation with filters: {:?}", self.this_class, this_method, filters); }
 
-        match TimerItemEntity::find().order_by_asc(TimerItemColumn::Id).all(db).await 
+        let mut query = TimerItemEntity::find();
+        if !filters.is_empty() {
+            let mut condition = Condition::all();
+
+            if let Some(id_str) = filters.get("id") { if let Ok(id) = id_str.parse::<i32>() { condition = condition.add(TimerItemColumn::Id.eq(id)); } }
+            if let Some(timer_id_str) = filters.get("timer_id") { if let Ok(timer_id) = timer_id_str.parse::<i32>() { condition = condition.add(TimerItemColumn::TimerId.eq(timer_id)); } }
+            if let Some(name) = filters.get("name") { condition = condition.add(TimerItemColumn::Name.contains(name)); }
+            if let Some(value_from) = filters.get("value_from") { condition = condition.add(TimerItemColumn::ValueFrom.contains(value_from)); }
+            if let Some(value_to) = filters.get("value_to") { condition = condition.add(TimerItemColumn::ValueTo.contains(value_to)); }
+            if let Some(description) = filters.get("description") { condition = condition.add(TimerItemColumn::Description.contains(description)); }
+            if let Some(enable_str) = filters.get("enable") { if let Ok(enable) = enable_str.parse::<bool>() { condition = condition.add(TimerItemColumn::Enable.eq(enable)); } }
+
+            query = query.filter(condition);
+        }
+
+        match query.order_by_asc(TimerItemColumn::Id).all(db).await 
         {
             Ok(items) => 
             {
-                let output = ModelOutput::success(items, "TimerItems retrieved successfully".to_string());
+                let message = if filters.is_empty() { "TimerItems retrieved successfully".to_string() } else { format!("Filtered timer items retrieved successfully (found {} items)", items.len()) };
+                let output = ModelOutput::success(items, message);
                 if self.verbose { info!("{}::{} - Success: TimerItems retrieved", self.this_class, this_method); }
                 if self.log { info!("LOG: {}::{} - TimerItems retrieved", self.this_class, this_method); }
                 output

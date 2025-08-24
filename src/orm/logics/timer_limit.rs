@@ -7,7 +7,7 @@
 //--------------------------------------------------------------------------------- Import
 use std::collections::HashMap;
 use tracing::{info, error, debug};
-use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder};
+use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder, QueryFilter, ColumnTrait, Condition};
 use crate::orm::models::timer_limit::{ActiveModel as TimerLimitActiveModel, Entity as TimerLimitEntity, Model as TimerLimitModel, Column as TimerLimitColumn};
 use crate::logics::general::ModelOutput;
 
@@ -60,16 +60,32 @@ impl TimerLimitORM
     }
 
     //------------------------- Items
-    pub async fn items(&self, db: &DbConn, _filters: HashMap<String, String>) -> ModelOutput<Vec<TimerLimitModel>> 
+    pub async fn items(&self, db: &DbConn, filters: HashMap<String, String>) -> ModelOutput<Vec<TimerLimitModel>> 
     {
         let this_method = "items";
-        if self.verbose { debug!("{}::{} - Starting items operation", self.this_class, this_method); }
+        if self.verbose { debug!("{}::{} - Starting items operation with filters: {:?}", self.this_class, this_method, filters); }
 
-        match TimerLimitEntity::find().order_by_asc(TimerLimitColumn::Id).all(db).await 
+        let mut query = TimerLimitEntity::find();
+        if !filters.is_empty() {
+            let mut condition = Condition::all();
+
+            if let Some(id_str) = filters.get("id") { if let Ok(id) = id_str.parse::<i32>() { condition = condition.add(TimerLimitColumn::Id.eq(id)); } }
+            if let Some(device_id_str) = filters.get("device_id") { if let Ok(device_id) = device_id_str.parse::<i32>() { condition = condition.add(TimerLimitColumn::DeviceId.eq(device_id)); } }
+            if let Some(command_from_id_str) = filters.get("command_from_id") { if let Ok(command_from_id) = command_from_id_str.parse::<i32>() { condition = condition.add(TimerLimitColumn::CommandFromId.eq(command_from_id)); } }
+            if let Some(command_to_id_str) = filters.get("command_to_id") { if let Ok(command_to_id) = command_to_id_str.parse::<i32>() { condition = condition.add(TimerLimitColumn::CommandToId.eq(command_to_id)); } }
+            if let Some(value_str) = filters.get("value") { if let Ok(value) = value_str.parse::<i32>() { condition = condition.add(TimerLimitColumn::Value.eq(value)); } }
+            if let Some(description) = filters.get("description") { condition = condition.add(TimerLimitColumn::Description.contains(description)); }
+            if let Some(enable_str) = filters.get("enable") { if let Ok(enable) = enable_str.parse::<bool>() { condition = condition.add(TimerLimitColumn::Enable.eq(enable)); } }
+
+            query = query.filter(condition);
+        }
+
+        match query.order_by_asc(TimerLimitColumn::Id).all(db).await 
         {
             Ok(items) => 
             {
-                let output = ModelOutput::success(items, "TimerLimits retrieved successfully".to_string());
+                let message = if filters.is_empty() { "TimerLimits retrieved successfully".to_string() } else { format!("Filtered timer limits retrieved successfully (found {} items)", items.len()) };
+                let output = ModelOutput::success(items, message);
                 if self.verbose { info!("{}::{} - Success: TimerLimits retrieved", self.this_class, this_method); }
                 if self.log { info!("LOG: {}::{} - TimerLimits retrieved", self.this_class, this_method); }
                 output

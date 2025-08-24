@@ -7,7 +7,7 @@
 //--------------------------------------------------------------------------------- Import
 use std::collections::HashMap;
 use tracing::{info, error, debug};
-use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder};
+use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder, QueryFilter, ColumnTrait, Condition};
 use crate::orm::models::zone_command::{ActiveModel as ZoneCommandActiveModel, Entity as ZoneCommandEntity, Model as ZoneCommandModel, Column as ZoneCommandColumn};
 use crate::logics::general::ModelOutput;
 
@@ -60,16 +60,30 @@ impl ZoneCommandORM
     }
 
     //------------------------- Items
-    pub async fn items(&self, db: &DbConn, _filters: HashMap<String, String>) -> ModelOutput<Vec<ZoneCommandModel>> 
+    pub async fn items(&self, db: &DbConn, filters: HashMap<String, String>) -> ModelOutput<Vec<ZoneCommandModel>> 
     {
         let this_method = "items";
-        if self.verbose { debug!("{}::{} - Starting items operation", self.this_class, this_method); }
+        if self.verbose { debug!("{}::{} - Starting items operation with filters: {:?}", self.this_class, this_method, filters); }
 
-        match ZoneCommandEntity::find().order_by_asc(ZoneCommandColumn::Id).all(db).await 
+        let mut query = ZoneCommandEntity::find();
+        if !filters.is_empty() {
+            let mut condition = Condition::all();
+
+            if let Some(id_str) = filters.get("id") { if let Ok(id) = id_str.parse::<i32>() { condition = condition.add(ZoneCommandColumn::Id.eq(id)); } }
+            if let Some(zone_id_str) = filters.get("zone_id") { if let Ok(zone_id) = zone_id_str.parse::<i32>() { condition = condition.add(ZoneCommandColumn::ZoneId.eq(zone_id)); } }
+            if let Some(name) = filters.get("name") { condition = condition.add(ZoneCommandColumn::Name.contains(name)); }
+            if let Some(description) = filters.get("description") { condition = condition.add(ZoneCommandColumn::Description.contains(description)); }
+            if let Some(enable_str) = filters.get("enable") { if let Ok(enable) = enable_str.parse::<bool>() { condition = condition.add(ZoneCommandColumn::Enable.eq(enable)); } }
+
+            query = query.filter(condition);
+        }
+
+        match query.order_by_asc(ZoneCommandColumn::Id).all(db).await 
         {
             Ok(items) => 
             {
-                let output = ModelOutput::success(items, "ZoneCommands retrieved successfully".to_string());
+                let message = if filters.is_empty() { "ZoneCommands retrieved successfully".to_string() } else { format!("Filtered zone commands retrieved successfully (found {} items)", items.len()) };
+                let output = ModelOutput::success(items, message);
                 if self.verbose { info!("{}::{} - Success: ZoneCommands retrieved", self.this_class, this_method); }
                 if self.log { info!("LOG: {}::{} - ZoneCommands retrieved", self.this_class, this_method); }
                 output

@@ -7,7 +7,7 @@
 //--------------------------------------------------------------------------------- Import
 use std::collections::HashMap;
 use tracing::{info, error, debug};
-use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder};
+use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder, QueryFilter, ColumnTrait, Condition};
 use crate::orm::models::config::{ActiveModel as ConfigActiveModel, Entity as ConfigEntity, Model as ConfigModel, Column as ConfigColumn};
 use crate::logics::general::ModelOutput;
 
@@ -65,11 +65,51 @@ impl ConfigORM
         let this_method = "items";
         if self.verbose { debug!("{}::{} - Starting items operation with filters: {:?}", self.this_class, this_method, filters); }
 
-        match ConfigEntity::find().order_by_asc(ConfigColumn::Id).all(db).await 
+        let mut query = ConfigEntity::find();
+        if !filters.is_empty() {
+            let mut condition = Condition::all();
+
+            if let Some(id_str) = filters.get("id") {
+                if let Ok(id) = id_str.parse::<i32>() {
+                    condition = condition.add(ConfigColumn::Id.eq(id));
+                }
+            }
+            if let Some(name) = filters.get("name") {
+                condition = condition.add(ConfigColumn::Name.contains(name));
+            }
+            if let Some(webapi_host) = filters.get("webapi_host") {
+                condition = condition.add(ConfigColumn::WebapiHost.contains(webapi_host));
+            }
+            if let Some(webapi_port_str) = filters.get("webapi_port") {
+                if let Ok(webapi_port) = webapi_port_str.parse::<i32>() {
+                    condition = condition.add(ConfigColumn::WebapiPort.eq(Some(webapi_port)));
+                }
+            }
+            if let Some(debug_str) = filters.get("debug") {
+                if let Ok(debug) = debug_str.parse::<bool>() {
+                    condition = condition.add(ConfigColumn::Debug.eq(debug));
+                }
+            }
+            if let Some(log_str) = filters.get("log") {
+                if let Ok(log) = log_str.parse::<bool>() {
+                    condition = condition.add(ConfigColumn::Log.eq(log));
+                }
+            }
+            if let Some(verbose_str) = filters.get("verbose") {
+                if let Ok(verbose) = verbose_str.parse::<bool>() {
+                    condition = condition.add(ConfigColumn::Verbose.eq(verbose));
+                }
+            }
+
+            query = query.filter(condition);
+        }
+
+        match query.order_by_asc(ConfigColumn::Id).all(db).await 
         {
             Ok(items) => 
             {
-                let output = ModelOutput::success(items, "Configs retrieved successfully".to_string());
+                let message = if filters.is_empty() { "Configs retrieved successfully".to_string() } else { format!("Filtered configs retrieved successfully (found {} items)", items.len()) };
+                let output = ModelOutput::success(items, message);
                 if self.verbose { info!("{}::{} - Success: Configs retrieved", self.this_class, this_method); }
                 if self.log { info!("LOG: {}::{} - Configs retrieved", self.this_class, this_method); }
                 output

@@ -7,7 +7,7 @@
 //--------------------------------------------------------------------------------- Import
 use std::collections::HashMap;
 use tracing::{info, error, debug};
-use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder};
+use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder, QueryFilter, ColumnTrait, Condition};
 use crate::orm::models::log::{ActiveModel as LogActiveModel, Entity as LogEntity, Model as LogModel, Column as LogColumn};
 use crate::logics::general::ModelOutput;
 
@@ -65,11 +65,24 @@ impl LogORM
         let this_method = "items";
         if self.verbose { debug!("{}::{} - Starting items operation with filters: {:?}", self.this_class, this_method, filters); }
 
-        match LogEntity::find().order_by_asc(LogColumn::Id).all(db).await 
+        let mut query = LogEntity::find();
+        if !filters.is_empty() {
+            let mut condition = Condition::all();
+
+            if let Some(id_str) = filters.get("id") { if let Ok(id) = id_str.parse::<i32>() { condition = condition.add(LogColumn::Id.eq(id)); } }
+            if let Some(name) = filters.get("name") { condition = condition.add(LogColumn::Name.contains(name)); }
+            if let Some(status_str) = filters.get("status") { if let Ok(status) = status_str.parse::<bool>() { condition = condition.add(LogColumn::Status.eq(status)); } }
+            if let Some(date) = filters.get("date") { condition = condition.add(LogColumn::Date.contains(date)); }
+
+            query = query.filter(condition);
+        }
+
+        match query.order_by_asc(LogColumn::Id).all(db).await 
         {
             Ok(items) => 
             {
-                let output = ModelOutput::success(items, "Logs retrieved successfully".to_string());
+                let message = if filters.is_empty() { "Logs retrieved successfully".to_string() } else { format!("Filtered logs retrieved successfully (found {} items)", items.len()) };
+                let output = ModelOutput::success(items, message);
                 if self.verbose { info!("{}::{} - Success: Logs retrieved", self.this_class, this_method); }
                 if self.log { info!("LOG: {}::{} - Logs retrieved", self.this_class, this_method); }
                 output

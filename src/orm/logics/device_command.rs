@@ -7,7 +7,7 @@
 //--------------------------------------------------------------------------------- Import
 use std::collections::HashMap;
 use tracing::{info, error, debug};
-use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder};
+use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder, QueryFilter, ColumnTrait, Condition};
 use crate::orm::models::device_command::{ActiveModel as DeviceCommandActiveModel, Entity as DeviceCommandEntity, Model as DeviceCommandModel, Column as DeviceCommandColumn};
 use crate::logics::general::ModelOutput;
 
@@ -65,11 +65,30 @@ impl DeviceCommandORM
         let this_method = "items";
         if self.verbose { debug!("{}::{} - Starting items operation with filters: {:?}", self.this_class, this_method, filters); }
 
-        match DeviceCommandEntity::find().order_by_asc(DeviceCommandColumn::Id).all(db).await 
+        let mut query = DeviceCommandEntity::find();
+        if !filters.is_empty() {
+            let mut condition = Condition::all();
+
+            if let Some(id_str) = filters.get("id") { if let Ok(id) = id_str.parse::<i32>() { condition = condition.add(DeviceCommandColumn::Id.eq(id)); } }
+            if let Some(device_id_str) = filters.get("device_id") { if let Ok(device_id) = device_id_str.parse::<i32>() { condition = condition.add(DeviceCommandColumn::DeviceId.eq(device_id)); } }
+            if let Some(name) = filters.get("name") { condition = condition.add(DeviceCommandColumn::Name.contains(name)); }
+            if let Some(value_from_str) = filters.get("value_from") { if let Ok(value_from) = value_from_str.parse::<i32>() { condition = condition.add(DeviceCommandColumn::ValueFrom.eq(Some(value_from))); } }
+            if let Some(value_to_str) = filters.get("value_to") { if let Ok(value_to) = value_to_str.parse::<i32>() { condition = condition.add(DeviceCommandColumn::ValueTo.eq(Some(value_to))); } }
+            if let Some(delay_str) = filters.get("delay") { if let Ok(delay) = delay_str.parse::<i32>() { condition = condition.add(DeviceCommandColumn::Delay.eq(Some(delay))); } }
+            if let Some(description) = filters.get("description") { condition = condition.add(DeviceCommandColumn::Description.contains(description)); }
+            if let Some(reload_str) = filters.get("reload") { if let Ok(reload) = reload_str.parse::<bool>() { condition = condition.add(DeviceCommandColumn::Reload.eq(reload)); } }
+            if let Some(enable_str) = filters.get("enable") { if let Ok(enable) = enable_str.parse::<bool>() { condition = condition.add(DeviceCommandColumn::Enable.eq(enable)); } }
+            if let Some(type_val) = filters.get("type") { condition = condition.add(DeviceCommandColumn::Type.contains(type_val)); }
+
+            query = query.filter(condition);
+        }
+
+        match query.order_by_asc(DeviceCommandColumn::Id).all(db).await 
         {
             Ok(items) => 
             {
-                let output = ModelOutput::success(items, "DeviceCommands retrieved successfully".to_string());
+                let message = if filters.is_empty() { "DeviceCommands retrieved successfully".to_string() } else { format!("Filtered device commands retrieved successfully (found {} items)", items.len()) };
+                let output = ModelOutput::success(items, message);
                 if self.verbose { info!("{}::{} - Success: DeviceCommands retrieved", self.this_class, this_method); }
                 if self.log { info!("LOG: {}::{} - DeviceCommands retrieved", self.this_class, this_method); }
                 output

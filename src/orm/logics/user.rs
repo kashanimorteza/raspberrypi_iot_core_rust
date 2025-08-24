@@ -9,7 +9,7 @@
 //--------------------------------------------------------------------------------- Import
 use std::collections::HashMap;
 use tracing::{info, error, debug};
-use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder};
+use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder, QueryFilter, ColumnTrait, Condition};
 use crate::orm::models::user::{ActiveModel as UserActiveModel, Entity as UserEntity, Model as UserModel, Column as UserColumn};
 use crate::logics::general::ModelOutput;
 
@@ -85,13 +85,25 @@ impl UserORM
             debug!("{}::{} - Starting items operation with filters: {:?}", self.this_class, this_method, filters);
         }
 
-        // For now, ignore filters and return all users
-        // In a real implementation, you'd apply filters here
-        match UserEntity::find().order_by_asc(UserColumn::Id).all(db).await 
+        let mut query = UserEntity::find();
+        if !filters.is_empty() {
+            let mut condition = Condition::all();
+
+            if let Some(id_str) = filters.get("id") { if let Ok(id) = id_str.parse::<i32>() { condition = condition.add(UserColumn::Id.eq(id)); } }
+            if let Some(name) = filters.get("name") { condition = condition.add(UserColumn::Name.contains(name)); }
+            if let Some(username) = filters.get("username") { condition = condition.add(UserColumn::Username.contains(username)); }
+            if let Some(email) = filters.get("email") { condition = condition.add(UserColumn::Email.contains(email)); }
+            if let Some(enable_str) = filters.get("enable") { if let Ok(enable) = enable_str.parse::<bool>() { condition = condition.add(UserColumn::Enable.eq(enable)); } }
+
+            query = query.filter(condition);
+        }
+
+        match query.order_by_asc(UserColumn::Id).all(db).await 
         {
             Ok(users) => 
             {
-                let output = ModelOutput::success(users, "Users retrieved successfully".to_string());
+                let message = if filters.is_empty() { "Users retrieved successfully".to_string() } else { format!("Filtered users retrieved successfully (found {} items)", users.len()) };
+                let output = ModelOutput::success(users, message);
                 if self.verbose 
                 {
                     info!("{}::{} - Success: Retrieved {} users", self.this_class, this_method, output.data.as_ref().map_or(0, |d| d.len()));

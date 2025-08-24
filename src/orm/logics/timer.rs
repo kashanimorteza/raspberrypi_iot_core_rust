@@ -7,7 +7,7 @@
 //--------------------------------------------------------------------------------- Import
 use std::collections::HashMap;
 use tracing::{info, error, debug};
-use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder};
+use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder, QueryFilter, ColumnTrait, Condition};
 use crate::orm::models::timer::{ActiveModel as TimerActiveModel, Entity as TimerEntity, Model as TimerModel, Column as TimerColumn};
 use crate::logics::general::ModelOutput;
 
@@ -65,11 +65,25 @@ impl TimerORM
         let this_method = "items";
         if self.verbose { debug!("{}::{} - Starting items operation with filters: {:?}", self.this_class, this_method, filters); }
 
-        match TimerEntity::find().order_by_asc(TimerColumn::Id).all(db).await 
+        let mut query = TimerEntity::find();
+        if !filters.is_empty() {
+            let mut condition = Condition::all();
+
+            if let Some(id_str) = filters.get("id") { if let Ok(id) = id_str.parse::<i32>() { condition = condition.add(TimerColumn::Id.eq(id)); } }
+            if let Some(user_id_str) = filters.get("user_id") { if let Ok(user_id) = user_id_str.parse::<i32>() { condition = condition.add(TimerColumn::UserId.eq(user_id)); } }
+            if let Some(name) = filters.get("name") { condition = condition.add(TimerColumn::Name.contains(name)); }
+            if let Some(description) = filters.get("description") { condition = condition.add(TimerColumn::Description.contains(description)); }
+            if let Some(enable_str) = filters.get("enable") { if let Ok(enable) = enable_str.parse::<bool>() { condition = condition.add(TimerColumn::Enable.eq(enable)); } }
+
+            query = query.filter(condition);
+        }
+
+        match query.order_by_asc(TimerColumn::Id).all(db).await 
         {
             Ok(items) => 
             {
-                let output = ModelOutput::success(items, "Timers retrieved successfully".to_string());
+                let message = if filters.is_empty() { "Timers retrieved successfully".to_string() } else { format!("Filtered timers retrieved successfully (found {} items)", items.len()) };
+                let output = ModelOutput::success(items, message);
                 if self.verbose { info!("{}::{} - Success: Timers retrieved", self.this_class, this_method); }
                 if self.log { info!("LOG: {}::{} - Timers retrieved", self.this_class, this_method); }
                 output

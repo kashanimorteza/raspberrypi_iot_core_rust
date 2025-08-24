@@ -7,7 +7,7 @@
 //--------------------------------------------------------------------------------- Import
 use std::collections::HashMap;
 use tracing::{info, error, debug};
-use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder};
+use sea_orm::{ActiveModelTrait, DbConn, EntityTrait, QueryOrder, QueryFilter, ColumnTrait, Condition};
 use crate::orm::models::device::{ActiveModel as DeviceActiveModel, Entity as DeviceEntity, Model as DeviceModel, Column as DeviceColumn};
 use crate::logics::general::ModelOutput;
 
@@ -65,11 +65,47 @@ impl DeviceORM
         let this_method = "items";
         if self.verbose { debug!("{}::{} - Starting items operation with filters: {:?}", self.this_class, this_method, filters); }
 
-        match DeviceEntity::find().order_by_asc(DeviceColumn::Id).all(db).await 
+        let mut query = DeviceEntity::find();
+        if !filters.is_empty() {
+            let mut condition = Condition::all();
+
+            if let Some(id_str) = filters.get("id") {
+                if let Ok(id) = id_str.parse::<i32>() { condition = condition.add(DeviceColumn::Id.eq(id)); }
+            }
+            if let Some(zone_id_str) = filters.get("zone_id") {
+                if let Ok(zone_id) = zone_id_str.parse::<i32>() { condition = condition.add(DeviceColumn::ZoneId.eq(zone_id)); }
+            }
+            if let Some(port_id_str) = filters.get("port_id") {
+                if let Ok(port_id) = port_id_str.parse::<i32>() { condition = condition.add(DeviceColumn::PortId.eq(port_id)); }
+            }
+            if let Some(power_id_str) = filters.get("power_id") {
+                if let Ok(power_id) = power_id_str.parse::<i32>() { condition = condition.add(DeviceColumn::PowerId.eq(power_id)); }
+            }
+            if let Some(command_id_str) = filters.get("command_id") {
+                if let Ok(command_id) = command_id_str.parse::<i32>() { condition = condition.add(DeviceColumn::CommandId.eq(command_id)); }
+            }
+            if let Some(enable_str) = filters.get("enable") {
+                if let Ok(enable) = enable_str.parse::<bool>() { condition = condition.add(DeviceColumn::Enable.eq(enable)); }
+            }
+            if let Some(name) = filters.get("name") {
+                condition = condition.add(DeviceColumn::Name.contains(name));
+            }
+            if let Some(address) = filters.get("address") {
+                condition = condition.add(DeviceColumn::Address.contains(address));
+            }
+            if let Some(date) = filters.get("date") {
+                condition = condition.add(DeviceColumn::Date.contains(date));
+            }
+
+            query = query.filter(condition);
+        }
+
+        match query.order_by_asc(DeviceColumn::Id).all(db).await 
         {
             Ok(items) => 
             {
-                let output = ModelOutput::success(items, "Devices retrieved successfully".to_string());
+                let message = if filters.is_empty() { "Devices retrieved successfully".to_string() } else { format!("Filtered devices retrieved successfully (found {} items)", items.len()) };
+                let output = ModelOutput::success(items, message);
                 if self.verbose { info!("{}::{} - Success: Devices retrieved", self.this_class, this_method); }
                 if self.log { info!("LOG: {}::{} - Devices retrieved", self.this_class, this_method); }
                 output

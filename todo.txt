@@ -1,2 +1,12 @@
-read src/orm/logics/port.rs on methpod items
-i need check if filter exist, select with filters value
+read src/orm/logics/port.rs on methpod items that implement filters
+i neeed implement filters for all logics on method item on  src/orm/logics/
+do it for zone_command
+do it for zone_command_if
+do it for zone_command_action
+do it for timer
+do it for timer_limit
+do it for timer_item
+do it for timer_device
+do it for device_command
+
+
