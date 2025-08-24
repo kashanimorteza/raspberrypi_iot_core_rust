@@ -2,7 +2,7 @@
 // src/api/handlers/port.rs
 
 //--------------------------------------------------------------------------------- Description
-// Axum handlers for Port CRUD operations
+// Port Handler
 
 //--------------------------------------------------------------------------------- Import
 use axum::{
@@ -46,12 +46,11 @@ pub struct UpdatePortRequest {
 }
 
 //--------------------------------------------------------------------------------- Handlers
-//------------------------- ListPorts
+//------------------------- List
 #[utoipa::path(
     get,
     path = "/port/items",
     tag = "🔌 Port",
-
     params(
         ("limit" = Option<i32>, Query, description = "Maximum number of ports to return"),
         ("offset" = Option<i32>, Query, description = "Number of ports to skip"),
@@ -70,7 +69,7 @@ pub async fn list_ports(
     Ok(Json(result))
 }
 
-//------------------------- GetPort
+//------------------------- Get
 #[utoipa::path(
     get,
     path = "/port/item/{id}",
@@ -94,7 +93,7 @@ pub async fn get_port(
     Ok(Json(result))
 }
 
-//------------------------- EnablePort
+//------------------------- Enable
 #[utoipa::path(
     get,
     path = "/port/enable/{id}",
@@ -118,7 +117,7 @@ pub async fn enable_port(
     Ok(Json(result))
 }
 
-//------------------------- DisablePort
+//------------------------- Disable
 #[utoipa::path(
     get,
     path = "/port/disable/{id}",
@@ -142,7 +141,7 @@ pub async fn disable_port(
     Ok(Json(result))
 }
 
-//------------------------- UpdatePort
+//------------------------- Update
 #[utoipa::path(
     put,
     path = "/port/update/{id}",
@@ -183,12 +182,11 @@ pub async fn update_port(
     Ok(Json(result))
 }
 
-//------------------------- CreatePort
+//------------------------- Create
 #[utoipa::path(
     post,
     path = "/port/add",
     tag = "🔌 Port",
-
     request_body = CreatePortRequest,
     responses(
         (status = 201, description = "Port created successfully", body = PortModel),
@@ -218,7 +216,7 @@ pub async fn create_port(
     Ok(Json(result))
 }
 
-//------------------------- DeletePort
+//------------------------- Delete
 #[utoipa::path(
     delete,
     path = "/port/delete/{id}",
@@ -242,7 +240,7 @@ pub async fn delete_port(
     Ok(Json(result))
 }
 
-//------------------------- StatusPort
+//------------------------- Status
 #[utoipa::path(
     get,
     path = "/port/status/{id}",

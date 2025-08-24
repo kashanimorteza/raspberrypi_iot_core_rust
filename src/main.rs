@@ -29,10 +29,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>
 {
     // Load environment variables
     dotenv().ok();
+    let project_name = std::env::var("PROJECT_NAME").unwrap_or_else(|_| "raspberrypi_iot_core_rust".to_string());
 
     // Initialize tracing
+    let default_filter = format!("{}=debug,tower_http=debug", project_name);
     tracing_subscriber::registry()
-        .with(tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| "api_1=debug,tower_http=debug".into()),)
+        .with(tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| default_filter.into()),)
         .with(tracing_subscriber::fmt::layer())
         .init();
 
